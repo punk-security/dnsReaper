@@ -1,4 +1,3 @@
-from pyclbr import Function
 import signatures
 
 signatures = [getattr(signatures, signature) for signature in signatures.__all__]
