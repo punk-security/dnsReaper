@@ -1,0 +1,20 @@
+name: pytest
+
+on:
+  pull_request:
+    branches: [ main ]
+    types:
+      - synchronize
+      - opened
+      - reopened
+
+jobs:
+  build_linux:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: install test dependencies
+        run:  sudo pip install -r test-requirements.txt
+      - name: run pytest
+        run: sudo pytest -v
