@@ -17,4 +17,4 @@ jobs:
       - name: install test dependencies
         run:  sudo pip install -r test-requirements.txt
       - name: run pytest
-        run: sudo pytest -v
+        run: sudo python -m pytest -v
