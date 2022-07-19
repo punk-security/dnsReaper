@@ -1,2 +1,3 @@
 # dnsReaper
-dnsReaper repo
+
+All your subdomains be mine
