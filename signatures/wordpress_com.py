@@ -1,33 +1,25 @@
 from domain import Domain
+import generic_checks
 
 import logging
 
 wordpress_cname = "wordpress.com"
 wordpress_ns = ["ns1.wordpress.com", "ns2.wordpress.com", "ns3.wordpress.com"]
-wordpress_missconfigured_message = (
+
+
+def potential(domain: Domain, **kwargs) -> bool:
+    if generic_checks.string_in_cname(domain, wordpress_cname):
+        return True
+    return generic_checks.string_in_ns(domain, wordpress_ns)
+
+
+domain_not_configured_message = (
     "If this is your domain name and it has recently stopped working"
 )
 
 
-def potential(domain: Domain, **kwargs) -> bool:
-    for cname in domain.CNAME:
-        if wordpress_cname in cname:
-            logging.debug(f"Wordpress CNAME detected for domain '{domain}'")
-            return True
-
-    for nameserver in domain.NS:
-        if nameserver in wordpress_ns:
-            logging.debug(f"Wordpress NS record found '{nameserver}'")
-            return True
-    return False
-
-
 def check(domain: Domain, **kwargs) -> bool:
-    if wordpress_missconfigured_message in domain.fetch_web().body:
-        logging.info(f"Wordpress not configured for domain '{domain}'")
-        return True
-    logging.debug(f"wordpress 'not configured' page NOT found on the domain '{domain}'")
-    return False
+    return generic_checks.string_in_body(domain, domain_not_configured_message)
 
 
 INFO = """

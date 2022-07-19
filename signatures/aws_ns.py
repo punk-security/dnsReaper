@@ -1,14 +1,12 @@
 from domain import Domain
-
+import generic_checks
 import logging
+
+matching_ns_substring = "awsdns"
 
 
 def potential(domain: Domain, **kwargs) -> bool:
-    for nameserver in domain.NS:
-        if "awsdns" in nameserver:
-            logging.debug(f"AWS NS record found '{nameserver}'")
-            return True
-    return False
+    return generic_checks.string_in_ns(domain, matching_ns_substring)
 
 
 def check(domain: Domain, **kwargs) -> bool:

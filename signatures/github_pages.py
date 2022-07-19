@@ -1,6 +1,8 @@
 from domain import Domain
 
-import logging
+import generic_checks
+import combined_checks
+
 
 github_pages_ipv4 = [
     "185.199.108.153",
@@ -17,19 +19,16 @@ github_pages_ipv6 = [
 
 
 def potential(domain: Domain, **kwargs) -> bool:
-    for ipv4 in github_pages_ipv4:
-        if ipv4 in domain.A:
-            return True
-    for ipv6 in github_pages_ipv6:
-        if ipv6 in domain.AAAA:
-            return True
-    return False
+    return combined_checks.matching_ipv4_or_ipv6(
+        domain, github_pages_ipv4, github_pages_ipv6
+    )
+
+
+domain_not_configured_message = "There isn't a GitHub Pages site here"
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    if domain.fetch_web().status_code == 404:
-        return True
-    return False
+    return generic_checks.string_in_body(domain, domain_not_configured_message)
 
 
 INFO = """
