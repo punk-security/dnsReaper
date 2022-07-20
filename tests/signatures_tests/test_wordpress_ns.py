@@ -15,4 +15,3 @@ def test_potential_success_with_matching_nameservers():
 def test_potential_failure():
     domain = Domain("mock.local", fetch_standard_records=False)
     assert wordpress_com_ns.potential(domain) == False
-
