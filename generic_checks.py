@@ -66,3 +66,18 @@ def ipv6_in_AAAA(domain: Domain, ipv6) -> str:
             logging.debug(f"IPv6 address detected for domain '{domain}'")
             return True
     return False
+
+
+def no_SOA_on_NS(domain: Domain) -> bool:
+    takeover_possible = False
+    for ns in domain.NS:
+        ns_ip = Domain(ns, fetch_standard_records=False).query("A")
+        if ns_ip == []:
+            logging.debug(f"Could not resolve NS '{ns}'")
+            continue
+        if Domain(domain.domain, fetch_standard_records=False, ns=ns_ip[0]).SOA == []:
+            logging.info(f"NAMESERVER at {ns} does not have this zone.")
+            takeover_possible = True
+        else:
+            logging.debug(f"SOA record found on NAMESERVER '{ns}'")
+    return takeover_possible

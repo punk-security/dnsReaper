@@ -3,6 +3,7 @@ import generic_checks
 
 from collections import namedtuple
 
+from unittest.mock import patch, PropertyMock
 
 ## string_in_body
 
@@ -292,3 +293,30 @@ def test_ipv6_in_AAAA_multiple_with_no_AAAA_records():
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.AAAA = []
     assert generic_checks.ipv6_in_AAAA(domain, ["::1", "::2"]) == False
+
+
+## no_SOA_on_NS
+
+
+def test_no_SOA_on_NS_with_matching_nameservers():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    domain.NS = ["ns"]
+    with patch("domain.Domain.SOA", return_value=[], new_callable=PropertyMock):
+        with patch("domain.Domain.query", return_value=["10.10.10.10"]):
+            assert generic_checks.no_SOA_on_NS(domain) == True
+
+
+def test_no_SOA_on_NS_with_no_matching_nameservers():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    domain.NS = ["ns"]
+    with patch(
+        "domain.Domain.SOA", return_value=["SOA RECORD HERE"], new_callable=PropertyMock
+    ):
+        with patch("domain.Domain.query", return_value=["10.10.10.10"]):
+            assert generic_checks.no_SOA_on_NS(domain) == False
+
+
+def test_no_SOA_on_NS_with_no_nameservers():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    domain.NS = []
+    assert generic_checks.no_SOA_on_NS(domain) == False
