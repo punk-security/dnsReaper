@@ -1,8 +1,6 @@
 from domain import Domain
 from signatures import aws_ns
 
-from unittest.mock import patch, PropertyMock
-
 
 def test_potential_success_with_matching_nameserver():
     domain = Domain("mock.local", fetch_standard_records=False)

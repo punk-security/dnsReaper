@@ -1,9 +1,6 @@
 from domain import Domain
 from signatures import wordpress_com_ns
 
-import mocks
-from unittest.mock import patch, PropertyMock
-
 
 def test_potential_success_with_matching_nameservers():
     domain = Domain("mock.local", fetch_standard_records=False)
