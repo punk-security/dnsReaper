@@ -18,7 +18,9 @@ def test_check_string_in_body_success_on_full_match():
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.fetch_web = mock_fetch_web
-    assert generic_checks.string_in_body(domain, string_in_body_full_match) == True
+    assert (
+        generic_checks.string_in_body(domain, string_in_body_full_match, False) == True
+    )
 
 
 def test_check_string_in_body_success_on_partial_match():
@@ -27,7 +29,10 @@ def test_check_string_in_body_success_on_partial_match():
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.fetch_web = mock_fetch_web
-    assert generic_checks.string_in_body(domain, string_in_body_partial_match) == True
+    assert (
+        generic_checks.string_in_body(domain, string_in_body_partial_match, False)
+        == True
+    )
 
 
 def test_check_string_in_body_failure_on_no_match():
@@ -36,7 +41,9 @@ def test_check_string_in_body_failure_on_no_match():
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.fetch_web = mock_fetch_web
-    assert generic_checks.string_in_body(domain, string_in_body_no_match) == False
+    assert (
+        generic_checks.string_in_body(domain, string_in_body_no_match, False) == False
+    )
 
 
 def test_check_string_in_body_failure_on_no_body():
@@ -45,7 +52,9 @@ def test_check_string_in_body_failure_on_no_body():
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.fetch_web = mock_fetch_web
-    assert generic_checks.string_in_body(domain, string_in_body_full_match) == False
+    assert (
+        generic_checks.string_in_body(domain, string_in_body_full_match, False) == False
+    )
 
 
 ## substrings_in_strings

@@ -21,10 +21,30 @@ def test_potential_failure():
 
 
 def test_check_success():
-    domain = mocks.mock_web_response(shopify.domain_not_configured_message)
+    domain = Domain("mock.local", fetch_standard_records=False)
+    mocks.mock_web_response_with_static_value(
+        domain, shopify.domain_not_configured_message
+    )
     assert shopify.check(domain) == True
 
 
 def test_check_failure():
-    domain = mocks.mock_web_response("Welcome to my shop!")
+    domain = Domain("mock.local", fetch_standard_records=False)
+    mocks.mock_web_response_with_static_value(domain, "Welcome to my shop!")
     assert shopify.check(domain) == False
+
+
+def test_check_message_for_ipv4_ACTIVE():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    mocks.mock_web_request_by_providing_static_host_resolution(
+        domain, shopify.shopify_ipv4
+    )
+    assert shopify.check(domain) == True
+
+
+def test_check_message_for_cname_ACTIVE():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    mocks.mock_web_request_by_providing_static_host_resolution(
+        domain, shopify.shopify_cname
+    )
+    assert shopify.check(domain) == True
