@@ -16,7 +16,7 @@ domain_not_configured_message = "Only one step left!"
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    return generic_checks.string_in_body(domain, domain_not_configured_message)
+    return generic_checks.string_in_body_http(domain, domain_not_configured_message)
 
 
 INFO = """
