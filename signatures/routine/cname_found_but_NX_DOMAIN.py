@@ -4,6 +4,11 @@ import signatures.generic
 
 from detection_enums import CONFIDENCE
 
+INFO = """
+The defined domain has CNAME records configured for {service} and but these records do not resolve. \
+An attacker can register this domain on {service} and serve their own web content.
+"""
+
 
 class cname_found_but_NX_DOMAIN(base.Base):
     def potential(self, domain, **kwargs) -> bool:
@@ -15,8 +20,10 @@ class cname_found_but_NX_DOMAIN(base.Base):
     def __init__(
         self,
         cname,
-        info,
+        service,
+        info=None,
         confidence=CONFIDENCE.CONFIRMED,
     ):
         self.cname = cname
-        super().__init__(info, confidence)
+        info = info if info else INFO
+        super().__init__(info.format(service=service), confidence)

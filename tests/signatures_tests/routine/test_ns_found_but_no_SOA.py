@@ -3,7 +3,7 @@ from signatures.routine.ns_found_but_no_SOA import (
     ns_found_but_no_SOA,
 )
 
-test = ns_found_but_no_SOA("ns1", "INFO")
+test = ns_found_but_no_SOA("ns1", "mock")
 
 
 def test_potential_success_with_matching_nameserver():
@@ -15,3 +15,6 @@ def test_potential_success_with_matching_nameserver():
 def test_potential_failure():
     domain = Domain("mock.local", fetch_standard_records=False)
     assert test.potential(domain) == False
+
+
+# TODO: Write check test

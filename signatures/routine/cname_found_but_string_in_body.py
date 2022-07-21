@@ -4,6 +4,11 @@ import signatures.generic
 
 from detection_enums import CONFIDENCE
 
+INFO = """
+The defined domain has CNAME records configured for {service} and but a web request shows the domain is unclaimed. \
+An attacker can register this domain on {service} and serve their own web content.
+"""
+
 
 class cname_found_but_string_in_body(base.Base):
     def potential(self, domain, **kwargs) -> bool:
@@ -22,11 +27,13 @@ class cname_found_but_string_in_body(base.Base):
         self,
         cname,
         domain_not_configured_message,
-        info,
+        service,
+        info=None,
         confidence=CONFIDENCE.CONFIRMED,
         https=False,
     ):
         self.cname = cname
         self.domain_not_configured_message = domain_not_configured_message
         self.https = https
-        super().__init__(info, confidence)
+        info = info if info else INFO
+        super().__init__(info.format(service=service), confidence)

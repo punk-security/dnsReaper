@@ -2,7 +2,7 @@ from domain import Domain
 from . import generic
 import detection_enums
 
-matching_ns_substring = ""
+from .routine.base import Base
 
 
 def potential(domain: Domain, **kwargs) -> bool:
@@ -18,4 +18,6 @@ The defined domain has NS records configured but these nameservers do not host a
 An attacker may be able to register this domain on with the service managing the nameserver.
     """
 
-CONFIDENCE = detection_enums.CONFIDENCE.POTENTIAL
+test = Base(INFO, detection_enums.CONFIDENCE.POTENTIAL)
+test.potential = potential
+test.check = check

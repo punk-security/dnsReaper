@@ -19,18 +19,7 @@ cnames = [
     ".servicebus.windows.net",
 ]
 
-INFO = """
-The defined domain has CNAME records configured for Microsoft Azure but they dont exist at Azure. \
-An attacker can register this domain on Microsoft Azure.
-
-    """
-
 test = cname_found_but_NX_DOMAIN(
     cname=cnames,
-    info=INFO,
+    service="Microsoft Azure",
 )
-
-check = test.check
-potential = test.potential
-CONFIDENCE = test.CONFIDENCE
-INFO = test.INFO
