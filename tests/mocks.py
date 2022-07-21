@@ -57,6 +57,11 @@ class HostHeaderAdapter(requests.adapters.HTTPAdapter):
             ip = [record.to_text() for record in response][0]
             return self.resolve_to_ip(ip)
 
+    def wrap_if_ipv6(self, ip):
+        if ip.count(":") > 1:
+            return f"[{ip}]"
+        return ip
+
     def send(self, request, **kwargs):
         from urllib.parse import urlparse
 
@@ -68,6 +73,8 @@ class HostHeaderAdapter(requests.adapters.HTTPAdapter):
         except:
             # If that fails, try and resolve
             resolved_ip = self.resolve_to_ip(result.hostname)
+
+        resolved_ip = self.wrap_if_ipv6(resolved_ip)
 
         request.url = request.url.replace(
             "//" + result.hostname,
