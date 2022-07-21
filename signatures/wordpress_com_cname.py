@@ -1,5 +1,6 @@
 from domain import Domain
 from . import generic
+import detection_enums
 
 wordpress_cname = "wordpress.com"
 
@@ -22,3 +23,5 @@ The defined domain has CNAME records configured for wordpress.com and is not cla
 An attacker can register this domain on wordpress.com.
 
     """
+
+CONFIDENCE = detection_enums.CONFIDENCE.CONFIRMED

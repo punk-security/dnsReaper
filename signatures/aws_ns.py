@@ -1,5 +1,6 @@
 from domain import Domain
 from . import generic
+import detection_enums
 
 matching_ns_substring = "awsdns"
 
@@ -9,10 +10,12 @@ def potential(domain: Domain, **kwargs) -> bool:
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    return generic.NS.no_SOA_detected(domain)
+    return not generic.NS.no_SOA_detected(domain)
 
 
 INFO = """
 The defined domain has NS records configured but these nameservers do not host a zone for this domain. \
 An attacker can register this domain on AWS multiple times until they get provisioned onto a matching nameserver.
     """
+
+CONFIDENCE = detection_enums.CONFIDENCE.CONFIRMED

@@ -1,5 +1,6 @@
 from domain import Domain
 from . import generic
+import detection_enums
 
 wordpress_ns = ["ns1.wordpress.com", "ns2.wordpress.com", "ns3.wordpress.com"]
 
@@ -17,3 +18,5 @@ The defined domain has NS records configured for wordpress.com and is not claime
 An attacker can register this domain on wordpress.com.
 
     """
+
+CONFIDENCE = detection_enums.CONFIDENCE.CONFIRMED

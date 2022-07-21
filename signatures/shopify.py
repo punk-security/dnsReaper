@@ -1,5 +1,6 @@
 from domain import Domain
 from . import generic
+import detection_enums
 
 shopify_ipv4 = "23.227.38.65"
 shopify_cname = "shops.myshopify.com"
@@ -21,5 +22,7 @@ The defined domain has A/CNAME records configured for Shopify pages but Shopify 
 An attacker can register this domain on Shopify pages.
 
     """
+
+CONFIDENCE = detection_enums.CONFIDENCE.CONFIRMED
 
 # https://help.shopify.com/en/manual/domains/add-a-domain/connecting-domains/connect-domain-manual#step-1-change-your-dns-records-in-your-third-party-domain-provider-account

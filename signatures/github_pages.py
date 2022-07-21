@@ -1,7 +1,6 @@
 from domain import Domain
-
 from . import generic
-
+import detection_enums
 
 github_pages_ipv4 = [
     "185.199.108.153",
@@ -34,3 +33,5 @@ INFO = """
 The defined domain has A/AAAA records configured for Github pages but Github pages returns a 404. \
 An attacker can register this domain on Github pages.
     """
+
+CONFIDENCE = detection_enums.CONFIDENCE.CONFIRMED
