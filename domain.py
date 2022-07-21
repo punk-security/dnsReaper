@@ -3,6 +3,7 @@ import dns.resolver
 from functools import lru_cache
 
 import requests
+import logging
 
 
 class Domain:
@@ -30,6 +31,7 @@ class Domain:
         self.A = []
         self.AAAA = []
         self.CNAME = []
+        self.requests = requests
         if ns == None:
             self.resolver = dns.resolver
         else:
@@ -43,7 +45,7 @@ class Domain:
         protocol = "https" if https else "http"
         url = f"{protocol}://{self.domain}/{uri}"
         try:
-            resp = requests.get(url, timeout=5, verify=False, params=params)
+            resp = self.requests.get(url, timeout=5, verify=False, params=params)
             web_status = resp.status_code
             web_body = resp.content.decode()
         except:

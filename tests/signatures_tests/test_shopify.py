@@ -1,7 +1,6 @@
 from domain import Domain
 from signatures import shopify
-
-from collections import namedtuple
+import mocks
 
 
 def test_potential_success_match_ipv4():
@@ -16,48 +15,36 @@ def test_potential_success_match_cname():
     assert shopify.potential(domain) == True
 
 
-def test_potential_success_match_ipv4_from_multiple():
+def test_potential_failure():
     domain = Domain("mock.local", fetch_standard_records=False)
-    domain.A = ["1.1.1.1", shopify.shopify_ipv4]
-    assert shopify.potential(domain) == True
-
-
-def test_potential_fail_no_A_or_CNAME():
-    domain = Domain("mock.local", fetch_standard_records=False)
-    assert shopify.potential(domain) == False
-
-
-def test_potential_fail_no_matching():
-    domain = Domain("mock.local", fetch_standard_records=False)
-    domain.A = ["1.1.1.1"]
-    domain.CNAME = ["cname"]
     assert shopify.potential(domain) == False
 
 
 def test_check_success():
-    def mock_fetch_web(**kwargs):
-        return namedtuple("web_response", ["body"])(
-            shopify.domain_not_configured_message
-        )
-
     domain = Domain("mock.local", fetch_standard_records=False)
-    domain.fetch_web = mock_fetch_web
+    mocks.mock_web_response_with_static_value(
+        domain, shopify.domain_not_configured_message
+    )
     assert shopify.check(domain) == True
 
 
-def test_check_fail_working_store():
-    def mock_fetch_web(**kwargs):
-        return namedtuple("web_response", ["body"])("Welcome to my store!")
-
+def test_check_failure():
     domain = Domain("mock.local", fetch_standard_records=False)
-    domain.fetch_web = mock_fetch_web
+    mocks.mock_web_response_with_static_value(domain, "Welcome to my shop!")
     assert shopify.check(domain) == False
 
 
-def test_check_fail_no_response():
-    def mock_fetch_web(**kwargs):
-        return namedtuple("web_response", ["status_code", "body"])(0, "")
-
+def test_check_message_for_ipv4_ACTIVE():
     domain = Domain("mock.local", fetch_standard_records=False)
-    domain.fetch_web = mock_fetch_web
-    assert shopify.check(domain) == False
+    mocks.mock_web_request_by_providing_static_host_resolution(
+        domain, shopify.shopify_ipv4
+    )
+    assert shopify.check(domain) == True
+
+
+def test_check_message_for_cname_ACTIVE():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    mocks.mock_web_request_by_providing_static_host_resolution(
+        domain, shopify.shopify_cname
+    )
+    assert shopify.check(domain) == True
