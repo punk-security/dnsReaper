@@ -13,18 +13,8 @@ github_pages_ipv6 = [
     "2606:50c0:8003::153",
 ]
 
-INFO = """
-The defined domain has A/AAAA records configured for Github pages but Github pages returns a 404. \
-An attacker can register this domain on Github pages.
-    """
-
 test = ip_found_but_string_in_body(
     ips=github_pages_ipv4 + github_pages_ipv6,
     domain_not_configured_message="There isn't a GitHub Pages site here",
-    info=INFO,
+    service="Github Pages",
 )
-
-check = test.check
-potential = test.potential
-CONFIDENCE = test.CONFIDENCE
-INFO = test.INFO

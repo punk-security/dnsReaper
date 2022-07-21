@@ -4,6 +4,11 @@ import signatures.generic
 
 from detection_enums import CONFIDENCE
 
+INFO = """
+The defined domain has {service} NS records configured but these nameservers do not host a zone for this domain. \
+An attacker can register this domain with {service} so they get provisioned onto a matching nameserver.
+    """
+
 
 class ns_found_but_no_SOA(base.Base):
     def potential(self, domain, **kwargs) -> bool:
@@ -15,8 +20,10 @@ class ns_found_but_no_SOA(base.Base):
     def __init__(
         self,
         ns,
-        info,
+        service,
+        info=None,
         confidence=CONFIDENCE.CONFIRMED,
     ):
         self.ns = ns
-        super().__init__(info, confidence)
+        info = info if info else INFO
+        super().__init__(info.format(service=service), confidence)

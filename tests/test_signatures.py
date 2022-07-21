@@ -1,7 +1,7 @@
 import signatures
 import detection_enums
 
-signatures = [getattr(signatures, signature) for signature in signatures.__all__]
+signatures = [getattr(signatures, signature).test for signature in signatures.__all__]
 
 
 def test_signatures_all_have_a_potential():
