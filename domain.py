@@ -5,6 +5,8 @@ from functools import lru_cache
 import requests
 import logging
 
+import urllib3
+
 
 class Domain:
     @property
@@ -42,6 +44,7 @@ class Domain:
 
     @lru_cache
     def fetch_web(self, uri="", https=True, params={}):
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         protocol = "https" if https else "http"
         url = f"{protocol}://{self.domain}/{uri}"
         try:
