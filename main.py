@@ -24,11 +24,11 @@ def scan_domain(domain):
                 f"Potential takeover found on DOMAIN '{d}' using signature '{signature.__name__}'"
             )
             if signature.test.check(domain=d):
-                status = signature.CONFIDENCE.value
+                status = signature.test.CONFIDENCE.value
                 logging.info(
                     f"Takeover {status} on {d} using signature '{signature.__name__}'"
                 )
-                print(domain, signature.INFO)
+                print(domain, signature.test.INFO)
 
 
 pool = ThreadPool(processes=50)
