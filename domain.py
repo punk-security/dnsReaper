@@ -14,7 +14,7 @@ class Domain:
 
     def query(self, type):
         try:
-            resp = self.resolver.query(self.domain, type)
+            resp = self.resolver.resolve(self.domain, type)
             return [record.to_text() for record in resp]
         except:
             return []
