@@ -1,6 +1,7 @@
 from domain import Domain
 from signatures import github_pages
-import mocks
+
+from tests import mocks
 
 
 def test_potential_success_match_ipv4():

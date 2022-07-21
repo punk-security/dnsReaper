@@ -9,7 +9,7 @@ def test_signatures_all_have_a_potential():
         assert callable(getattr(signature, "potential"))
 
 
-def test_signatures_all_have_a_potential():
+def test_signatures_all_have_a_check():
     for signature in signatures:
         assert callable(getattr(signature, "check"))
 

@@ -1,22 +1,4 @@
-from domain import Domain
-from . import generic
-import detection_enums
-
-wordpress_cname = "wordpress.com"
-
-
-def potential(domain: Domain, **kwargs) -> bool:
-    return generic.CNAME.match(domain, wordpress_cname)
-
-
-domain_not_configured_message = (
-    "If this is your domain name and it has recently stopped working"
-)
-
-
-def check(domain: Domain, **kwargs) -> bool:
-    return generic.WEB.string_in_body_https(domain, domain_not_configured_message)
-
+from .routine.cname_found_but_string_in_body import cname_found_but_string_in_body
 
 INFO = """
 The defined domain has CNAME records configured for wordpress.com and is not claimed. \
@@ -24,4 +6,13 @@ An attacker can register this domain on wordpress.com.
 
     """
 
-CONFIDENCE = detection_enums.CONFIDENCE.CONFIRMED
+test = cname_found_but_string_in_body(
+    cname="wordpress.com",
+    domain_not_configured_message="If this is your domain name and it has recently stopped working",
+    info=INFO,
+)
+
+check = test.check
+potential = test.potential
+CONFIDENCE = test.CONFIDENCE
+INFO = test.INFO
