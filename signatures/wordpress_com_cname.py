@@ -1,13 +1,11 @@
 from domain import Domain
-import generic_checks
-
-import logging
+from . import generic
 
 wordpress_cname = "wordpress.com"
 
 
 def potential(domain: Domain, **kwargs) -> bool:
-    return generic_checks.string_in_cname(domain, wordpress_cname)
+    return generic.CNAME.match(domain, wordpress_cname)
 
 
 domain_not_configured_message = (
@@ -16,7 +14,7 @@ domain_not_configured_message = (
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    return generic_checks.string_in_body_https(domain, domain_not_configured_message)
+    return generic.WEB.string_in_body_https(domain, domain_not_configured_message)
 
 
 INFO = """

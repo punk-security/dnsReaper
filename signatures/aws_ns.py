@@ -1,16 +1,15 @@
 from domain import Domain
-import generic_checks
-import logging
+from . import generic
 
 matching_ns_substring = "awsdns"
 
 
 def potential(domain: Domain, **kwargs) -> bool:
-    return generic_checks.string_in_ns(domain, matching_ns_substring)
+    return generic.NS.match(domain, matching_ns_substring)
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    return generic_checks.no_SOA_on_NS(domain)
+    return generic.NS.no_SOA_detected(domain)
 
 
 INFO = """

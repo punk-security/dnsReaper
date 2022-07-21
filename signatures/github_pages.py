@@ -1,7 +1,6 @@
 from domain import Domain
 
-import generic_checks
-import combined_checks
+from . import generic
 
 
 github_pages_ipv4 = [
@@ -19,7 +18,7 @@ github_pages_ipv6 = [
 
 
 def potential(domain: Domain, **kwargs) -> bool:
-    return combined_checks.matching_ipv4_or_ipv6(
+    return generic.COMBINED.matching_ipv4_or_ipv6(
         domain, github_pages_ipv4, github_pages_ipv6
     )
 
@@ -28,7 +27,7 @@ domain_not_configured_message = "There isn't a GitHub Pages site here"
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    return generic_checks.string_in_body_http(domain, domain_not_configured_message)
+    return generic.WEB.string_in_body_http(domain, domain_not_configured_message)
 
 
 INFO = """

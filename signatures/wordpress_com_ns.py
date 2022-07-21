@@ -1,17 +1,15 @@
 from domain import Domain
-import generic_checks
-
-import logging
+from . import generic
 
 wordpress_ns = ["ns1.wordpress.com", "ns2.wordpress.com", "ns3.wordpress.com"]
 
 
 def potential(domain: Domain, **kwargs) -> bool:
-    return generic_checks.string_in_ns(domain, wordpress_ns)
+    return generic.NS.match(domain, wordpress_ns)
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    return generic_checks.no_SOA_on_NS(domain)
+    return generic.NS.no_SOA(domain)
 
 
 INFO = """
