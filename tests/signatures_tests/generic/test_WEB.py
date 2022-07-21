@@ -1,5 +1,5 @@
 from domain import Domain
-import signatures.generic
+from signatures.generic import WEB
 
 from collections import namedtuple
 
@@ -17,10 +17,7 @@ def test_check_string_in_body_success_on_full_match():
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.fetch_web = mock_fetch_web
-    assert (
-        signatures.generic.WEB.string_in_body(domain, string_in_body_full_match, False)
-        == True
-    )
+    assert WEB.string_in_body(domain, string_in_body_full_match, False) == True
 
 
 def test_check_string_in_body_success_on_partial_match():
@@ -29,12 +26,7 @@ def test_check_string_in_body_success_on_partial_match():
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.fetch_web = mock_fetch_web
-    assert (
-        signatures.generic.WEB.string_in_body(
-            domain, string_in_body_partial_match, False
-        )
-        == True
-    )
+    assert WEB.string_in_body(domain, string_in_body_partial_match, False) == True
 
 
 def test_check_string_in_body_failure_on_no_match():
@@ -43,10 +35,7 @@ def test_check_string_in_body_failure_on_no_match():
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.fetch_web = mock_fetch_web
-    assert (
-        signatures.generic.WEB.string_in_body(domain, string_in_body_no_match, False)
-        == False
-    )
+    assert WEB.string_in_body(domain, string_in_body_no_match, False) == False
 
 
 def test_check_string_in_body_failure_on_no_body():
@@ -55,7 +44,4 @@ def test_check_string_in_body_failure_on_no_body():
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.fetch_web = mock_fetch_web
-    assert (
-        signatures.generic.WEB.string_in_body(domain, string_in_body_full_match, False)
-        == False
-    )
+    assert WEB.string_in_body(domain, string_in_body_full_match, False) == False

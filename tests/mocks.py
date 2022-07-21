@@ -1,6 +1,4 @@
 from collections import namedtuple
-from importlib.resources import path
-from pydoc import resolve
 from domain import Domain
 import requests
 import dns.resolver

@@ -1,6 +1,7 @@
 from domain import Domain
 from signatures import shopify
-import mocks
+
+from tests import mocks
 
 
 def test_potential_success_match_ipv4():
