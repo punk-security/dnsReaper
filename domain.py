@@ -22,10 +22,15 @@ class Domain:
             return []
 
     def fetch_std_records(self):
-        self.NS = self.query("NS")
+        self.CNAME = self.query("CNAME")
         self.A = self.query("A")
         self.AAAA = self.query("AAAA")
-        self.CNAME = self.query("CNAME")
+        if self.CNAME:
+            # return early if we get a CNAME otherwise we get records for the cname aswell
+            # this is actually desirable for A/AAAA but not NS as the next zone
+            # will be queried based on the CNAME value, not the original domain
+            return
+        self.NS = self.query("NS")
 
     def __init__(self, domain, fetch_standard_records=True, ns=None):
         self.domain = domain
