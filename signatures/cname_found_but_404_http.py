@@ -10,7 +10,7 @@ def potential(domain: Domain, **kwargs) -> bool:
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    return generic.WEB.status_code_404(domain, True)
+    return generic.WEB.status_code_404(domain, False)
 
 
 INFO = """
