@@ -11,7 +11,7 @@ string_in_body_partial_match = "response"
 string_in_body_no_match = "goose"
 
 
-def test_check_string_in_body_success_on_full_match():
+def test_string_in_body_success_on_full_match():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["body"])(string_in_body_response)
 
@@ -20,7 +20,7 @@ def test_check_string_in_body_success_on_full_match():
     assert WEB.string_in_body(domain, string_in_body_full_match, False) == True
 
 
-def test_check_string_in_body_success_on_partial_match():
+def test_string_in_body_success_on_partial_match():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["body"])(string_in_body_response)
 
@@ -29,7 +29,7 @@ def test_check_string_in_body_success_on_partial_match():
     assert WEB.string_in_body(domain, string_in_body_partial_match, False) == True
 
 
-def test_check_string_in_body_failure_on_no_match():
+def test_string_in_body_failure_on_no_match():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["body"])(string_in_body_response)
 
@@ -38,7 +38,7 @@ def test_check_string_in_body_failure_on_no_match():
     assert WEB.string_in_body(domain, string_in_body_no_match, False) == False
 
 
-def test_check_string_in_body_failure_on_no_body():
+def test_string_in_body_failure_on_no_body():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["body"])("")
 
