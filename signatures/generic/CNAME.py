@@ -13,19 +13,8 @@ def match(domain: Domain, strings) -> str:
 
 def NX_DOMAIN_on_resolve(domain: Domain) -> bool:
     for cname in domain.CNAME:
-        cname = Domain(cname, fetch_standard_records=True)
-        if cname.A != []:
-            logging.debug(f"A records returned for cname {cname}")
-            continue
-        if cname.AAAA != []:
-            logging.debug(f"AAAA records returned for cname {cname}")
-            continue
-        if cname.CNAME != []:
-            logging.debug(f"NS records returned for cname {cname}")
-            continue
-        if cname.NS != []:
-            logging.debug(f"NS records returned for cname {cname}")
-            continue
-        logging.debug(f"No records returned for domain {cname}")
-        return True
+        cname = Domain(cname, fetch_standard_records=False)
+        if cname.NX_DOMAIN:
+            logging.info(f"NX_Domain for cname {cname}")
+            return True
     return False
