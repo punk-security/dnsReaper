@@ -14,6 +14,15 @@ class Domain:
     def SOA(self):
         return self.query("SOA")
 
+    @property
+    @lru_cache
+    def NX_DOMAIN(self):
+        record_types = ["A", "AAAA", "CNAME", "TXT", "MX", "NS"]
+        for record_type in record_types:
+            if self.query(record_type):
+                return False
+        return True
+
     def query(self, type):
         try:
             resp = self.resolver.resolve(self.domain, type)
@@ -33,7 +42,7 @@ class Domain:
         self.NS = self.query("NS")
 
     def __init__(self, domain, fetch_standard_records=True, ns=None):
-        self.domain = domain
+        self.domain = domain.rstrip(".")
         self.NS = []
         self.A = []
         self.AAAA = []
