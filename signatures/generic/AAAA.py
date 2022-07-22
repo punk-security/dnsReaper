@@ -1,6 +1,7 @@
 from domain import Domain
 import logging
 
+
 def match(domain: Domain, ipv6) -> str:
     if type(ipv6) == str:
         ipv6 = [ipv6]
