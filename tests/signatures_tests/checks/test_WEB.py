@@ -1,5 +1,5 @@
 from domain import Domain
-from signatures.generic import WEB
+from signatures.checks import WEB
 
 from collections import namedtuple
 

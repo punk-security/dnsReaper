@@ -1,6 +1,6 @@
 from . import base
 
-import signatures.generic
+import signatures.checks
 
 from detection_enums import CONFIDENCE
 
@@ -12,10 +12,10 @@ An attacker can register this domain with {service} so they get provisioned onto
 
 class ns_found_but_no_SOA(base.Base):
     def potential(self, domain, **kwargs) -> bool:
-        return signatures.generic.NS.match(domain, self.ns)
+        return signatures.checks.NS.match(domain, self.ns)
 
     def check(self, domain, **kwargs) -> bool:
-        return signatures.generic.NS.no_SOA_detected(domain)
+        return signatures.checks.NS.no_SOA_detected(domain)
 
     def __init__(
         self,

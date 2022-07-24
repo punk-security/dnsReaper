@@ -1,6 +1,6 @@
 from domain import Domain
 import signatures
-from signatures.routine.ip_found_but_string_in_body import (
+from signatures.templates.ip_found_but_string_in_body import (
     ip_found_but_string_in_body,
 )
 from tests import mocks

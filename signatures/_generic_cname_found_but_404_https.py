@@ -1,8 +1,8 @@
 from domain import Domain
-from . import generic
+from . import checks
 import detection_enums
 
-from .routine.base import Base
+from .templates.base import Base
 
 
 def potential(domain: Domain, **kwargs) -> bool:
@@ -10,7 +10,7 @@ def potential(domain: Domain, **kwargs) -> bool:
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    return generic.WEB.status_code_404(domain, True)
+    return checks.WEB.status_code_404(domain, True)
 
 
 INFO = """

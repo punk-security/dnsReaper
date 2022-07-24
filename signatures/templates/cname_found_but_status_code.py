@@ -1,6 +1,6 @@
 from . import base
 
-import signatures.generic
+import signatures.checks
 
 from detection_enums import CONFIDENCE
 
@@ -12,10 +12,10 @@ You should investigate this 404 response.
 
 class cname_found_but_status_code(base.Base):
     def potential(self, domain, **kwargs) -> bool:
-        return signatures.generic.CNAME.match(domain, self.cname)
+        return signatures.checks.CNAME.match(domain, self.cname)
 
     def check(self, domain, **kwargs) -> bool:
-        return signatures.generic.WEB.status_code_match(domain, self.code, self.https)
+        return signatures.checks.WEB.status_code_match(domain, self.code, self.https)
 
     def __init__(
         self,

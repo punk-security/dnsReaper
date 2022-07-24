@@ -1,6 +1,6 @@
 from . import base
 
-import signatures.generic
+import signatures.checks
 
 from detection_enums import CONFIDENCE
 
@@ -12,16 +12,16 @@ An attacker can register this domain on {service} and serve their own web conten
 
 class ip_found_but_string_in_body(base.Base):
     def potential(self, domain, **kwargs) -> bool:
-        if signatures.generic.A.match(domain, self.ips):
+        if signatures.checks.A.match(domain, self.ips):
             return True
-        return signatures.generic.AAAA.match(domain, self.ips)
+        return signatures.checks.AAAA.match(domain, self.ips)
 
     def check(self, domain, **kwargs) -> bool:
         if self.https:
-            return signatures.generic.WEB.string_in_body_https(
+            return signatures.checks.WEB.string_in_body_https(
                 domain, self.domain_not_configured_message
             )
-        return signatures.generic.WEB.string_in_body_http(
+        return signatures.checks.WEB.string_in_body_http(
             domain, self.domain_not_configured_message
         )
 

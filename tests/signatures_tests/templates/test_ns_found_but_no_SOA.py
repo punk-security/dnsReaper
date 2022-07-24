@@ -1,6 +1,6 @@
 from domain import Domain
 import signatures
-from signatures.routine.ns_found_but_no_SOA import (
+from signatures.templates.ns_found_but_no_SOA import (
     ns_found_but_no_SOA,
 )
 

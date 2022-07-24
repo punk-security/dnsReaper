@@ -1,5 +1,5 @@
 from domain import Domain
-from signatures.generic import CNAME
+from signatures.checks import CNAME
 from unittest.mock import patch, PropertyMock
 
 

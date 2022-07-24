@@ -1,5 +1,5 @@
 from domain import Domain
-from signatures.generic import AAAA
+from signatures.checks import AAAA
 
 
 def test_ipv6_in_AAAA_for_single_ip():

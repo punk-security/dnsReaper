@@ -1,6 +1,6 @@
 from domain import Domain
 import signatures
-from signatures.routine.cname_found_but_status_code import (
+from signatures.templates.cname_found_but_status_code import (
     cname_found_but_status_code,
 )
 

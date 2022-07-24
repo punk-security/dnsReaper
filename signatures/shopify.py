@@ -1,8 +1,8 @@
 from domain import Domain
-from . import generic
+from . import checks
 import detection_enums
 
-from .routine.base import Base
+from .templates.base import Base
 
 shopify_ipv4 = "23.227.38.65"
 shopify_cname = "shops.myshopify.com"
@@ -10,11 +10,11 @@ domain_not_configured_message = "Only one step left!"
 
 
 def potential(domain: Domain, **kwargs) -> bool:
-    return generic.COMBINED.matching_ipv4_or_cname(domain, shopify_ipv4, shopify_cname)
+    return checks.COMBINED.matching_ipv4_or_cname(domain, shopify_ipv4, shopify_cname)
 
 
 def check(domain: Domain, **kwargs) -> bool:
-    return generic.WEB.string_in_body_http(domain, domain_not_configured_message)
+    return checks.WEB.string_in_body_http(domain, domain_not_configured_message)
 
 
 INFO = """

@@ -1,6 +1,6 @@
 from domain import Domain
 import signatures
-from signatures.routine.cname_found_but_NX_DOMAIN import (
+from signatures.templates.cname_found_but_NX_DOMAIN import (
     cname_found_but_NX_DOMAIN,
 )
 

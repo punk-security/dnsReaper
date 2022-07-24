@@ -1,5 +1,5 @@
 from domain import Domain
-from signatures.generic import A
+from signatures.checks import A
 
 
 def test_match_for_single_ip():

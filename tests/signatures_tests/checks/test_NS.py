@@ -1,5 +1,5 @@
 from domain import Domain
-from signatures.generic import NS
+from signatures.checks import NS
 from unittest.mock import patch, PropertyMock
 
 

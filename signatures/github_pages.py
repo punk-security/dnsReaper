@@ -1,4 +1,4 @@
-from .routine.ip_found_but_string_in_body import ip_found_but_string_in_body
+from .templates.ip_found_but_string_in_body import ip_found_but_string_in_body
 
 github_pages_ipv4 = [
     "185.199.108.153",

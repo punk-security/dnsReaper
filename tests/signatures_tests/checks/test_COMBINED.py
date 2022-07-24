@@ -1,5 +1,5 @@
 from domain import Domain
-from signatures.generic import COMBINED
+from signatures.checks import COMBINED
 
 ## matching_ipv4_or_ipv6
 def test_matching_ipv4_or_ipv6_ipv4_match():
