@@ -1,29 +1,19 @@
 import signatures
-import detection_enums
+import pytest
 
-signatures = [getattr(signatures, signature).test for signature in signatures.__all__]
-
-
-def test_signatures_all_have_a_potential():
-    for signature in signatures:
-        assert callable(getattr(signature, "potential"))
+all_signatures = [getattr(signatures, signature) for signature in signatures.__all__]
 
 
-def test_signatures_all_have_a_check():
-    for signature in signatures:
-        assert callable(getattr(signature, "check"))
+@pytest.mark.parametrize("signature", all_signatures)
+def test_signatures_have_a_test_defined(signature):
+    assert hasattr(signature, "test") == True
 
 
-def test_signatures_all_have_an_INFO_string():
-    for signature in signatures:
-        assert type(getattr(signature, "INFO")) is str
-
-
-def test_signatures_all_have_an_INFO_string():
-    for signature in signatures:
-        assert type(getattr(signature, "CONFIDENCE")) is detection_enums.CONFIDENCE
+@pytest.mark.parametrize("signature", all_signatures)
+def test_signatures_inherit_from_Base(signature):
+    assert issubclass(type(signature.test), signatures.templates.base.Base)
 
 
 def test_signatures_INFO_strings_are_unique():
-    INFOs = [signature.INFO for signature in signatures]
+    INFOs = [signature.test.INFO for signature in all_signatures]
     assert len(INFOs) == len(set(INFOs))
