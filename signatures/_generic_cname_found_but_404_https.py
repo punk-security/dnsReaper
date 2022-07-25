@@ -6,7 +6,12 @@ from .templates.base import Base
 
 
 def potential(domain: Domain, **kwargs) -> bool:
-    return domain.CNAME != []
+    if domain.CNAME != []:
+        for cname in domain.CNAME:
+            if domain.domain.split(".")[-2:] != cname.split(".")[-2:]:
+                # last 2 parts of domain dont match, doesnt belong to same org
+                return True
+    return False
 
 
 def check(domain: Domain, **kwargs) -> bool:

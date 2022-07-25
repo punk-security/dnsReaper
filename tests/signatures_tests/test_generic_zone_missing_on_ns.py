@@ -17,3 +17,9 @@ def test_potential_success_with_multiple_nameservers():
 def test_potential_failure():
     domain = Domain("mock.local", fetch_standard_records=False)
     assert _generic_zone_missing_on_ns.test.potential(domain) == False
+
+
+def test_potential_failure_with_same_root_for_both_domain_and_ns():
+    domain = Domain("something.mock.local", fetch_standard_records=False)
+    domain.NS = ["ns1.mock.local"]
+    assert _generic_zone_missing_on_ns.test.potential(domain) == False

@@ -15,6 +15,12 @@ def test_potential_failure():
     assert _generic_cname_found_but_404_http.test.potential(domain) == False
 
 
+def test_potential_failure_with_same_root_For_both_domain_and_cname():
+    domain = Domain("foo.mock.local", fetch_standard_records=False)
+    domain.CNAME = ["bar.mock.local"]
+    assert _generic_cname_found_but_404_http.test.potential(domain) == False
+
+
 def test_check_success():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(404)
