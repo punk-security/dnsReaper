@@ -5,7 +5,12 @@ import detection_enums
 from .templates.base import Base
 
 
-filtered_cname_substrings = ["elb.amazonaws.com", ".cloudfront.net", ".oracle.com"]
+filtered_cname_substrings = [
+    "elb.amazonaws.com",
+    ".cloudfront.net",
+    ".oracle.com",
+    ".invalid",
+]
 
 
 def cname_should_be_filtered(cname):
