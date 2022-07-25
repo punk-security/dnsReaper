@@ -18,6 +18,6 @@ The defined domain has a CNAME record configured but the CNAME does not resolve.
 You should look to see if you can register or takeover this CNAME.
     """
 
-test = Base(INFO, detection_enums.CONFIDENCE.UNLIKELY)
+test = Base(INFO, detection_enums.CONFIDENCE.POTENTIAL)
 test.potential = potential
 test.check = check
