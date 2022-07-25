@@ -1,4 +1,4 @@
-from .routine.cname_found_but_NX_DOMAIN import cname_found_but_NX_DOMAIN
+from .templates.cname_found_but_NX_DOMAIN import cname_found_but_NX_DOMAIN
 
 cnames = [
     ".cloudapp.net",

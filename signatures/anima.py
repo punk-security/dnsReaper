@@ -1,4 +1,4 @@
-from .routine.ip_found_but_string_in_body import ip_found_but_string_in_body
+from .templates.ip_found_but_string_in_body import ip_found_but_string_in_body
 
 test = ip_found_but_string_in_body(
     ips="35.164.217.247",

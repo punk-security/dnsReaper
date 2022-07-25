@@ -3,6 +3,11 @@ from domain import Domain
 import requests
 import dns.resolver
 import ipaddress
+from uuid import uuid4
+
+
+def random_string():
+    return uuid4().hex[:8]
 
 
 def mock_web_response_with_static_value(
