@@ -5,8 +5,25 @@ import detection_enums
 from .templates.base import Base
 
 
+filtered_cname_substrings = ["elb.amazonaws.com", ".cloudfront.net", ".oracle.com"]
+
+
+def cname_should_be_filtered(cname):
+    for f in filtered_cname_substrings:
+        if f in cname:
+            return True
+    return False
+
+
 def potential(domain: Domain, **kwargs) -> bool:
-    return domain.CNAME != []
+    if domain.CNAME != []:
+        for cname in domain.CNAME:
+            if cname_should_be_filtered(cname):
+                continue
+            if domain.domain.split(".")[-2:] != cname.split(".")[-2:]:
+                # last 2 parts of domain dont match, doesnt belong to same org
+                return True
+    return False
 
 
 def check(domain: Domain, **kwargs) -> bool:
