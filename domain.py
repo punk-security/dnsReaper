@@ -26,7 +26,7 @@ class Domain:
     def query(self, type):
         try:
             resp = self.resolver.resolve(self.domain, type)
-            return [record.to_text() for record in resp]
+            return [record.to_text().rstrip(".") for record in resp]
         except:
             return []
 
@@ -72,3 +72,12 @@ class Domain:
 
     def __repr__(self):
         return self.domain
+
+    @property
+    def records(self):
+        return f"""
+        A: {self.A}
+        AAAA: {self.AAAA}
+        CNAME: {self.CNAME}
+        NS: {self.NS}
+        """

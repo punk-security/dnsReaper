@@ -6,7 +6,12 @@ from .templates.base import Base
 
 
 def potential(domain: Domain, **kwargs) -> bool:
-    return domain.NS != []
+    if domain.NS != []:
+        for ns in domain.NS:
+            if domain.domain.split(".")[-2:] != ns.split(".")[-2:]:
+                # last 2 parts of domain dont match, otherwise belongs to same org
+                return True
+    return False
 
 
 def check(domain: Domain, **kwargs) -> bool:
