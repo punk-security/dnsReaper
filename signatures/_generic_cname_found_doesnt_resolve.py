@@ -25,6 +25,9 @@ def potential(domain: Domain, **kwargs) -> bool:
         for cname in domain.CNAME:
             if cname_should_be_filtered(cname):
                 continue
+            if domain.domain in cname:
+                # the entire domain is in the cname so its probably not customer provided input
+                continue
             if domain.domain.split(".")[-2:] != cname.split(".")[-2:]:
                 # last 2 parts of domain dont match, doesnt belong to same org
                 return True
