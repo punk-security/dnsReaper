@@ -17,6 +17,7 @@ cnames = [
     ".redis.cache.windows.net",
     ".azurehdinsight.net",
     ".servicebus.windows.net",
+    ".trafficmanager.net",
 ]
 
 test = cname_found_but_NX_DOMAIN(
