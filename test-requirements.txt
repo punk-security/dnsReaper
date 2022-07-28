@@ -1,3 +1,4 @@
 dnspython
 requests
 pytest
+python-whois
