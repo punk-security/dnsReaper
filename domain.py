@@ -7,6 +7,12 @@ import logging
 
 import urllib3
 
+import collections
+
+collections.Iterable = collections.abc.Iterable
+collections.Mapping = collections.abc.Mapping
+import whois
+
 
 class Domain:
     @property
@@ -69,6 +75,14 @@ class Domain:
             web_status = 0
             web_body = ""
         return namedtuple("web_response", ["status_code", "body"])(web_status, web_body)
+
+    @property
+    @lru_cache
+    def is_registered(self):
+        try:
+            return whois.whois(self.domain)["registrar"] != None
+        except:
+            return True
 
     def __repr__(self):
         return self.domain
