@@ -2,6 +2,9 @@ import argparse
 from os import linesep, environ
 import sys
 
+import providers
+import inspect
+
 runtime = environ.get("SM_COMMAND", f"{sys.argv[0]}")
 
 banner = """\
@@ -25,7 +28,7 @@ class CustomParser(argparse.ArgumentParser):
 
 
 parser = CustomParser(
-    usage=f"{linesep} {runtime} {{file/stdin/aws/azure/cloudflare}} [options] {linesep}",
+    usage=f"{linesep} {runtime} {{ {'/'.join(providers.__all__) } }} [options] {linesep}",
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description="",
 )
@@ -33,17 +36,17 @@ parser = CustomParser(
 parser.add_argument(
     "provider",
     type=str,
-    choices=["file", "stdin", "aws", "azure", "cloudflare"],
+    choices=providers.__all__,
 )
 
-file_group = parser.add_argument_group("file")
-file_group.add_argument(
-    "--filename", type=str, help="filename containing domains, one per line"
-)
-
-aws_group = parser.add_argument_group("aws")
-aws_group.add_argument("--access-key-id")
-aws_group.add_argument("--access-key-secret")
+for provider in providers.__all__:
+    group = parser.add_argument_group(provider)
+    module = getattr(providers, provider)
+    for arg in inspect.getfullargspec(module.fetch_domains)[0]:
+        group.add_argument(
+            f"--{arg.replace('_','-')}",
+            type=str,
+        )
 
 parser.add_argument(
     "--out",
@@ -111,8 +114,8 @@ def parse_args():
         parser.error("file inputs requires --filename")
 
     if "aws" == args.provider and (
-        args.access_key_id is None or args.access_key_secret is None
+        args.aws_access_key_id is None or args.aws_access_key_secret is None
     ):
-        parser.error("aws requires --access_key_id and --access_key_secret")
+        parser.error("aws requires --aws-access_key_id and --aws-access_key_secret")
 
     return args

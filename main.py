@@ -1,8 +1,8 @@
-from finding import Finding
+from scan import scan_domain
 import signatures
-from domain import Domain
 import output
 import detection_enums
+import providers
 
 from multiprocessing.pool import ThreadPool
 import threading
@@ -27,23 +27,15 @@ if args.verbose > 1:
 
 logging.basicConfig(format="%(message)s", level=verbosity_level)
 logging.StreamHandler(stderr)
+
+if not args.verbose > 2:
+    for module in ["boto", "requests"]:
+        logger = logging.getLogger(module)
+        logger.setLevel(logging.CRITICAL)
 ###### domain ingestion
 
-## file
-
-if args.provider == "file":
-
-    def read_domains(filename):
-        with open(filename) as file:
-            try:
-                lines = file.readlines()
-                logging.info(f"Ingested {len(lines)} domains")
-            except Exception as e:
-                logging.error(f"Could not read any domains from file {filename} -- {e}")
-        return [Domain(line.rstrip()) for line in lines]
-
-    domains = read_domains(args.filename)
-
+provider = getattr(providers, args.provider)
+domains = provider.fetch_domains(**args.__dict__)
 
 ###### signatures
 
@@ -72,47 +64,27 @@ if args.disable_probable:
 logging.info(f"Testing with {len(signatures)} signatures")
 
 
-def scan_domain(d, output_handler: output.Output):
-    global lock
-    global findings
-    for signature in signatures:
-        logging.debug(
-            f"Testing domain '{d.domain}' with signature '{signature.__name__}'"
-        )
-        if signature.test.potential(domain=d):
-            logging.debug(
-                f"Potential takeover found on DOMAIN '{d}' using signature '{signature.__name__}'"
-            )
-            if signature.test.check(domain=d):
-                status = signature.test.CONFIDENCE.value
-                logging.info(
-                    f"Takeover {status} on {d} using signature '{signature.__name__}'"
-                )
-                finding = Finding(
-                    domain=d.domain,
-                    signature=signature.__name__,
-                    info=signature.test.INFO,
-                    confidence=signature.test.CONFIDENCE,
-                )
-                with lock:
-                    findings.append(finding)
-                    output_handler.write(finding)
-            else:
-                logging.debug(
-                    f"Takeover not possible on DOMAIN '{d}' using signature '{signature.__name__}'"
-                )
+###### scanning
 
-
-global lock
-global findings
 findings = []
 lock = threading.Lock()
 with output.Output(args.out_format, args.out) as o:
-    scan = partial(scan_domain, output_handler=o)
+    scan = partial(
+        scan_domain,
+        signatures=signatures,
+        output_handler=o,
+        lock=lock,
+        findings=findings,
+    )
     pool = ThreadPool(processes=args.parallelism)
     pool.map(scan, domains)
 
-logging.info(f"\n\nWe found {len(findings)} takeovers ☠️")
+
+###### exit
+
+logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")
+for finding in findings:
+    logging.warning(f"-- DOMAIN '{finding.domain}' :: SIGNATURE '{finding.signature}'")
 logging.warning(f"\n...Thats all folks!")
 
 if args.pipeline:
