@@ -3,9 +3,7 @@ from finding import Finding
 import logging
 
 
-def scan_domain(domain, signatures, output_handler):
-    global lock
-    global findings
+def scan_domain(domain, signatures, lock, findings, output_handler):
     for signature in signatures:
         logging.debug(
             f"Testing domain '{domain.domain}' with signature '{signature.__name__}'"

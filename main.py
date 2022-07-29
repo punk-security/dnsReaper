@@ -62,12 +62,16 @@ logging.info(f"Testing with {len(signatures)} signatures")
 
 ###### scanning
 
-global lock
-global findings
 findings = []
 lock = threading.Lock()
 with output.Output(args.out_format, args.out) as o:
-    scan = partial(scan_domain, signatures=signatures, output_handler=o)
+    scan = partial(
+        scan_domain,
+        signatures=signatures,
+        output_handler=o,
+        lock=lock,
+        findings=findings,
+    )
     pool = ThreadPool(processes=args.parallelism)
     pool.map(scan, domains)
 
