@@ -44,8 +44,8 @@ file_group.add_argument(
 )
 
 aws_group = parser.add_argument_group("aws")
-aws_group.add_argument("--access-key-id")
-aws_group.add_argument("--access-key-secret")
+aws_group.add_argument("--aws-access-key-id")
+aws_group.add_argument("--aws-access-key-secret")
 
 parser.add_argument(
     "--out",
@@ -113,8 +113,8 @@ def parse_args():
         parser.error("file inputs requires --filename")
 
     if "aws" == args.provider and (
-        args.access_key_id is None or args.access_key_secret is None
+        args.aws_access_key_id is None or args.aws_access_key_secret is None
     ):
-        parser.error("aws requires --access_key_id and --access_key_secret")
+        parser.error("aws requires --aws-access_key_id and --aws-access_key_secret")
 
     return args

@@ -1,3 +1,4 @@
 dnspython
 requests
 python-whois
+boto3
