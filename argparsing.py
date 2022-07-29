@@ -23,6 +23,7 @@ class CustomParser(argparse.ArgumentParser):
         self.print_usage()
         sys.exit(2)
 
+
 providers = ["file", "stdin", "aws", "azure", "cloudflare"]
 
 parser = CustomParser(
