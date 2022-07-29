@@ -1,3 +1,4 @@
+from multiprocessing.sharedctypes import Value
 from domain import Domain
 from signatures.checks import CNAME
 from unittest.mock import patch, PropertyMock
@@ -110,3 +111,32 @@ def test_NX_DOMAIN_on_resolve_failure_no_cname():
     domain = Domain("mock.local", fetch_standard_records=False)
     with patch("domain.Domain.query", return_value=["something"]):
         assert CNAME.NX_DOMAIN_on_resolve(domain_with_cname) == False
+
+
+def test_is_unregistered_failure_no_cname():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    assert CNAME.is_unregistered(domain) == False
+
+
+def test_is_unregistered_failure_cname_registered():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    domain.CNAME = ["something"]
+    with patch("domain.whois.whois", return_value={"registrar": "something"}):
+        assert CNAME.is_unregistered(domain) == False
+
+
+def test_is_unregistered_failure_whois_failure():
+    def whois(domain):
+        raise ValueError("BOOK")
+
+    domain = Domain("mock.local", fetch_standard_records=False)
+    domain.CNAME = ["something"]
+    with patch("domain.whois.whois", new=whois):
+        assert CNAME.is_unregistered(domain) == False
+
+
+def test_is_unregistered_success_cname_unregistered():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    domain.CNAME = ["something"]
+    with patch("domain.whois.whois", return_value={"registrar": None}):
+        assert CNAME.is_unregistered(domain) == True
