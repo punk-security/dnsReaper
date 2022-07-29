@@ -1,6 +1,5 @@
-from finding import Finding
+from scan import scan_domain
 import signatures
-from domain import Domain
 import output
 import detection_enums
 import domain_providers
@@ -63,46 +62,17 @@ logging.info(f"Testing with {len(signatures)} signatures")
 
 ###### scanning
 
-
-def scan_domain(d, output_handler: output.Output):
-    global lock
-    global findings
-    for signature in signatures:
-        logging.debug(
-            f"Testing domain '{d.domain}' with signature '{signature.__name__}'"
-        )
-        if signature.test.potential(domain=d):
-            logging.debug(
-                f"Potential takeover found on DOMAIN '{d}' using signature '{signature.__name__}'"
-            )
-            if signature.test.check(domain=d):
-                status = signature.test.CONFIDENCE.value
-                logging.info(
-                    f"Takeover {status} on {d} using signature '{signature.__name__}'"
-                )
-                finding = Finding(
-                    domain=d.domain,
-                    signature=signature.__name__,
-                    info=signature.test.INFO,
-                    confidence=signature.test.CONFIDENCE,
-                )
-                with lock:
-                    findings.append(finding)
-                    output_handler.write(finding)
-            else:
-                logging.debug(
-                    f"Takeover not possible on DOMAIN '{d}' using signature '{signature.__name__}'"
-                )
-
-
 global lock
 global findings
 findings = []
 lock = threading.Lock()
 with output.Output(args.out_format, args.out) as o:
-    scan = partial(scan_domain, output_handler=o)
+    scan = partial(scan_domain, signatures=signatures, output_handler=o)
     pool = ThreadPool(processes=args.parallelism)
     pool.map(scan, domains)
+
+
+###### exit
 
 logging.info(f"\n\nWe found {len(findings)} takeovers ☠️")
 logging.warning(f"\n...Thats all folks!")
