@@ -3,6 +3,8 @@ import logging
 
 from domain import Domain
 
+description = "Scan multiple domains by fetching them from AWS Route53"
+
 
 def get_records(client, zone_id):
     records = []

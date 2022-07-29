@@ -42,6 +42,7 @@ parser.add_argument(
 for provider in providers.__all__:
     group = parser.add_argument_group(provider)
     module = getattr(providers, provider)
+    group.description = module.description
     for arg in inspect.getfullargspec(module.fetch_domains)[0]:
         group.add_argument(
             f"--{arg.replace('_','-')}",
@@ -110,12 +111,8 @@ parser.add_argument(
 
 def parse_args():
     args = parser.parse_args()
-    if "file" == args.provider and (args.filename is None):
-        parser.error("file inputs requires --filename")
-
-    if "aws" == args.provider and (
-        args.aws_access_key_id is None or args.aws_access_key_secret is None
-    ):
-        parser.error("aws requires --aws-access_key_id and --aws-access_key_secret")
-
+    module = getattr(providers, args.provider)
+    for arg in inspect.getfullargspec(module.fetch_domains)[0]:
+        if args.__dict__[arg] == None:
+            parser.error(f" {args.provider} provider requires --{arg.replace('_','-')}")
     return args
