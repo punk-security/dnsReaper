@@ -2,7 +2,7 @@ from scan import scan_domain
 import signatures
 import output
 import detection_enums
-import domain_providers
+import providers
 
 from multiprocessing.pool import ThreadPool
 import threading
@@ -29,13 +29,9 @@ logging.basicConfig(format="%(message)s", level=verbosity_level)
 logging.StreamHandler(stderr)
 ###### domain ingestion
 
-if args.provider == "file":
-    domains = domain_providers.from_file(args.filename)
+provider = getattr(providers, args.provider)
+domains = provider.fetch_domains(**args.__dict__)
 
-if args.provider == "aws":
-    domains = domain_providers.from_aws(
-        args.aws_access_key_id, args.aws_access_key_secret
-    )
 ###### signatures
 
 signatures = [getattr(signatures, signature) for signature in signatures.__all__]

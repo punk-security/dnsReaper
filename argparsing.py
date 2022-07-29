@@ -2,6 +2,9 @@ import argparse
 from os import linesep, environ
 import sys
 
+import providers
+import inspect
+
 runtime = environ.get("SM_COMMAND", f"{sys.argv[0]}")
 
 banner = """\
@@ -24,10 +27,8 @@ class CustomParser(argparse.ArgumentParser):
         sys.exit(2)
 
 
-providers = ["file", "stdin", "aws", "azure", "cloudflare"]
-
 parser = CustomParser(
-    usage=f"{linesep} {runtime} {{ {'/'.join(providers) }}} [options] {linesep}",
+    usage=f"{linesep} {runtime} {{ {'/'.join(providers.__all__) } }} [options] {linesep}",
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description="",
 )
@@ -35,17 +36,17 @@ parser = CustomParser(
 parser.add_argument(
     "provider",
     type=str,
-    choices=providers,
+    choices=providers.__all__,
 )
 
-file_group = parser.add_argument_group("file")
-file_group.add_argument(
-    "--filename", type=str, help="filename containing domains, one per line"
-)
-
-aws_group = parser.add_argument_group("aws")
-aws_group.add_argument("--aws-access-key-id")
-aws_group.add_argument("--aws-access-key-secret")
+for provider in providers.__all__:
+    group = parser.add_argument_group(provider)
+    module = getattr(providers, provider)
+    for arg in inspect.getfullargspec(module.fetch_domains)[0]:
+        group.add_argument(
+            f"--{arg.replace('_','-')}",
+            type=str,
+        )
 
 parser.add_argument(
     "--out",

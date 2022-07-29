@@ -1,20 +1,10 @@
+import boto3
 import logging
+
 from domain import Domain
 
-import boto3
 
-
-def from_file(filename):
-    with open(filename) as file:
-        try:
-            lines = file.readlines()
-            logging.info(f"Ingested {len(lines)} domains")
-        except Exception as e:
-            logging.error(f"Could not read any domains from file {filename} -- {e}")
-    return [Domain(line.rstrip()) for line in lines]
-
-
-def aws_get_records(client, zone_id):
+def get_records(client, zone_id):
     records = []
     paginator = client.get_paginator("list_resource_record_sets")
     source_zone_records = paginator.paginate(HostedZoneId=zone_id)
@@ -23,7 +13,7 @@ def aws_get_records(client, zone_id):
     return records
 
 
-def aws_convert_records_to_domains(records):
+def convert_records_to_domains(records):
     buf = {}
     for record in records:
         if record["Name"] not in buf.keys():
@@ -44,7 +34,7 @@ def aws_convert_records_to_domains(records):
         yield domain
 
 
-def aws_get_zones(client):
+def get_zones(client):
     hosted_zones = client.list_hosted_zones()["HostedZones"]
     logging.debug(f"Got {len(hosted_zones)} zones from aws")
     if len(hosted_zones) == 0:
@@ -56,17 +46,17 @@ def aws_get_zones(client):
     return public_zones
 
 
-def from_aws(access_key_id, access_key_secret):
+def fetch_domains(aws_access_key_id, aws_access_key_secret, **args):
     domains = []
     client = boto3.client(
         "route53",
-        aws_access_key_id=access_key_id,
-        aws_secret_access_key=access_key_secret,
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_access_key_secret,
     )
-    zones = aws_get_zones(client)
+    zones = get_zones(client)
     for zone in zones:
-        records = aws_get_records(client, zone["Id"].replace("/hostedzone/", ""))
+        records = get_records(client, zone["Id"].replace("/hostedzone/", ""))
         logging.debug(f"Got {len(records)} records for aws zone '{zone['Name']}'")
-        for domain in aws_convert_records_to_domains(records):
+        for domain in convert_records_to_domains(records):
             domains.append(domain)
     return domains
