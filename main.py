@@ -32,7 +32,10 @@ logging.StreamHandler(stderr)
 if args.provider == "file":
     domains = domain_providers.from_file(args.filename)
 
-
+if args.provider == "aws":
+    domains = domain_providers.from_aws(
+        args.aws_access_key_id, args.aws_access_key_secret
+    )
 ###### signatures
 
 signatures = [getattr(signatures, signature) for signature in signatures.__all__]
@@ -78,7 +81,7 @@ with output.Output(args.out_format, args.out) as o:
 
 ###### exit
 
-logging.info(f"\n\nWe found {len(findings)} takeovers ☠️")
+logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")
 logging.warning(f"\n...Thats all folks!")
 
 if args.pipeline:
