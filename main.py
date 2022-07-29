@@ -27,6 +27,11 @@ if args.verbose > 1:
 
 logging.basicConfig(format="%(message)s", level=verbosity_level)
 logging.StreamHandler(stderr)
+
+if not args.verbose > 2:
+    for module in ["boto", "requests"]:
+        logger = logging.getLogger(module)
+        logger.setLevel(logging.CRITICAL)
 ###### domain ingestion
 
 provider = getattr(providers, args.provider)
