@@ -82,6 +82,8 @@ with output.Output(args.out_format, args.out) as o:
 ###### exit
 
 logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")
+for finding in findings:
+    logging.warning(f"-- DOMAIN '{finding.domain}' :: SIGNATURE '{finding.signature}'")
 logging.warning(f"\n...Thats all folks!")
 
 if args.pipeline:
