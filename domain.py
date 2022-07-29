@@ -81,7 +81,9 @@ class Domain:
     def is_registered(self):
         try:
             return whois.whois(self.domain)["registrar"] != None
-        except:
+        except Exception as e:
+            if "No match for" in e.args[0]:
+                return False
             return True
 
     def __repr__(self):
