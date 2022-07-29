@@ -28,6 +28,12 @@ def test_potential_failure_with_filtered_cname():
         assert _generic_cname_found_doesnt_resolve.test.potential(domain) == False
 
 
+def test_potential_failure_with_domain_in_cname():
+    domain = Domain("foo.mock.local", fetch_standard_records=False)
+    domain.CNAME = ["foo.mock.local.cdn"]
+    assert _generic_cname_found_doesnt_resolve.test.potential(domain) == False
+
+
 def test_check_success():
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.CNAME = ["cname"]
