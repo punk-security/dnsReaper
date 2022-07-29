@@ -3,6 +3,7 @@ import signatures
 from domain import Domain
 import output
 import detection_enums
+import domain_providers
 
 from multiprocessing.pool import ThreadPool
 import threading
@@ -29,20 +30,8 @@ logging.basicConfig(format="%(message)s", level=verbosity_level)
 logging.StreamHandler(stderr)
 ###### domain ingestion
 
-## file
-
 if args.provider == "file":
-
-    def read_domains(filename):
-        with open(filename) as file:
-            try:
-                lines = file.readlines()
-                logging.info(f"Ingested {len(lines)} domains")
-            except Exception as e:
-                logging.error(f"Could not read any domains from file {filename} -- {e}")
-        return [Domain(line.rstrip()) for line in lines]
-
-    domains = read_domains(args.filename)
+    domains = domain_providers.from_file(args.filename)
 
 
 ###### signatures
@@ -70,6 +59,9 @@ if args.disable_probable:
     ]
 
 logging.info(f"Testing with {len(signatures)} signatures")
+
+
+###### scanning
 
 
 def scan_domain(d, output_handler: output.Output):
