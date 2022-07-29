@@ -23,9 +23,10 @@ class CustomParser(argparse.ArgumentParser):
         self.print_usage()
         sys.exit(2)
 
+providers = ["file", "stdin", "aws", "azure", "cloudflare"]
 
 parser = CustomParser(
-    usage=f"{linesep} {runtime} {{file/stdin/aws/azure/cloudflare}} [options] {linesep}",
+    usage=f"{linesep} {runtime} {{ {'/'.join(providers) }}} [options] {linesep}",
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description="",
 )
@@ -33,7 +34,7 @@ parser = CustomParser(
 parser.add_argument(
     "provider",
     type=str,
-    choices=["file", "stdin", "aws", "azure", "cloudflare"],
+    choices=providers,
 )
 
 file_group = parser.add_argument_group("file")
