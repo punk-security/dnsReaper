@@ -1,3 +1,4 @@
+import colorama
 import argparse
 from os import linesep, environ
 import sys
@@ -13,11 +14,31 @@ banner = """\
         / /_/ / / / / __ \/ //_/\__ \/ _ \/ ___/ / / / ___/ / __/ / / /
        / ____/ /_/ / / / / ,<  ___/ /  __/ /__/ /_/ / /  / / /_/ /_/ / 
       /_/    \__,_/_/ /_/_/|_|/____/\___/\___/\__,_/_/  /_/\__/\__, /  
-                                             PRESENTS         /____/  
+                                             PRESENTS         /____/
                               DNS Reaper ☠️
 
              Scan all your DNS records for subdomain takeovers!
         """
+
+banner_with_colour = (
+    colorama.Fore.GREEN
+    + """\
+          ____              __   _____                      _ __       
+         / __ \__  ______  / /__/ ___/___  _______  _______(_) /___  __
+        / /_/ / / / / __ \/ //_/\__ \/ _ \/ ___/ / / / ___/ / __/ / / /
+       / ____/ /_/ / / / / ,<  ___/ /  __/ /__/ /_/ / /  / / /_/ /_/ / 
+      /_/    \__,_/_/ /_/_/|_|/____/\___/\___/\__,_/_/  /_/\__/\__, /  
+                                             PRESENTS         /____/"""
+    + colorama.Fore.RED
+    + """  
+                              DNS Reaper ☠️"""
+    + colorama.Fore.CYAN
+    + """
+
+             Scan all your DNS records for subdomain takeovers!
+        """
+    + colorama.Fore.RESET
+)
 
 
 class CustomParser(argparse.ArgumentParser):
@@ -107,6 +128,8 @@ parser.add_argument(
     default=0,
     help="-v for verbose, -vv for extra verbose",
 )
+
+parser.add_argument("--nocolour", help="Turns off coloured text", action="store_true")
 
 
 def parse_args():
