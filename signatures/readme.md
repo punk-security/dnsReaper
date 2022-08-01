@@ -12,7 +12,7 @@ Each signature has two components, a ```potential``` function and a ```check``` 
 
 The potential function is used to identify if this signature might be relevant for this domain, and typically should not contain any active check such as a web request or DNS request.  We try to only check data we already have, such as pattern matching the cnames.
 
-The check function is used to validate the takeover and will only run if the domain has passed the potential function.  This check can be slower / more intensive as it wont run for every domain.
+The check function is used to validate the takeover and will only run if the domain has passed the potential function.  This check can be slower / more intensive as it will not run for every domain.
 
 ## Adding a new signature
 
@@ -20,4 +20,4 @@ It is probably best copying another signature that resembles the one you are loo
 
 If a signature uses a standard template such as [cname_found_but_string_in_body](templates/cname_found_but_string_in_body.py) then there are no further tests required.
 
-If you need to use a custom approach, you should use the components in the [checks](checks/) directory.  These are sorted by the domain component you are testing.  These checks are all havily tested for edge cases.  If you need to add a new check component, ensure you add the relevant edge case tests.
+If you need to use a custom approach, you should use the components in the [checks](checks/) directory.  These are sorted by the domain component you are testing.  These checks are all heavily tested for edge cases.  If you need to add a new check component, ensure you add the relevant edge case tests.
