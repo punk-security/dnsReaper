@@ -16,6 +16,8 @@ The description and provider file name are used to configure the argument parser
 
 The fetch_domains function can take any number of arguments, and these are automatically added to the argument parsers and help menu.
 
+For full details on indervidual providers, please visit [docs](../docs/README.md)
+
 #### IMPORTANT:  All providers must have unique argument names (so considering namespacing them such as ```<provider>_access_key``` rather than ```access_key``` )
 
 ## Adding a new provider
