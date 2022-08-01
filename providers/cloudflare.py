@@ -49,7 +49,7 @@ def get_zones(client):
     except Exception as e:
         exit(f"/zones.get api call failed {e}")
 
-    logging.debug(f"Got {len(zones)} zones from cloudflare")
+    logging.info(f"Got {len(zones)} zones from cloudflare")
 
     if len(zones) == 0:
         return []
@@ -69,4 +69,5 @@ def fetch_domains(cloudflare_token, **args):
         )
         for record in convert_records_to_domains(records):
             domains.append(record)
+    logging.warn(f"Got {len(domains)} records from cloudflare")
     return domains
