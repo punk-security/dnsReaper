@@ -59,8 +59,7 @@ class Domain:
         else:
             self.resolver = dns.resolver.Resolver()
             self.resolver.nameservers = [ns]
-        if fetch_standard_records:
-            self.fetch_std_records()
+        self.should_fetch_std_records = fetch_standard_records
 
     @lru_cache
     def fetch_web(self, uri="", https=True, params={}):
