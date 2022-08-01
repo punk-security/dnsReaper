@@ -2,4 +2,5 @@ dnspython
 requests
 python-whois
 boto3
+cloudflare
 colorama
