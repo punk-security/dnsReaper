@@ -9,11 +9,19 @@ import threading
 from functools import partial
 
 import logging
-from sys import stderr, exit
+from sys import stderr, exit, argv
 
 import argparsing
 
-print(argparsing.banner, file=stderr)
+import colorama
+
+
+if "--nocolour" in argv:
+    print(argparsing.banner, file=stderr)
+else:
+    colorama.init()
+    print(argparsing.banner_with_colour, file=stderr)
+
 args = argparsing.parse_args()
 
 ###### verbosity
@@ -84,7 +92,10 @@ with output.Output(args.out_format, args.out) as o:
 
 logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")
 for finding in findings:
-    logging.warning(f"-- DOMAIN '{finding.domain}' :: SIGNATURE '{finding.signature}'")
+    msg = f"-- DOMAIN '{finding.domain}' :: SIGNATURE '{finding.signature}'"
+    if args.nocolour == False:
+        msg = colorama.Fore.RED + msg + colorama.Fore.RESET
+        logging.warning(msg)
 logging.warning(f"\n...Thats all folks!")
 
 if args.pipeline:
