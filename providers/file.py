@@ -1,7 +1,7 @@
 import logging
 from domain import Domain
 
-description = "Scan multiple domains by reading them from a file"
+description = "Read domains from a file, one per line"
 
 
 def fetch_domains(filename, **args):
