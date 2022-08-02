@@ -56,7 +56,7 @@ help:
 {runtime} --help
 
 providers:
-{ linesep.join([f" 🔸 {provider} - {getattr(providers, provider).description}" for provider in providers.__all__ ]) }
+{ linesep.join([f"  > {provider} - {getattr(providers, provider).description}" for provider in providers.__all__ ]) }
 """,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description="",
