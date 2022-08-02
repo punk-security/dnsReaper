@@ -106,9 +106,9 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--disable-unlikely",
+    "--enable-unlikely",
     action="store_true",
-    help="Do not check for unlikely conditions",
+    help="Check for more conditions, but with a high false positive rate",
 )
 
 parser.add_argument(

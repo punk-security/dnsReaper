@@ -59,17 +59,21 @@ if args.signature:
 if args.exclude_signature:
     signatures = [s for s in signatures if s.__name__ not in args.exclude_signature]
 
-if args.disable_unlikely:
+if not args.enable_unlikely:
     signatures = [
-        s for s in signatures if s.CONFIDENCE != detection_enums.CONFIDENCE.UNLIKELY
+        s
+        for s in signatures
+        if s.test.CONFIDENCE != detection_enums.CONFIDENCE.UNLIKELY
     ]
 
 if args.disable_probable:
     signatures = [
-        s for s in signatures if s.CONFIDENCE != detection_enums.CONFIDENCE.POTENTIAL
+        s
+        for s in signatures
+        if s.test.CONFIDENCE != detection_enums.CONFIDENCE.POTENTIAL
     ]
 
-logging.info(f"Testing with {len(signatures)} signatures")
+logging.warning(f"Testing with {len(signatures)} signatures")
 
 
 ###### scanning
@@ -89,10 +93,9 @@ with output.Output(args.out_format, args.out) as o:
 
 
 ###### exit
-
 logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")
 for finding in findings:
-    msg = f"-- DOMAIN '{finding.domain}' :: SIGNATURE '{finding.signature}'"
+    msg = f"-- DOMAIN '{finding.domain}' :: SIGNATURE '{finding.signature}' :: CONFIDENCE '{finding.confidence}'"
     if args.nocolour == False:
         msg = colorama.Fore.RED + msg + colorama.Fore.RESET
         logging.warning(msg)
@@ -101,5 +104,3 @@ logging.warning(f"\n...Thats all folks!")
 if args.pipeline:
     logging.debug(f"Pipeline flag set - Exit code: {len(findings)}")
     exit(len(findings))
-
-# TOFO: test empire-alpha.integ.amazon.com , dipper-cts-gamma-tcp.aws.amazon.com
