@@ -1,3 +1,10 @@
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/punk-security/secret-magpie-cli/graphs/commit-activity)
+[![Maintaner](https://img.shields.io/badge/maintainer-PunkSecurity-blue)](https://www.punksecurity.co.uk)
+[![Docker Pulls](https://img.shields.io/docker/pulls/punksecurity/dnsreaper)](https://hub.docker.com/r/punksecurity/dnsreaper)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=punk-security_dnsReaper&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=punk-security_dnsReaper)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=punk-security_dnsReaper&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=punk-security_dnsReaper)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=punk-security_dnsReaper&metric=bugs)](https://sonarcloud.io/summary/new_code?id=punk-security_dnsReaper)
+
 # DNS Reaper
 
 DNS Reaper is yet another sub-domain takeover tool, but with an emphasis on accuracy, speed and the number of signatures in our arsenal!
@@ -71,12 +78,13 @@ main.py --help
 
 providers:
   > aws - Scan multiple domains by fetching them from AWS Route53
+  > bind - Read domains from a dns BIND zone file, or path to multiple
   > cloudflare - Scan multiple domains by fetching them from Cloudflare
-  > file - Scan multiple domains by reading them from a file
+  > file - Read domains from a file, one per line
   > single - Scan a single domain by providing a domain on the commandline
 
 positional arguments:
-  {aws,cloudflare,file,single}
+  {aws,bind,cloudflare,file,single}
 
 options:
   -h, --help            show this help message and exit
@@ -100,13 +108,18 @@ aws:
   --aws-access-key-id AWS_ACCESS_KEY_ID
   --aws-access-key-secret AWS_ACCESS_KEY_SECRET
 
+bind:
+  Read domains from a dns BIND zone file, or path to multiple
+
+  --bind-zone-file BIND_ZONE_FILE
+
 cloudflare:
   Scan multiple domains by fetching them from Cloudflare
 
   --cloudflare-token CLOUDFLARE_TOKEN
 
 file:
-  Scan multiple domains by reading them from a file
+  Read domains from a file, one per line
 
   --filename FILENAME
 
