@@ -61,4 +61,5 @@ def fetch_domains(aws_access_key_id, aws_access_key_secret, **args):
         logging.debug(f"Got {len(records)} records for aws zone '{zone['Name']}'")
         for domain in convert_records_to_domains(records):
             domains.append(domain)
+    logging.warn(f"Got {len(domains)} records from aws")
     return domains

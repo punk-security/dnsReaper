@@ -49,7 +49,15 @@ class CustomParser(argparse.ArgumentParser):
 
 
 parser = CustomParser(
-    usage=f"{linesep} {runtime} {{ {'/'.join(providers.__all__) } }} [options] {linesep}",
+    usage=f"""
+{runtime} provider [options] 
+
+help:
+{runtime} --help
+
+providers:
+{ linesep.join([f" 🔸 {provider} - {getattr(providers, provider).description}" for provider in providers.__all__ ]) }
+""",
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description="",
 )
