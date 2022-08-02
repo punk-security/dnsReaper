@@ -15,6 +15,9 @@ import argparsing
 
 import colorama
 
+import time
+
+start_time = time.time()
 
 if "--nocolour" in argv:
     print(argparsing.banner, file=stderr)
@@ -99,8 +102,8 @@ for finding in findings:
     if args.nocolour == False:
         msg = colorama.Fore.RED + msg + colorama.Fore.RESET
         logging.warning(msg)
-logging.warning(f"\n...Thats all folks!")
-
+logging.warning(f"\n⏱️  We completed in {time.time() - start_time} seconds")
+logging.warning(f"...Thats all folks!")
 if args.pipeline:
     logging.debug(f"Pipeline flag set - Exit code: {len(findings)}")
     exit(len(findings))
