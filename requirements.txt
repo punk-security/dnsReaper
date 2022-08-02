@@ -4,3 +4,6 @@ python-whois
 boto3
 cloudflare
 colorama
+azure-mgmt-dns
+azure-identity
+msrestazure
