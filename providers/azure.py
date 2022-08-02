@@ -86,9 +86,7 @@ def fetch_domains(
     az_subscription_id, az_tenant_id, az_client_id, az_client_secret, **args
 ):
     domains = []
-    credentials = ClientSecretCredential(
-        az_tenant_id, az_client_id, az_client_secret, **args
-    )
+    credentials = ClientSecretCredential(az_tenant_id, az_client_id, az_client_secret)
     client = DnsManagementClient(
         credentials, az_subscription_id, api_version="2018-05-01"
     )
