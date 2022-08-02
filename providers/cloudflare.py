@@ -32,7 +32,7 @@ def convert_records_to_domains(records):
         if "A" in buf[subdomain].keys():
             domain.A = [r.rstrip(".") for r in buf[subdomain]["A"]]
         if "AAAA" in buf[subdomain].keys():
-            domain.A = [r.rstrip(".") for r in buf[subdomain]["AAAA"]]
+            domain.AAAA = [r.rstrip(".") for r in buf[subdomain]["AAAA"]]
         if "CNAME" in buf[subdomain].keys():
             domain.CNAME = [r.rstrip(".") for r in buf[subdomain]["CNAME"]]
         if "NS" in buf[subdomain].keys():
