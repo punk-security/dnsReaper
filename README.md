@@ -45,7 +45,7 @@ python main.py --help
 
 * Scan AWS account:
 
-    ``` docker run punksecurity/dnsreaper aws --aws-aws-access-key-id <key> --aws-access-key-secret <secret> ```
+    ``` docker run punksecurity/dnsreaper aws --aws-access-key-id <key> --aws-access-key-secret <secret> ```
 * Scan all domains from file:
 
     ``` docker run punksecurity/dnsreaper file --filename <filename> ```
