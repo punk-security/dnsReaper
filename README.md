@@ -20,7 +20,7 @@ This means most organisations can scan their entire DNS estate in less than 10 s
 
 You can run it by letting it fetch your DNS records for you!  Yes that's right, you can run it with credentials and test all your domain config quickly and easily.  DNS Reaper will connect to the DNS provider and fetch all your records, and then test them.
 
-We currently support AWS Route53, Cloudflare. Documentation on adding your own provider can be found [here](/providers/readme.md)
+We currently support AWS Route53, Cloudflare, and Azure. Documentation on adding your own provider can be found [here](/providers/readme.md)
 
 ### You can use DNS Reaper as a DevSecOps Pro!
 [Punk Security](https://www.punksecurity.co.uk) are a DevSecOps company, and DNS Reaper has its roots in modern security best practice.
