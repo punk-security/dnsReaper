@@ -1,6 +1,6 @@
 # Providers
 
-Providers provide the domains to the scanning engine, wether they are read from the cli, a local file or a service provider.
+Providers provide the domains to the scanning engine, whether they are read from the cli, a local file or a service provider.
 
 All providers have two mandatory items, a description and a fetch_domains function.
 

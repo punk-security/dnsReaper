@@ -18,14 +18,14 @@ This means most organisations can scan their entire DNS estate in less than 10 s
 
 ### You can use DNS Reaper as a defender! 
 
-You can run it by letting it fetch your DNS records for you!  Yes that right, you can run it with credentials and test all your domain config quickly and easily.  DNS Reaper will connect to the DNS provider and fetch all your records, and then test them.
+You can run it by letting it fetch your DNS records for you!  Yes that's right, you can run it with credentials and test all your domain config quickly and easily.  DNS Reaper will connect to the DNS provider and fetch all your records, and then test them.
 
-Currently we support AWS Route53.
+We currently support AWS Route53, Cloudflare, and Azure. Documentation on adding your own provider can be found [here](/providers/readme.md)
 
 ### You can use DNS Reaper as a DevSecOps Pro!
 [Punk Security](https://www.punksecurity.co.uk) are a DevSecOps company, and DNS Reaper has its roots in modern security best practice.
 
-You can run DNS Reaper in a pipeline, feeding it a list of domains that you intend to provision and it will exit Non-Zero if it detects a takeover is possible.  You can prevent takeovers before they are even possible!
+You can run DNS Reaper in a pipeline, feeding it a list of domains that you intend to provision, and it will exit Non-Zero if it detects a takeover is possible.  You can prevent takeovers before they are even possible!
 
 ## Usage 
 
@@ -60,31 +60,32 @@ python main.py --help
 ### Full usage
 
 ```
-          ____              __   _____                      _ __
+            ____              __   _____                      _ __       
          / __ \__  ______  / /__/ ___/___  _______  _______(_) /___  __
         / /_/ / / / / __ \/ //_/\__ \/ _ \/ ___/ / / / ___/ / __/ / / /
-       / ____/ /_/ / / / / ,<  ___/ /  __/ /__/ /_/ / /  / / /_/ /_/ /
-      /_/    \__,_/_/ /_/_/|_|/____/\___/\___/\__,_/_/  /_/\__/\__, /
-                                             PRESENTS         /____/
+       / ____/ /_/ / / / / ,<  ___/ /  __/ /__/ /_/ / /  / / /_/ /_/ / 
+      /_/    \__,_/_/ /_/_/|_|/____/\___/\___/\__,_/_/  /_/\__/\__, /  
+                                             PRESENTS         /____/  
                               DNS Reaper ☠️
 
              Scan all your DNS records for subdomain takeovers!
-
-usage:
-main.py provider [options]
+        
+usage: 
+main.py provider [options] 
 
 help:
 main.py --help
 
 providers:
   > aws - Scan multiple domains by fetching them from AWS Route53
+  > azure - Scan multiple domains by fetching them from Azure DNS services
   > bind - Read domains from a dns BIND zone file, or path to multiple
   > cloudflare - Scan multiple domains by fetching them from Cloudflare
   > file - Read domains from a file, one per line
   > single - Scan a single domain by providing a domain on the commandline
 
 positional arguments:
-  {aws,bind,cloudflare,file,single}
+  {aws,azure,bind,cloudflare,file,single}
 
 options:
   -h, --help            show this help message and exit
@@ -107,6 +108,14 @@ aws:
 
   --aws-access-key-id AWS_ACCESS_KEY_ID
   --aws-access-key-secret AWS_ACCESS_KEY_SECRET
+
+azure:
+  Scan multiple domains by fetching them from Azure DNS services
+
+  --az-subscription-id AZ_SUBSCRIPTION_ID
+  --az-tenant-id AZ_TENANT_ID
+  --az-client-id AZ_CLIENT_ID
+  --az-client-secret AZ_CLIENT_SECRET
 
 bind:
   Read domains from a dns BIND zone file, or path to multiple
