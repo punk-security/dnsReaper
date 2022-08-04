@@ -1,7 +1,8 @@
-from multiprocessing.sharedctypes import Value
 from domain import Domain
 from signatures.checks import CNAME
 from unittest.mock import patch, PropertyMock
+from whois.parser import PywhoisError
+import mocks
 
 
 def test_match_for_single_string():
@@ -136,7 +137,17 @@ def test_is_unregistered_failure_whois_failure():
 
 
 def test_is_unregistered_success_cname_unregistered():
+    def whois(domain):
+        raise PywhoisError("Not found")
+
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.CNAME = ["something"]
-    with patch("domain.whois.whois", return_value={"registrar": None}):
+    with patch("domain.whois.whois", new=whois):
+        assert CNAME.is_unregistered(domain) == True
+
+
+def test_is_unregistered_success_cname_unregistered_ACTIVE():
+    domain = Domain("mock.local", fetch_standard_records=False)
+    for tld in [".com", ".co.uk"]:
+        domain.CNAME = [f"{mocks.random_string()}{tld}"]
         assert CNAME.is_unregistered(domain) == True

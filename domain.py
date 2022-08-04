@@ -79,10 +79,16 @@ class Domain:
     @lru_cache
     def is_registered(self):
         try:
-            return whois.whois(self.domain)["registrar"] != None
-        except Exception as e:
-            if "No match for" in e.args[0]:
-                return False
+            whois.whois(self.domain)
+            return True
+        except whois.parser.PywhoisError as e:
+            if e.args[0] == "No whois server is known for this kind of object.":
+                # This is the only case of a potentially registered domain
+                # triggering a PywhoisError
+                # https://github.com/richardpenman/whois/blob/56dc7e41d134e6d4343ad80a48533681bd887ff2/whois/parser.py#L201
+                return True
+            return False
+        except Exception:
             return True
 
     def __repr__(self):
