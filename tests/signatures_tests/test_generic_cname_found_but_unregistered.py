@@ -40,7 +40,7 @@ def test_check_failure():
 
 
 def test_check_success_ACTIVE():
-    test_cname = f"{mocks.random_string()}.io"
+    test_cname = f"{mocks.random_string()}.co.uk"
     domain = Domain(f"{mocks.random_string()}.com", fetch_standard_records=False)
     domain.CNAME = [test_cname]
     print(f"Testing cname {test_cname}")
