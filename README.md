@@ -12,6 +12,9 @@ DNS Reaper is yet another sub-domain takeover tool, but with an emphasis on accu
 We can scan around 50 subdomains per second, testing each one with over 50 takeover signatures.
 This means most organisations can scan their entire DNS estate in less than 10 seconds.
 
+![DNS Reaper detects a if domain has a broken cname record and can be taken over by registering the domain's cname](docs/reaper_detection.png "DNS Reaper detects a if domain has a broken cname record and can be taken over by registering the domain's cname")
+
+
 ### You can use DNS Reaper as an attacker or bug hunter!
 
  You can run it by providing a list of domains in a file, or a single domain on the command line.  DNS Reaper will then scan the domains with all of its signatures, producing a CSV file.
@@ -30,6 +33,8 @@ You can run DNS Reaper in a pipeline, feeding it a list of domains that you inte
 ## Usage 
 
 To run DNS Reaper, you can use the docker image or run it with python 3.10.
+
+**Findings are returned in the output and more detail is provided in a local "results.csv" file.  We also support json output as an option.**
 
 ### Run it with docker
 
