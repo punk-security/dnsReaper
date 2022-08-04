@@ -144,10 +144,3 @@ def test_is_unregistered_success_cname_unregistered():
     domain.CNAME = ["something"]
     with patch("domain.whois.whois", new=whois):
         assert CNAME.is_unregistered(domain) == True
-
-
-def test_is_unregistered_success_cname_unregistered_ACTIVE():
-    domain = Domain("mock.local", fetch_standard_records=False)
-    for tld in [".com", ".co.uk"]:
-        domain.CNAME = [f"{mocks.random_string()}{tld}"]
-        assert CNAME.is_unregistered(domain) == True
