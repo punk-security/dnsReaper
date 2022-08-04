@@ -31,6 +31,8 @@ You can run DNS Reaper in a pipeline, feeding it a list of domains that you inte
 
 To run DNS Reaper, you can use the docker image or run it with python 3.10.
 
+**Findings are returned in the output and more detail is provided in a local "results.csv" file.  We also support json output as an option.**
+
 ### Run it with docker
 
 ``` docker run punksecurity/dnsreaper --help  ```

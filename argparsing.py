@@ -52,6 +52,9 @@ parser = CustomParser(
     usage=f"""
 {runtime} provider [options] 
 
+output:
+  findings output to screen and (by default) results.csv 
+
 help:
 {runtime} --help
 
