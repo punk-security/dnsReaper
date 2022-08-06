@@ -53,7 +53,7 @@ python main.py --help
     ``` docker run punksecurity/dnsreaper aws --aws-access-key-id <key> --aws-access-key-secret <secret> ```
 * Scan all domains from file:
 
-    ``` docker run punksecurity/dnsreaper file --filename <filename> ```
+    ``` docker run -v $(pwd):/etc/dnsreaper punksecurity/dnsreaper file --filename /etc/dnsreaper/<filename> ```
 * Scan single domain
 
     ``` docker run punksecurity/dnsreaper single --domain <domain> ```
