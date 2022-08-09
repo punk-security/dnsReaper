@@ -88,11 +88,7 @@ parser.add_argument(
     action='help',
     help="Show this help message and exit",
 )
-# if self.add_help:
-#             self.add_argument(
-#                 default_prefix+'h', default_prefix*2+'help',
-#                 action='help', default=SUPPRESS,
-#                 help=_('show this help message and exit'))
+
 parser.add_argument(
     "--out",
     type=str,
