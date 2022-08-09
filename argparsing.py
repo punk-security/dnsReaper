@@ -63,6 +63,7 @@ providers:
 """,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description="",
+    add_help=False
 )
 
 parser.add_argument(
@@ -80,6 +81,13 @@ for provider in providers.__all__:
             f"--{arg.replace('_','-')}",
             type=str,
         )
+
+parser.add_argument(
+    "-h",
+    "--help",
+    action='help',
+    help="Show this help message and exit",
+)
 
 parser.add_argument(
     "--out",
