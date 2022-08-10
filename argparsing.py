@@ -76,10 +76,13 @@ for provider in providers.__all__:
     group = parser.add_argument_group(provider)
     module = getattr(providers, provider)
     group.description = module.description
-    for arg in inspect.getfullargspec(module.fetch_domains)[0]:
+    signature = inspect.signature(module.fetch_domains)
+    parameters = signature.parameters.items()
+    for parameter in [x[1] for x in parameters if x[1].kind != x[1].VAR_KEYWORD and x[1].kind != x[1].VAR_POSITIONAL]:
         group.add_argument(
-            f"--{arg.replace('_','-')}",
+            f"--{parameter.name.replace('_','-')}",
             type=str,
+            help="Required" if isinstance(parameter.default, type(parameter.empty)) else "Optional"
         )
 
 parser.add_argument(
@@ -154,7 +157,10 @@ parser.add_argument("--nocolour", help="Turns off coloured text", action="store_
 def parse_args():
     args = parser.parse_args()
     module = getattr(providers, args.provider)
-    for arg in inspect.getfullargspec(module.fetch_domains)[0]:
-        if args.__dict__[arg] == None:
-            parser.error(f" {args.provider} provider requires --{arg.replace('_','-')}")
+    signature = inspect.signature(module.fetch_domains)
+    parameters = signature.parameters.items()
+    for parameter in [x[1] for x in parameters if x[1].kind != x[1].VAR_KEYWORD and x[1].kind != x[1].VAR_POSITIONAL]:
+        # If provider function signature has a default value, the command line option is optional!
+        if args.__dict__[parameter.name] is None and isinstance(parameter.default, type(parameter.empty)):
+            parser.error(f" {args.provider} provider requires --{parameter.name.replace('_', '-')}")
     return args

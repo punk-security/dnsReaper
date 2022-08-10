@@ -15,6 +15,7 @@ def fetch_domains(argumentA, argumentB **args):
 The description and provider file name are used to configure the argument parser and help menu.
 
 The fetch_domains function can take any number of arguments, and these are automatically added to the argument parsers and help menu.
+To make an argument optional, give it a default value. 
 
 For full details on individual providers, please visit [docs](../docs/README.md)
 
