@@ -102,7 +102,7 @@ for finding in findings:
     if args.nocolour == False:
         msg = colorama.Fore.RED + msg + colorama.Fore.RESET
         logging.warning(msg)
-logging.warning(f"\n⏱️  We completed in {time.time() - start_time} seconds")
+logging.warning(f"\n⏱️  We completed in {round(time.time() - start_time, 2)} seconds")
 logging.warning(f"...Thats all folks!")
 if args.pipeline:
     logging.debug(f"Pipeline flag set - Exit code: {len(findings)}")
