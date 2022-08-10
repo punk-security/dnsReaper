@@ -53,7 +53,15 @@ def get_zones(client):
     return public_zones
 
 
-def fetch_domains(aws_access_key_id, aws_access_key_secret, **args):
+def validate_args(aws_access_key_id, aws_access_key_secret):
+    if aws_access_key_id is not None and aws_access_key_secret is None:
+        raise ValueError("--aws-access-key-secret must be specified if --aws-access-key-id is specified")
+    if aws_access_key_secret is not None and aws_access_key_id is None:
+        raise ValueError("--aws-access-key-id must be specified if --aws-access-key-secret is specified")
+
+
+def fetch_domains(aws_access_key_id=None, aws_access_key_secret=None):
+    validate_args(aws_access_key_id, aws_access_key_secret)
     domains = []
     client = boto3.client(
         "route53",
