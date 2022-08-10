@@ -93,7 +93,7 @@ positional arguments:
   {aws,azure,bind,cloudflare,file,single}
 
 options:
-  -h, --help            show this help message and exit
+  -h, --help            Show this help message and exit
   --out OUT             Output file (default: results) - use 'stdout' to stream out
   --out-format {csv,json}
   --parallelism PARALLELISM
