@@ -20,9 +20,14 @@ def convert_records_to_domains(records):
     for record in records:
         if record["Name"] not in buf.keys():
             buf[record["Name"]] = {}
-        buf[record["Name"]][record["Type"]] = [
-            r["Value"] for r in record["ResourceRecords"]
-        ]
+        if "ResourceRecords" in record:
+            buf[record["Name"]][record["Type"]] = [
+                r["Value"] for r in record["ResourceRecords"]
+            ]
+        elif "AliasTarget" in record:
+            buf[record["Name"]][record["Type"]] = [
+                record["AliasTarget"]["DNSName"]
+            ]
     for subdomain in buf.keys():
         domain = Domain(subdomain.rstrip("."), fetch_standard_records=False)
         if "A" in buf[subdomain].keys():
