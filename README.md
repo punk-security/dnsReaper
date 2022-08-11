@@ -80,6 +80,9 @@ python main.py --help
 usage: 
 main.py provider [options] 
 
+output:
+  findings output to screen and (by default) results.csv 
+
 help:
 main.py --help
 
@@ -114,33 +117,42 @@ aws:
   Scan multiple domains by fetching them from AWS Route53
 
   --aws-access-key-id AWS_ACCESS_KEY_ID
+                        Optional
   --aws-access-key-secret AWS_ACCESS_KEY_SECRET
+                        Optional
 
 azure:
   Scan multiple domains by fetching them from Azure DNS services
 
   --az-subscription-id AZ_SUBSCRIPTION_ID
+                        Required
   --az-tenant-id AZ_TENANT_ID
+                        Required
   --az-client-id AZ_CLIENT_ID
+                        Required
   --az-client-secret AZ_CLIENT_SECRET
+                        Required
 
 bind:
   Read domains from a dns BIND zone file, or path to multiple
 
   --bind-zone-file BIND_ZONE_FILE
+                        Required
 
 cloudflare:
   Scan multiple domains by fetching them from Cloudflare
 
   --cloudflare-token CLOUDFLARE_TOKEN
+                        Required
 
 file:
   Read domains from a file, one per line
 
-  --filename FILENAME
+  --filename FILENAME   Required
 
 single:
   Scan a single domain by providing a domain on the commandline
 
-  --domain DOMAIN
+  --domain DOMAIN       Required
+
 ```
