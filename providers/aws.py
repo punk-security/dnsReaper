@@ -60,7 +60,7 @@ def validate_args(aws_access_key_id, aws_access_key_secret):
         raise ValueError("--aws-access-key-id must be specified if --aws-access-key-secret is specified")
 
 
-def fetch_domains(aws_access_key_id=None, aws_access_key_secret=None, **args):
+def fetch_domains(aws_access_key_id=None, aws_access_key_secret=None, **args):  # NOSONAR
     validate_args(aws_access_key_id, aws_access_key_secret)
     domains = []
     client = boto3.client(
