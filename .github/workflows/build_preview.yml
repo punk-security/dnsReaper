@@ -18,3 +18,13 @@ jobs:
         run:  sudo pip install -r test-requirements.txt
       - name: run pytest
         run: sudo python -m pytest -v
+      - name: Update dockerhub description
+        run: |
+          sudo apt-get install -y jq
+          TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "punksecurity", "password": "${{ secrets.DOCKER_ACCESS_TOKEN }}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+          curl -X PATCH \
+          -H 'Content-Type: application/json' \
+          -H 'Accept: application/json' \
+          -H "Authorization: JWT $TOKEN" \
+          -d "{\"full_description\": $(cat README.md | jq -Rsa .)}" \
+          https://hub.docker.com/v2/repositories/punksecurity/dnsreape
