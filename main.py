@@ -46,7 +46,11 @@ if not args.verbose > 2:
 ###### domain ingestion
 
 provider = getattr(providers, args.provider)
-domains = provider.fetch_domains(**args.__dict__)
+domains = list(provider.fetch_domains(**args.__dict__))
+
+if len(domains) == 0:
+    logging.error("ERROR: No domains to scan")
+    exit(-1)
 
 ###### signatures
 

@@ -1,0 +1,4 @@
+zone "punksecurity.io" {
+    type master;
+    file "/etc/bind/db.punksecurity.io"; # zone file path
+};

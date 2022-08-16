@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  bind:
+    image: ubuntu/bind9
+    environment:
+      TZ: UTC
+    ports:
+      - "53:53"
+    volumes:
+      - "./docker/bind/db.punksecurity.io:/etc/bind/db.punksecurity.io"
+      - "./docker/bind/named.conf.local:/etc/bind/named.conf.local"
+      - "./docker/bind/named.conf.options:/etc/bind/named.conf.options"
