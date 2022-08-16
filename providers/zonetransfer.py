@@ -24,12 +24,19 @@ def convert_records_to_domains(root_domain, records):
 
         if record_type == record_types.A:
             buf[fqdn]["A"] = [str(x) for x in record_items]
+            continue
+
         if record_type == record_types.AAAA:
             buf[fqdn]["AAAA"] = [str(x) for x in record_items]
+            continue
+
         if record_type == record_types.CNAME:
             buf[fqdn]["CNAME"] = [str(x) for x in record_items]
+            continue
+
         if record_type == record_types.NS:
             buf[fqdn]["NS"] = [str(x) for x in record_items]
+            continue
 
     for subdomain in buf.keys():
 
