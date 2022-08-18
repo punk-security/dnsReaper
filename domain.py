@@ -47,6 +47,13 @@ class Domain:
             return
         self.NS = self.query("NS")
 
+    def set_custom_NS(self, ns: str):
+        if type(ns) != str:
+            logging.error(f"Cannot set custom NS as {ns} not a string")
+            exit(-1)
+        self.resolver = dns.resolver.Resolver()
+        self.resolver.nameservers = [ns]
+
     def __init__(self, domain, fetch_standard_records=True, ns=None):
         self.domain = domain.rstrip(".")
         self.NS = []
@@ -57,8 +64,7 @@ class Domain:
         if ns == None:
             self.resolver = dns.resolver
         else:
-            self.resolver = dns.resolver.Resolver()
-            self.resolver.nameservers = [ns]
+            self.set_custom_NS(ns)
         self.should_fetch_std_records = fetch_standard_records
 
     @lru_cache

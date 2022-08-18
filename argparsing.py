@@ -113,6 +113,14 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "--name-server",
+    type=str,
+    default="",
+    help="Provide a custom nameserver, otherwise it is autodetected",
+)
+
+
+parser.add_argument(
     "--parallelism",
     type=int,
     default=30,
