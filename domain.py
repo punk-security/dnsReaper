@@ -93,12 +93,3 @@ class Domain:
 
     def __repr__(self):
         return self.domain
-
-    @property
-    def records(self):
-        return f"""
-        A: {self.A}
-        AAAA: {self.AAAA}
-        CNAME: {self.CNAME}
-        NS: {self.NS}
-        """
