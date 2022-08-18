@@ -116,7 +116,7 @@ parser.add_argument(
     "--resolver",
     type=str,
     default="",
-    help="Provide a custom DNS resolver, otherwise it is autodetected",
+    help="Provide a custom DNS resolver (or multiple seperated by commas)",
 )
 
 

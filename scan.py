@@ -2,10 +2,12 @@ from finding import Finding
 
 import logging
 
+import random
 
-def scan_domain(domain, signatures, lock, findings, output_handler, name_server=""):
-    if name_server:
-        domain.set_custom_NS(name_server)
+
+def scan_domain(domain, signatures, lock, findings, output_handler, name_servers: list):
+    if name_servers and name_servers != [""]:
+        domain.set_custom_NS(random.choice(name_servers))
     if domain.should_fetch_std_records:
         domain.fetch_std_records()
     for signature in signatures:
