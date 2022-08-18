@@ -94,6 +94,7 @@ with output.Output(args.out_format, args.out) as o:
         output_handler=o,
         lock=lock,
         findings=findings,
+        name_server=args.resolver,
     )
     pool = ThreadPool(processes=args.parallelism)
     pool.map(scan, domains)

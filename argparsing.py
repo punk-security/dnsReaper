@@ -63,7 +63,7 @@ providers:
 """,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description="",
-    add_help=False
+    add_help=False,
 )
 
 parser.add_argument(
@@ -78,17 +78,23 @@ for provider in providers.__all__:
     group.description = module.description
     signature = inspect.signature(module.fetch_domains)
     parameters = signature.parameters.items()
-    for parameter in [x[1] for x in parameters if x[1].kind != x[1].VAR_KEYWORD and x[1].kind != x[1].VAR_POSITIONAL]:
+    for parameter in [
+        x[1]
+        for x in parameters
+        if x[1].kind != x[1].VAR_KEYWORD and x[1].kind != x[1].VAR_POSITIONAL
+    ]:
         group.add_argument(
             f"--{parameter.name.replace('_','-')}",
             type=str,
-            help="Required" if isinstance(parameter.default, type(parameter.empty)) else "Optional"
+            help="Required"
+            if isinstance(parameter.default, type(parameter.empty))
+            else "Optional",
         )
 
 parser.add_argument(
     "-h",
     "--help",
-    action='help',
+    action="help",
     help="Show this help message and exit",
 )
 
@@ -105,6 +111,14 @@ parser.add_argument(
     default="csv",
     choices=["csv", "json"],
 )
+
+parser.add_argument(
+    "--resolver",
+    type=str,
+    default="",
+    help="Provide a custom DNS resolver, otherwise it is autodetected",
+)
+
 
 parser.add_argument(
     "--parallelism",
@@ -159,8 +173,16 @@ def parse_args():
     module = getattr(providers, args.provider)
     signature = inspect.signature(module.fetch_domains)
     parameters = signature.parameters.items()
-    for parameter in [x[1] for x in parameters if x[1].kind != x[1].VAR_KEYWORD and x[1].kind != x[1].VAR_POSITIONAL]:
+    for parameter in [
+        x[1]
+        for x in parameters
+        if x[1].kind != x[1].VAR_KEYWORD and x[1].kind != x[1].VAR_POSITIONAL
+    ]:
         # If provider function signature has a default value, the command line option is optional!
-        if args.__dict__[parameter.name] is None and isinstance(parameter.default, type(parameter.empty)):
-            parser.error(f" {args.provider} provider requires --{parameter.name.replace('_', '-')}")
+        if args.__dict__[parameter.name] is None and isinstance(
+            parameter.default, type(parameter.empty)
+        ):
+            parser.error(
+                f" {args.provider} provider requires --{parameter.name.replace('_', '-')}"
+            )
     return args

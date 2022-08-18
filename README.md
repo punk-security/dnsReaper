@@ -102,6 +102,8 @@ options:
   -h, --help            Show this help message and exit
   --out OUT             Output file (default: results) - use 'stdout' to stream out
   --out-format {csv,json}
+  --resolver RESOLVER
+                        Provide a custom DNS resolver, otherwise it is autodetected
   --parallelism PARALLELISM
                         Number of domains to test in parallel - too high and you may see odd DNS results (default: 30)
   --disable-probable    Do not check for probable conditions

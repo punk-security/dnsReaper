@@ -3,7 +3,9 @@ from finding import Finding
 import logging
 
 
-def scan_domain(domain, signatures, lock, findings, output_handler):
+def scan_domain(domain, signatures, lock, findings, output_handler, name_server=""):
+    if name_server:
+        domain.set_custom_NS(name_server)
     if domain.should_fetch_std_records:
         domain.fetch_std_records()
     for signature in signatures:
