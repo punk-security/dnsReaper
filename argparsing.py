@@ -113,10 +113,10 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--name-server",
+    "--resolver",
     type=str,
     default="",
-    help="Provide a custom nameserver, otherwise it is autodetected",
+    help="Provide a custom DNS resolver, otherwise it is autodetected",
 )
 
 
