@@ -45,8 +45,11 @@ class Output:
                 self.fd, fieldnames=finding.__dict__.keys(), dialect="excel"
             )
             self.writer.writeheader()
-
-        self.writer.writerow(finding.__dict__)
+        row = finding.__dict__
+        for k in row.keys():
+            if type(row[k]) == list:
+                row[k] = ",".join(row[k])
+        self.writer.writerow(row)
 
     def write_json(self, finding):
         sep = ","
