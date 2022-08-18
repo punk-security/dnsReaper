@@ -22,7 +22,7 @@ def scan_domain(domain, signatures, lock, findings, output_handler, name_server=
                     f"Takeover {status} on {domain} using signature '{signature.__name__}'"
                 )
                 finding = Finding(
-                    domain=domain.domain,
+                    domain=domain,
                     signature=signature.__name__,
                     info=signature.test.INFO,
                     confidence=signature.test.CONFIDENCE,
