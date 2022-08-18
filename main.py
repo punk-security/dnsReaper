@@ -3,6 +3,7 @@ import signatures
 import output
 import detection_enums
 import providers
+from os import linesep
 
 from multiprocessing.pool import ThreadPool
 import threading
@@ -103,6 +104,7 @@ with output.Output(args.out_format, args.out) as o:
 logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")
 for finding in findings:
     msg = f"-- DOMAIN '{finding.domain}' :: SIGNATURE '{finding.signature}' :: CONFIDENCE '{finding.confidence}'"
+    msg += f"{linesep}{finding.populated_records()}"
     if args.nocolour == False:
         msg = colorama.Fore.RED + msg + colorama.Fore.RESET
         logging.warning(msg)
