@@ -2,6 +2,6 @@ from .templates.cname_found_but_string_in_body import cname_found_but_string_in_
 
 test = cname_found_but_string_in_body(
     cname="cname.cargo.site",
-    domain_not_configured_message="404 Not Found",
+    domain_not_configured_message="Should you require further assistance, please",
     service="Cargo Collective",
 )
