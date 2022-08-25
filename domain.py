@@ -72,8 +72,17 @@ class Domain:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         protocol = "https" if https else "http"
         url = f"{protocol}://{self.domain}/{uri}"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.59",
+        }
         try:
-            resp = self.requests.get(url, timeout=5, verify=False, params=params)
+            resp = self.requests.get(
+                url,
+                timeout=5,
+                verify=False,
+                params=params,
+                headers=headers,
+            )
             web_status = resp.status_code
             web_body = resp.content.decode()
         except:
