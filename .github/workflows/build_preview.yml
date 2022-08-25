@@ -2,7 +2,7 @@ name: pytest
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
     types:
       - synchronize
       - opened
@@ -11,11 +11,11 @@ on:
 jobs:
   build_linux:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: install test dependencies
-        run:  sudo pip install -r test-requirements.txt
+        run: sudo pip install -r test-requirements.txt
       - name: run pytest
         run: sudo python -m pytest -v
       - name: Update dockerhub description
@@ -27,4 +27,4 @@ jobs:
           -H 'Accept: application/json' \
           -H "Authorization: JWT $TOKEN" \
           -d "{\"full_description\": $(cat README.md | jq -Rsa .)}" \
-          https://hub.docker.com/v2/repositories/punksecurity/dnsreape
+          https://hub.docker.com/repository/docker/punksecurity/dnsreaper
