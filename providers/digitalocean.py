@@ -51,20 +51,22 @@ class DoApi:
         return self.check_response(res)
 
 
-def convert_records_to_domains(records):
+def convert_records_to_domains(records, root_domain):
     buf = {}
     for record in records:
         if "@" == record["name"]:
             continue
 
-        if record["name"] not in buf.keys():
-            buf[record["name"]] = {}
+        record_name = f"{record['name']}.{root_domain}"
 
-        if record["type"] not in buf[record["name"]].keys():
-            buf[record["name"]][record["type"]] = []
+        if record_name not in buf.keys():
+            buf[record_name] = {}
+
+        if record["type"] not in buf[record_name].keys():
+            buf[record_name][record["type"]] = []
 
         if "data" in record.keys():
-            buf[record["name"]][record["type"]].append(record["data"])
+            buf[record_name][record["type"]].append(record["data"])
 
     def extract_records(desired_type):
         return [r.rstrip(".") for r in buf[subdomain][desired_type]]
@@ -106,6 +108,6 @@ def fetch_domains(do_api_key: str, do_domains: str = None, **args):  # NOSONAR
             continue
 
         records = api.get_records(domain).json()
-        domains.extend(convert_records_to_domains(records["domain_records"]))
+        domains.extend(convert_records_to_domains(records["domain_records"], domain))
 
     return domains
