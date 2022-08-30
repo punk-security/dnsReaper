@@ -67,7 +67,7 @@ python main.py --help
 ### Full usage
 
 ```
-          ____              __   _____                      _ __       
+          ____              __   _____                      _ __
          / __ \__  ______  / /__/ ___/___  _______  _______(_) /___  __
         / /_/ / / / / __ \/ //_/\__ \/ _ \/ ___/ / / / ___/ / __/ / / /
        / ____/ /_/ / / / / ,<  ___/ /  __/ /__/ /_/ / /  / / /_/ /_/ / 
@@ -76,9 +76,9 @@ python main.py --help
                               DNS Reaper ☠️
 
              Scan all your DNS records for subdomain takeovers!
-        
-usage: 
-main.py provider [options] 
+
+usage:
+main.py provider [options]
 
 output:
   findings output to screen and (by default) results.csv 
@@ -173,5 +173,4 @@ zonetransfer:
                         Required
   --zonetransfer-domain ZONETRANSFER_DOMAIN
                         Required
-
 ```
