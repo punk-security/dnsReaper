@@ -70,9 +70,9 @@ python main.py --help
           ____              __   _____                      _ __
          / __ \__  ______  / /__/ ___/___  _______  _______(_) /___  __
         / /_/ / / / / __ \/ //_/\__ \/ _ \/ ___/ / / / ___/ / __/ / / /
-       / ____/ /_/ / / / / ,<  ___/ /  __/ /__/ /_/ / /  / / /_/ /_/ / 
-      /_/    \__,_/_/ /_/_/|_|/____/\___/\___/\__,_/_/  /_/\__/\__, /  
-                                             PRESENTS         /____/  
+       / ____/ /_/ / / / / ,<  ___/ /  __/ /__/ /_/ / /  / / /_/ /_/ /
+      /_/    \__,_/_/ /_/_/|_|/____/\___/\___/\__,_/_/  /_/\__/\__, /
+                                             PRESENTS         /____/
                               DNS Reaper ☠️
 
              Scan all your DNS records for subdomain takeovers!
@@ -81,7 +81,7 @@ usage:
 main.py provider [options]
 
 output:
-  findings output to screen and (by default) results.csv 
+  findings output to screen and (by default) results.csv
 
 help:
 main.py --help
