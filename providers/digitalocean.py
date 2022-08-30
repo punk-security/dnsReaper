@@ -8,7 +8,7 @@ from domain import Domain
 description = "Scan multiple domains by fetching them from Digital Ocean"
 
 
-class DomainNotFoundError(BaseException):
+class DomainNotFoundError(Exception):
     def __init__(self, domain):
         self.message = "Domain not found: " + domain
         super().__init__(self.message)
