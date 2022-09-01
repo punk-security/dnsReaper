@@ -5,3 +5,4 @@
 - [Azure](azure.md)
 - [BIND](bind.md)
 - [CloudFlare](cloudflare.md)
+- [Digital Ocean](digitalocean.md)
