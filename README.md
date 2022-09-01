@@ -78,32 +78,32 @@ python main.py --help
              Scan all your DNS records for subdomain takeovers!
 
 usage:
-.\main.py provider [options]
+main.py provider [options]
 
 output:
   findings output to screen and (by default) results.csv
 
 help:
-.\main.py --help
+main.py --help
 
 providers:
   > aws - Scan multiple domains by fetching them from AWS Route53
   > azure - Scan multiple domains by fetching them from Azure DNS services
   > bind - Read domains from a dns BIND zone file, or path to multiple
   > cloudflare - Scan multiple domains by fetching them from Cloudflare
-  > file - Read domains from a file, one per line
+  > digitalocean - Scan multiple domains by fetching them from Digital Ocean
+  > file - Read domains from a file (or folder of files), one per line
   > single - Scan a single domain by providing a domain on the commandline
   > zonetransfer - Scan multiple domains by fetching records via DNS zone transfer
 
 positional arguments:
-  {aws,azure,bind,cloudflare,file,single,zonetransfer}
+  {aws,azure,bind,cloudflare,digitalocean,file,single,zonetransfer}
 
 options:
   -h, --help            Show this help message and exit
   --out OUT             Output file (default: results) - use 'stdout' to stream out
   --out-format {csv,json}
-  --resolver RESOLVER
-                        Provide a custom DNS resolver (or multiple seperated by commas)
+  --resolver RESOLVER   Provide a custom DNS resolver (or multiple seperated by commas)
   --parallelism PARALLELISM
                         Number of domains to test in parallel - too high and you may see odd DNS results (default: 30)
   --disable-probable    Do not check for probable conditions
@@ -148,8 +148,16 @@ cloudflare:
   --cloudflare-token CLOUDFLARE_TOKEN
                         Required
 
+digitalocean:
+  Scan multiple domains by fetching them from Digital Ocean
+
+  --do-api-key DO_API_KEY
+                        Required
+  --do-domains DO_DOMAINS
+                        Optional
+
 file:
-  Read domains from a file, one per line
+  Read domains from a file (or folder of files), one per line
 
   --filename FILENAME   Required
 
