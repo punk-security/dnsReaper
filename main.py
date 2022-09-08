@@ -99,7 +99,8 @@ with output.Output(args.out_format, args.out) as o:
     )
     pool = ThreadPool(processes=args.parallelism)
     pool.map(scan, domains)
-
+    pool.close()
+    pool.join()
 
 ###### exit
 logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")
