@@ -44,6 +44,10 @@ To run DNS Reaper, you can use the docker image or run it with python 3.10.
 ``` 
 pip install -r requirements.txt
 python main.py --help
+
+# Or install the software through setup.py so it will be available as a module
+
+python setup.py install
 ```
 
 ### Common commands
