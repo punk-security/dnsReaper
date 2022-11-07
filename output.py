@@ -10,7 +10,7 @@ class Output:
     def __init__(self, format, path):
         if format not in self.supported_formats:
             raise Exception("Unsupported output format")
-        self.path = f"{path}.{format}"
+        self.path = path
         if path == "stdout":
             self.path = stdout
         self.format = format
