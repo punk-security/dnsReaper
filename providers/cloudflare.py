@@ -8,19 +8,21 @@ description = "Scan multiple domains by fetching them from Cloudflare"
 def get_records(client, zone_id):
     records = []
 
-    page_number = 0 
+    page_number = 0
     while True:
         page_number += 1
 
         # request the DNS records from that zone
         try:
-            raw_results = client.zones.dns_records.get(zone_id, params={'page':page_number})
+            raw_results = client.zones.dns_records.get(
+                zone_id, params={"page": page_number}
+            )
         except CloudFlare.exceptions.CloudFlareAPIError as e:
             exit(f"/zones/dns_records.get api call failed {e}")
 
-        records.extend(raw_results['result'])
+        records.extend(raw_results["result"])
 
-        total_pages = raw_results['result_info']['total_pages']
+        total_pages = raw_results["result_info"]["total_pages"]
         if page_number == total_pages:
             break
 
@@ -63,9 +65,9 @@ def get_zones(client):
         except Exception as e:
             exit(f"/zones.get api call failed {e}")
 
-        zones.extend(raw_results['result'])
+        zones.extend(raw_results["result"])
 
-        total_pages = raw_results['result_info']['total_pages']
+        total_pages = raw_results["result_info"]["total_pages"]
         if page_number == total_pages:
             break
 

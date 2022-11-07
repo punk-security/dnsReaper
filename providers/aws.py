@@ -81,7 +81,9 @@ def validate_args(aws_access_key_id, aws_access_key_secret):
         )
 
 
-def fetch_domains(aws_access_key_id=None, aws_access_key_secret=None,aws_session_token=None, **args):
+def fetch_domains(
+    aws_access_key_id=None, aws_access_key_secret=None, aws_session_token=None, **args
+):
     validate_args(aws_access_key_id, aws_access_key_secret)
     domains = []
 
