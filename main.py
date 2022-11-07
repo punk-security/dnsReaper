@@ -88,6 +88,11 @@ logging.warning(f"Testing with {len(signatures)} signatures")
 
 findings = []
 lock = threading.Lock()
+
+if "out" not in argv:
+    # using default out location, need to append our format
+    args.out = f"{args.out}.{args.out_format}"
+
 with output.Output(args.out_format, args.out) as o:
     scan = partial(
         scan_domain,
