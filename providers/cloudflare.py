@@ -8,11 +8,21 @@ description = "Scan multiple domains by fetching them from Cloudflare"
 def get_records(client, zone_id):
     records = []
 
-    # request the DNS records from that zone
-    try:
-        records = client.zones.dns_records.get(zone_id)
-    except CloudFlare.exceptions.CloudFlareAPIError as e:
-        exit(f"/zones/dns_records.get api call failed {e}")
+    page_number = 0 
+    while True:
+        page_number += 1
+
+        # request the DNS records from that zone
+        try:
+            raw_results = client.zones.dns_records.get(zone_id, params={'page':page_number})
+        except CloudFlare.exceptions.CloudFlareAPIError as e:
+            exit(f"/zones/dns_records.get api call failed {e}")
+
+        records.extend(raw_results['result'])
+
+        total_pages = raw_results['result_info']['total_pages']
+        if page_number == total_pages:
+            break
 
     return records
 
@@ -41,15 +51,25 @@ def convert_records_to_domains(records):
 
 
 def get_zones(client):
+    zones = []
 
-    try:
-        zones = client.zones.get()
-    except CloudFlare.exceptions.CloudFlareAPIError as e:
-        exit(f"/zones.get api call failed {e}")
-    except Exception as e:
-        exit(f"/zones.get api call failed {e}")
+    page_number = 0
+    while True:
+        page_number += 1
+        try:
+            raw_results = client.zones.get()
+        except CloudFlare.exceptions.CloudFlareAPIError as e:
+            exit(f"/zones.get api call failed {e}")
+        except Exception as e:
+            exit(f"/zones.get api call failed {e}")
 
-    logging.info(f"Got {len(zones)} zones from cloudflare")
+        zones.extend(raw_results['result'])
+
+        total_pages = raw_results['result_info']['total_pages']
+        if page_number == total_pages:
+            break
+
+    logging.info(f"Got {len(zones)} zones ({total_pages} pages) from cloudflare")
 
     if len(zones) == 0:
         return []
@@ -60,7 +80,7 @@ def get_zones(client):
 def fetch_domains(cloudflare_token, **args):
     domains = []
 
-    client = CloudFlare.CloudFlare(token=cloudflare_token)
+    client = CloudFlare.CloudFlare(token=cloudflare_token, raw=True)
     zones = get_zones(client)
     for zone in zones:
         records = get_records(client, zone["id"])
