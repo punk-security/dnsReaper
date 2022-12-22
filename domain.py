@@ -1,3 +1,5 @@
+import ipaddress
+import socket
 from collections import namedtuple
 import dns.resolver
 from functools import lru_cache
@@ -69,7 +71,15 @@ class Domain:
             logging.error(f"Cannot set custom NS as {ns} not a string")
             exit(-1)
         self.resolver = dns.resolver.Resolver()
-        self.resolver.nameservers = [ns]
+
+        try:
+            ipaddress.ip_address(ns)
+            self.resolver.nameservers = [ns]
+        except ValueError:
+            try:
+                self.resolver.nameservers = [socket.gethostbyname(ns.rstrip('.'))]
+            except:
+                logging.error(f"Cannot set custom NS as {ns} does not resolve to a valid IP address")
 
     def set_base_domain(self):
         split_domain = self.domain.split(".", 1)
