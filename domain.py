@@ -58,6 +58,7 @@ class Domain:
             if self.base_domain == split_cname[1]:
                 continue  # Same zone, dont fetch
             d = Domain(cname)
+            d.fetch_std_records()
             self.A += d.A
             self.AAAA += d.AAAA
             self.CNAME += d.CNAME
@@ -77,9 +78,12 @@ class Domain:
             self.resolver.nameservers = [ns]
         except ValueError:
             try:
-                self.resolver.nameservers = [socket.gethostbyname(ns.rstrip('.'))]
+                self.resolver.nameservers = [socket.gethostbyname(ns.rstrip("."))]
             except:
-                logging.error(f"Cannot set custom NS as {ns} does not resolve to a valid IP address")
+                logging.error(
+                    f"Cannot set custom NS as {ns} does not resolve to a valid IP address"
+                )
+                exit(-1)
 
     def set_base_domain(self):
         split_domain = self.domain.split(".", 1)
