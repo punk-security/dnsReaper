@@ -1,3 +1,5 @@
+import ipaddress
+import socket
 from collections import namedtuple
 import dns.resolver
 from functools import lru_cache
@@ -37,6 +39,7 @@ class Domain:
             return []
 
     def fetch_std_records(self):
+        # TODO: is this recursive?
         self.CNAME = self.query("CNAME")
         self.A = self.query("A")
         self.AAAA = self.query("AAAA")
@@ -47,12 +50,47 @@ class Domain:
             return
         self.NS = self.query("NS")
 
+    def fetch_external_records(self):
+        for cname in self.CNAME:
+            split_cname = cname.split(".", 1)
+            if len(split_cname) == 1:
+                continue  # This cname has no zone to assess
+            if self.base_domain == split_cname[1]:
+                continue  # Same zone, dont fetch
+            d = Domain(cname)
+            d.fetch_std_records()
+            self.A += d.A
+            self.AAAA += d.AAAA
+            self.CNAME += d.CNAME
+        for ns in self.NS:
+            d = Domain(self.domain, ns=ns)
+            self.A += d.A
+            self.AAAA += d.AAAA
+
     def set_custom_NS(self, ns: str):
         if type(ns) != str:
             logging.error(f"Cannot set custom NS as {ns} not a string")
             exit(-1)
         self.resolver = dns.resolver.Resolver()
-        self.resolver.nameservers = [ns]
+
+        try:
+            ipaddress.ip_address(ns)
+            self.resolver.nameservers = [ns]
+        except ValueError:
+            try:
+                self.resolver.nameservers = [socket.gethostbyname(ns.rstrip("."))]
+            except:
+                logging.error(
+                    f"Cannot set custom NS as {ns} does not resolve to a valid IP address"
+                )
+                exit(-1)
+
+    def set_base_domain(self):
+        split_domain = self.domain.split(".", 1)
+        if len(split_domain) > 1:
+            self.base_domain = split_domain[1]
+        else:
+            self.base_domain = "."
 
     def __init__(self, domain, fetch_standard_records=True, ns=None):
         self.domain = domain.rstrip(".")
@@ -60,6 +98,7 @@ class Domain:
         self.A = []
         self.AAAA = []
         self.CNAME = []
+        self.set_base_domain()
         self.requests = requests
         if ns == None:
             self.resolver = dns.resolver

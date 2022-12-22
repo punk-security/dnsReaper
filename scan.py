@@ -10,6 +10,8 @@ def scan_domain(domain, signatures, lock, findings, output_handler, name_servers
         domain.set_custom_NS(random.choice(name_servers))
     if domain.should_fetch_std_records:
         domain.fetch_std_records()
+    else:
+        domain.fetch_external_records()
     for signature in signatures:
         logging.debug(
             f"Testing domain '{domain.domain}' with signature '{signature.__name__}'"
