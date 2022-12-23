@@ -30,7 +30,7 @@ def scan_domain(domain, signatures, lock, findings, output_handler, name_servers
                     signature=signature.__name__,
                     info=signature.test.INFO,
                     confidence=signature.test.CONFIDENCE,
-                    more_info_url=signature.more_info_url,
+                    more_info_url=signature.test.more_info_url,
                 )
                 with lock:
                     findings.append(finding)
