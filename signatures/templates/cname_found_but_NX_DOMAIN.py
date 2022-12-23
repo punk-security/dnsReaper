@@ -5,7 +5,7 @@ import signatures.checks
 from detection_enums import CONFIDENCE
 
 INFO = """
-The defined domain has CNAME records configured for {service} and but these records do not resolve. \
+The defined domain has CNAME records configured for {service} but these records do not resolve. \
 An attacker can register this domain on {service} and serve their own web content.
 """
 

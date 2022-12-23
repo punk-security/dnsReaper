@@ -1,4 +1,6 @@
-from .templates.ip_found_but_string_in_body import ip_found_but_string_in_body
+from .templates.cname_or_ip_found_but_string_in_body import (
+    cname_or_ip_found_but_string_in_body,
+)
 
 github_pages_ipv4 = [
     "185.199.108.153",
@@ -13,7 +15,10 @@ github_pages_ipv6 = [
     "2606:50c0:8003::153",
 ]
 
-test = ip_found_but_string_in_body(
+github_pages_cname = ".github.io"
+
+test = cname_or_ip_found_but_string_in_body(
+    cname=github_pages_cname,
     ips=github_pages_ipv4 + github_pages_ipv6,
     domain_not_configured_message="There isn't a GitHub Pages site here",
     service="Github Pages",

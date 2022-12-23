@@ -5,14 +5,16 @@ import signatures.checks
 from detection_enums import CONFIDENCE
 
 INFO = """
-The defined domain has CNAME records configured for {service} but a web request shows the domain is unclaimed. \
+The defined domain has CNAME or A/AAAA records configured for {service} but a web request shows the domain is unclaimed. \
 An attacker can register this domain on {service} and serve their own web content.
 """
 
 
-class cname_found_but_string_in_body(base.Base):
+class cname_or_ip_found_but_string_in_body(base.Base):
     def potential(self, domain, **kwargs) -> bool:
-        return signatures.checks.CNAME.match(domain, self.cname)
+        return signatures.checks.COMBINED.matching_ip_or_cname(
+            domain, self.cname, self.ips
+        )
 
     def check(self, domain, **kwargs) -> bool:
         if self.https:
@@ -26,6 +28,7 @@ class cname_found_but_string_in_body(base.Base):
     def __init__(
         self,
         cname,
+        ips,
         domain_not_configured_message,
         service,
         info=None,
@@ -33,6 +36,7 @@ class cname_found_but_string_in_body(base.Base):
         https=False,
     ):
         self.cname = cname
+        self.ips = ips
         self.domain_not_configured_message = domain_not_configured_message
         self.https = https
         info = info if info else INFO
