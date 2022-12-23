@@ -5,7 +5,7 @@ import signatures.checks
 from detection_enums import CONFIDENCE
 
 INFO = """
-The defined domain has CNAME records configured for {service} and but a web request shows the domain is unclaimed. \
+The defined domain has CNAME records configured for {service} but a web request shows the domain is unclaimed. \
 An attacker can register this domain on {service} and serve their own web content.
 """
 
