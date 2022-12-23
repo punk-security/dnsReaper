@@ -17,13 +17,7 @@ class cname_found_but_NX_DOMAIN(base.Base):
     def check(self, domain, **kwargs) -> bool:
         return signatures.checks.CNAME.NX_DOMAIN_on_resolve(domain)
 
-    def __init__(
-        self,
-        cname,
-        service,
-        info=None,
-        confidence=CONFIDENCE.CONFIRMED,
-    ):
+    def __init__(self, cname, service, info=None, **kwargs):
         self.cname = cname
         info = info if info else INFO
-        super().__init__(info.format(service=service), confidence)
+        super().__init__(info.format(service=service), **kwargs)

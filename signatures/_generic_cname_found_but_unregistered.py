@@ -23,6 +23,6 @@ The defined domain has a CNAME record configured but the CNAME is not registered
 You should look to see if you can register this CNAME.
     """
 
-test = Base(INFO, detection_enums.CONFIDENCE.CONFIRMED)
+test = Base(INFO)
 test.potential = potential
 test.check = check

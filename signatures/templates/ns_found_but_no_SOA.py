@@ -16,16 +16,9 @@ class ns_found_but_no_SOA(base.Base):
     def check(self, domain, **kwargs) -> bool:
         return signatures.checks.NS.no_SOA_detected(domain)
 
-    def __init__(
-        self,
-        ns,
-        service,
-        sample_ns=None,
-        info=None,
-        confidence=CONFIDENCE.CONFIRMED,
-    ):
+    def __init__(self, ns, service, sample_ns=None, info=None, **kwargs):
         self.ns = ns
         if sample_ns:
             self.sample_ns = sample_ns
         info = info if info else INFO
-        super().__init__(info.format(service=service), confidence)
+        super().__init__(info.format(service=service), **kwargs)
