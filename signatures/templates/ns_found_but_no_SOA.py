@@ -6,8 +6,7 @@ from detection_enums import CONFIDENCE
 
 INFO = """
 The defined domain has {service} NS records configured but these nameservers do not host a zone for this domain. \
-An attacker can register this domain with {service} so they get provisioned onto a matching nameserver.
-    """
+An attacker can register this domain with {service} so they get provisioned onto a matching nameserver."""
 
 
 class ns_found_but_no_SOA(base.Base):
