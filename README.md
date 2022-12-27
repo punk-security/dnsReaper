@@ -55,15 +55,15 @@ python main.py --help
     For more information, see [the documentation for the aws provider](/docs/aws.md)
 * Scan all domains from file:
 
-    ``` docker run -v $(pwd):/etc/dnsreaper punksecurity/dnsreaper file --filename /etc/dnsreaper/<filename> ```
+    ``` docker run -it --rm -v $(pwd):/etc/dnsreaper punksecurity/dnsreaper file --filename /etc/dnsreaper/<filename> ```
 * Scan single domain
 
-    ``` docker run punksecurity/dnsreaper single --domain <domain> ```
+    ``` docker run -it --rm punksecurity/dnsreaper single --domain <domain> ```
 * Scan single domain and output to stdout:
 
     You should either redirect the stderr output or save stdout output with >
 
-    ``` docker run punksecurity/dnsreaper single --domain <domain> --out stdout --out-format=json > output```
+    ``` docker run -it --rm punksecurity/dnsreaper single --domain <domain> --out stdout --out-format=json > output```
 ### Full usage
 
 ```
