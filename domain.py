@@ -63,14 +63,19 @@ class Domain:
             self.AAAA += d.AAAA
             self.CNAME += d.CNAME
         for ns in self.NS:
-            d = Domain(self.domain, ns=ns)
-            self.A += d.A
-            self.AAAA += d.AAAA
+            try:
+                d = Domain(self.domain)
+                d.set_custom_NS(ns=ns)
+                self.A += d.A
+                self.AAAA += d.AAAA
+            except:
+                logging.debug(
+                    f"We could not resolve the provided NS record '{ns}' to an ip"
+                )
 
     def set_custom_NS(self, ns: str):
         if type(ns) != str:
             logging.error(f"Cannot set custom NS as {ns} not a string")
-            exit(-1)
         self.resolver = dns.resolver.Resolver()
 
         try:
@@ -80,10 +85,7 @@ class Domain:
             try:
                 self.resolver.nameservers = [socket.gethostbyname(ns.rstrip("."))]
             except:
-                logging.error(
-                    f"Cannot set custom NS as {ns} does not resolve to a valid IP address"
-                )
-                exit(-1)
+                self.resolver.nameservers = []
 
     def set_base_domain(self):
         split_domain = self.domain.split(".", 1)

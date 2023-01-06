@@ -2,13 +2,7 @@ from os import linesep
 
 
 class Finding(object):
-    def __init__(
-        self,
-        domain,
-        signature,
-        info,
-        confidence,
-    ):
+    def __init__(self, domain, signature, info, confidence, more_info_url):
         self.domain = domain.domain
         self.signature = signature
         self.info = info.replace("\n", " ").replace("\r", "").rstrip()
@@ -17,6 +11,7 @@ class Finding(object):
         self.aaaa_records = domain.AAAA
         self.cname_records = domain.CNAME
         self.ns_records = domain.NS
+        self.more_info_url = more_info_url
 
     def populated_records(self):
         resp = ""

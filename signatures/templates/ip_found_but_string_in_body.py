@@ -31,11 +31,11 @@ class ip_found_but_string_in_body(base.Base):
         domain_not_configured_message,
         service,
         info=None,
-        confidence=CONFIDENCE.CONFIRMED,
         https=False,
+        **kwargs
     ):
         self.ips = ips
         self.domain_not_configured_message = domain_not_configured_message
         self.https = https
         info = info if info else INFO
-        super().__init__(info.format(service=service), confidence)
+        super().__init__(info.format(service=service), **kwargs)

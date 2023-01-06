@@ -22,7 +22,7 @@ def bind_file_to_domains(bind_zone_file):
                 domain.AAAA = [str(r) for r in record.items]
             if record.rdtype == dns.rdatatype.CNAME:
                 domain.CNAME = [str(r) for r in record.items]
-            if record.rdtype == dns.rdatatype.NS and name != "@":
+            if record.rdtype == dns.rdatatype.NS and str(name) != "@":
                 domain.NS = [str(r) for r in record.items]
         domains.append(domain)
         logging.info(f"Read {len(domains)} domains from zonefile '{bind_zone_file}'")
