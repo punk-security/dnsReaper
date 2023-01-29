@@ -1,4 +1,4 @@
-FROM python:3.11-alpine as builder
+FROM python:3.11-alpine AS builder
 
 # Create app directory
 RUN python -m venv /opt/venv
