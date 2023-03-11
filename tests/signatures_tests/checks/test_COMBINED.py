@@ -2,6 +2,7 @@ from xml import dom
 from domain import Domain
 from signatures.checks import COMBINED
 
+
 ## matching_ipv4_or_ipv6
 def test_matching_ipv4_or_ipv6_ipv4_match():
     domain = Domain("mock.local", fetch_standard_records=False)

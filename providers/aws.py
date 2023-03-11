@@ -115,7 +115,11 @@ authentication methods
     )
     zones = get_zones(client)
     for zone in zones:
-        records = get_records(client, zone["Id"].replace("/hostedzone/", ""))
+        try:
+            records = get_records(client, zone["Id"].replace("/hostedzone/", ""))
+        except:
+            logging.warning(f"Could not retrieve records for aws zone '{zone['Name']}'")
+            records = []
         logging.debug(f"Got {len(records)} records for aws zone '{zone['Name']}'")
         for domain in convert_records_to_domains(records):
             domains.append(domain)
