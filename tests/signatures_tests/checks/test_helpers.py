@@ -1,5 +1,6 @@
 from signatures.checks import helpers
 
+
 ## substrings_in_strings
 def test_substrings_in_strings_for_single_string():
     assert helpers.substrings_in_strings("abc", "abc") == "abc"
