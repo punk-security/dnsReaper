@@ -157,7 +157,7 @@ digitalocean:
                         Optional
 
 projectdiscovery:
-  Scan multiple domains by fetching them from Digital Ocean
+  Scan multiple domains by fetching them from Project Discovery
 
   --pd-api-key PD_API_KEY
                         Required
