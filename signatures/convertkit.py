@@ -1,6 +1,4 @@
-from .templates.ip_found_but_string_in_body import (
-    ip_found_but_string_in_body
-)
+from .templates.ip_found_but_string_in_body import ip_found_but_string_in_body
 
 convertkit_pages_ipv4 = [
     "3.13.222.255",
