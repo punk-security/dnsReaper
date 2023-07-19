@@ -1,0 +1,24 @@
+name: 'Python runtime test'
+description: 'Test pwnSpoof against a given Python version'
+inputs:
+  python-version:
+    description: 'Python version'
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: Python version
+      id: python-version
+      run: python --version
+      shell: bash
+    - name: install requirements
+      run: python -m pip install -r tests/requirements.txt
+      shell: bash
+    - name: output tests
+      run: python -m pytest -v
+      shell: bash

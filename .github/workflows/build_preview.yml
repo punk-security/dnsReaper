@@ -9,12 +9,17 @@ on:
       - reopened
 
 jobs:
-  build_linux:
+  v3-9:
     runs-on: ubuntu-latest
-    steps: 
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: install test dependencies
-        run:  sudo pip install -r test-requirements.txt
-      - name: run pytest
-        run: sudo python -m pytest -v
+    steps:
+      - name: Python runtime test
+        uses: ./.github/actions/python-test
+        with:
+          python-version: "3.9"
+  v3-10:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Python runtime test
+        uses: ./.github/actions/python-test
+        with:
+          python-version: "3.10"
