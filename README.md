@@ -156,6 +156,15 @@ digitalocean:
   --do-domains DO_DOMAINS
                         Optional
 
+projectdiscovery:
+  Scan multiple domains by fetching them from Digital Ocean
+
+  --pd-api-key DO_API_KEY
+                        Required
+  --pd-domains DO_DOMAINS
+                        Optional
+
+
 file:
   Read domains from a file (or folder of files), one per line
 
