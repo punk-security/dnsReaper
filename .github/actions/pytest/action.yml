@@ -17,7 +17,7 @@ runs:
       run: python --version
       shell: bash
     - name: install requirements
-      run: python -m pip install -r tests/requirements.txt
+      run: python -m pip install -r test-requirements.txt
       shell: bash
     - name: output tests
       run: python -m pytest -v
