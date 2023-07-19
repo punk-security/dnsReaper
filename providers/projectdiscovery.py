@@ -11,7 +11,7 @@ class DomainNotFoundError(Exception):
         super().__init__(self.message)
 
 
-class DoApi:
+class PBApi:
     def __init__(self, api_key):
         self.session = requests.session()
         self.session.headers.update(
@@ -47,23 +47,17 @@ class DoApi:
 
         return self.check_response(res)
 
-
-def validate_args(pd_api_key: str):
-    if not pd_api_key.startswith("pd_v1"):
-        raise ValueError("ProjectDiscovery: Invalid API key specified")
-
-
 def fetch_domains(pd_api_key: str, pd_domains: str = None, **args):
     root_domains = []
     domains = []
-    api = DoApi(pd_api_key)
+    api = PBApi(pd_api_key)
 
 
     if pd_domains is not None and len(pd_domains):
         root_domains = [domain.strip(" ") for domain in pd_domains.split(",")]
     else:
-        resp_data = api.list_domains().json()
-        root_domains = [domain["name"] for domain in resp_data["domains"]]
+        print("Domain required")
+        exit()
 
     for domain in root_domains:
         if "" == domain or domain is None:

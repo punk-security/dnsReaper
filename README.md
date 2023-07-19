@@ -159,9 +159,9 @@ digitalocean:
 projectdiscovery:
   Scan multiple domains by fetching them from Digital Ocean
 
-  --pd-api-key DO_API_KEY
+  --pd-api-key PB_API_KEY
                         Required
-  --pd-domains DO_DOMAINS
+  --pd-domains PB_DOMAINS
                         Optional
 
 
