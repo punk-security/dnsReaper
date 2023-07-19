@@ -12,7 +12,7 @@ class DomainNotFoundError(Exception):
         super().__init__(self.message)
 
 
-class PBApi:
+class PDApi:
     def __init__(self, api_key):
         self.session = requests.session()
         self.session.headers.update(
@@ -52,7 +52,7 @@ class PBApi:
 def fetch_domains(pd_api_key: str, pd_domains: str = None, **args):
     root_domains = []
     domains = []
-    api = PBApi(pd_api_key)
+    api = PDApi(pd_api_key)
 
     if pd_domains is not None and len(pd_domains):
         root_domains = [domain.strip(" ") for domain in pd_domains.split(",")]
