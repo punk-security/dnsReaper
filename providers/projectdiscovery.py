@@ -1,9 +1,10 @@
-#import CloudFlare, logging
+# import CloudFlare, logging
 import requests, logging, json
 
 from domain import Domain
 
 description = "Scan multiple domains by fetching them from ProjectDiscovery"
+
 
 class DomainNotFoundError(Exception):
     def __init__(self, domain):
@@ -47,11 +48,11 @@ class PBApi:
 
         return self.check_response(res)
 
+
 def fetch_domains(pd_api_key: str, pd_domains: str = None, **args):
     root_domains = []
     domains = []
     api = PBApi(pd_api_key)
-
 
     if pd_domains is not None and len(pd_domains):
         root_domains = [domain.strip(" ") for domain in pd_domains.split(",")]
