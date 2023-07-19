@@ -162,7 +162,7 @@ projectdiscovery:
   --pd-api-key PD_API_KEY
                         Required
   --pd-domains PD_DOMAINS
-                        Optional
+                        Required
 
 
 file:
