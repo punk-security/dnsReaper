@@ -1,4 +1,3 @@
-# import CloudFlare, logging
 import requests, logging, json
 
 from domain import Domain
