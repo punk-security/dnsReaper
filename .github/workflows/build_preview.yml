@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Python runtime test
-        uses: ./.github/actions/python-test
+        uses: ./.github/actions/pytest
         with:
           python-version: "3.9"
   v3-10:
     runs-on: ubuntu-latest
     steps:
       - name: Python runtime test
-        uses: ./.github/actions/python-test
+        uses: ./.github/actions/pytest
         with:
           python-version: "3.10"
