@@ -93,7 +93,7 @@ def fetch_domains(gd_api_key: str, gd_api_secret: str, gd_domains: str = None, *
         root_domains = [domain.strip(" ") for domain in gd_domains.split(",")]
     else:
         resp_data = api.list_domains().json()
-        root_domains = [domain["name"] for domain in resp_data["domains"]]
+        root_domains = [domain["domain"] for domain in resp_data]
         
 
     for domain in root_domains:
