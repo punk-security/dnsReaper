@@ -84,7 +84,6 @@ def convert_records_to_domains(records, root_domain):
         yield domain
 
 
-# TODO: make domains optional
 def fetch_domains(gd_api_key: str, gd_api_secret: str, gd_domains: str = None, **args):
     root_domains = []
     domains = []
