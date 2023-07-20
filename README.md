@@ -159,6 +159,16 @@ digitalocean:
 projectdiscovery:
   Scan multiple domains by fetching them from Project Discovery
 
+  --gd-api-key GD_API_KEY
+                        Required
+  --gd-api-secret GD_API_SECRET
+                        Required
+  --gd-domains GD_DOMAINS
+                        Required
+
+projectdiscovery:
+  Scan multiple domains by fetching them from Project Discovery
+
   --pd-api-key PD_API_KEY
                         Required
   --pd-domains PD_DOMAINS
