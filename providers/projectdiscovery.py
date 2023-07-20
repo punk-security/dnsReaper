@@ -48,23 +48,19 @@ class PDApi:
         return self.check_response(res)
 
 
-def fetch_domains(pd_api_key: str, pd_domains: str = None, **args):
+def fetch_domains(pd_api_key: str, pd_domains: str, **args):
     root_domains = []
     domains = []
     api = PDApi(pd_api_key)
 
-    if pd_domains is not None and len(pd_domains):
-        root_domains = [domain.strip(" ") for domain in pd_domains.split(",")]
-    else:
-        print("Domain required")
-        exit()
+    root_domains = [domain.strip(" ") for domain in pd_domains.split(",")]
 
     for domain in root_domains:
         if "" == domain or domain is None:
             continue
 
         raw_domains = api.get_subdomains(domain).json()
-        logging.info("Testing", len(raw_domains["subdomains"]), "subdomains")
+        logging.warn("Testing", len(raw_domains["subdomains"]), "subdomains")
         domains.extend([Domain(f"{sb}.{domain}") for sb in raw_domains["subdomains"]])
 
     return domains
