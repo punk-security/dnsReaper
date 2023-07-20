@@ -10,6 +10,7 @@ class DomainNotFoundError(Exception):
         self.message = "Domain not found: " + domain
         super().__init__(self.message)
 
+
 class GDApi:
     def __init__(self, api_key, api_secret):
         self.session = requests.session()
@@ -48,7 +49,8 @@ class GDApi:
             raise DomainNotFoundError(domain)
 
         return self.check_response(res)
-    
+
+
 def convert_records_to_domains(records, root_domain):
     buf = {}
     for record in records:
@@ -94,7 +96,6 @@ def fetch_domains(gd_api_key: str, gd_api_secret: str, gd_domains: str = None, *
     else:
         resp_data = api.list_domains().json()
         root_domains = [domain["domain"] for domain in resp_data]
-        
 
     for domain in root_domains:
         if "" == domain or domain is None:
