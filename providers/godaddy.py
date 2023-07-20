@@ -101,7 +101,6 @@ def fetch_domains(gd_api_key: str, gd_api_secret: str, gd_domains: str = None, *
             continue
 
         records = api.get_records(domain).json()
-
-        domains.extend(convert_records_to_domains(records["domain_records"], domain))
+        domains.extend(convert_records_to_domains(records, domain))
 
     return domains

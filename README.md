@@ -93,6 +93,8 @@ providers:
   > cloudflare - Scan multiple domains by fetching them from Cloudflare
   > digitalocean - Scan multiple domains by fetching them from Digital Ocean
   > file - Read domains from a file (or folder of files), one per line
+  > godaddy - Scan multiple domains by fetching them from GoDaddy
+  > projectdiscovery - Scan multiple domains by fetching them from Project Discovery
   > single - Scan a single domain by providing a domain on the commandline
   > zonetransfer - Scan multiple domains by fetching records via DNS zone transfer
 
@@ -159,21 +161,20 @@ digitalocean:
 projectdiscovery:
   Scan multiple domains by fetching them from Project Discovery
 
+  --pd-api-key PD_API_KEY
+                        Required
+  --pd-domains PD_DOMAINS
+                        Required
+
+godaddy:
+  Scan multiple domains by fetching them from GoDaddy
+
   --gd-api-key GD_API_KEY
                         Required
   --gd-api-secret GD_API_SECRET
                         Required
   --gd-domains GD_DOMAINS
                         Required
-
-projectdiscovery:
-  Scan multiple domains by fetching them from Project Discovery
-
-  --pd-api-key PD_API_KEY
-                        Required
-  --pd-domains PD_DOMAINS
-                        Required
-
 
 file:
   Read domains from a file (or folder of files), one per line
