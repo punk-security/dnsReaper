@@ -106,6 +106,7 @@ class Domain:
             self.resolver = dns.resolver
         else:
             self.set_custom_NS(ns)
+        self.resolver.timeout = 1
         self.should_fetch_std_records = fetch_standard_records
 
     @lru_cache

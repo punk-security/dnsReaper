@@ -103,9 +103,16 @@ with output.Output(args.out_format, args.out) as o:
         name_servers=args.resolver.replace(" ", "").split(","),
     )
     pool = ThreadPool(processes=args.parallelism)
-    pool.map(scan, domains)
-    pool.close()
-    pool.join()
+    res = pool.map_async(scan, domains)
+    try:
+        while not res.ready():
+            time.sleep(2)
+    except KeyboardInterrupt:
+        logging.warning("Caught KeyboardInterrupt, terminating early...")
+        lock.acquire()
+    else:
+        pool.close()
+        pool.join()
 
 ###### exit
 logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")
