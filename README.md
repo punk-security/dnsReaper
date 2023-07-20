@@ -174,9 +174,18 @@ projectdiscovery:
   --pd-domains PD_DOMAINS
                         Required
 
+googlecloud:
+  Scan multiple domains by fetching them from Google Cloud
+  Requires user to already be authenticated.
+
+  --gc-api-key PD_API_KEY
+                        Required
+  --gc-domains PD_DOMAINS
+                        Required
+
 godaddy:
   Scan multiple domains by fetching them from GoDaddy
-
+  
   --gd-api-key GD_API_KEY
                         Required
   --gd-api-secret GD_API_SECRET
