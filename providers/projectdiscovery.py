@@ -60,7 +60,13 @@ def fetch_domains(pd_api_key: str, pd_domains: str, **args):
             continue
 
         raw_domains = api.get_subdomains(domain).json()
-        logging.warn("Testing", len(raw_domains["subdomains"]), "subdomains")
-        domains.extend([Domain(f"{sb}.{domain}") for sb in raw_domains["subdomains"]])
+        logging.warn(f"Testing {len(raw_domains['subdomains'])} subdomains")
+        domains.extend(
+            [
+                Domain(f"{sb}.{domain}")
+                for sb in raw_domains["subdomains"]
+                if "*" not in sb
+            ]
+        )
 
     return domains
