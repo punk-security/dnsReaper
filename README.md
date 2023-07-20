@@ -174,7 +174,7 @@ godaddy:
   --gd-api-secret GD_API_SECRET
                         Required
   --gd-domains GD_DOMAINS
-                        Required
+                        Optional
 
 file:
   Read domains from a file (or folder of files), one per line
