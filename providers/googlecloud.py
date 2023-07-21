@@ -48,7 +48,7 @@ def get_zones(client):
         logging.critical(
             f"""Failed to fetch zones from Google Cloud. Could not discover credentials.
 Ensure that the environment variable `GOOGLE_APPLICATION_CREDENTIALS` is set to the JSON credential file's location, 
-or that the JSON file is in the default location. 
+or that the JSON file is in the default location. Also, ensure that the correct project id has been passed.
 {e}"""
         )
         exit(-1)
