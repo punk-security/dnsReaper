@@ -94,6 +94,7 @@ providers:
   > digitalocean - Scan multiple domains by fetching them from Digital Ocean
   > file - Read domains from a file (or folder of files), one per line
   > godaddy - Scan multiple domains by fetching them from GoDaddy
+  > googlecloud - Scan multiple domains by fetching them from Google Cloud
   > projectdiscovery - Scan multiple domains by fetching them from ProjectDiscovery
   > securitytrails - Scan multiple domains by fetching them from Security Trails
   > single - Scan a single domain by providing a domain on the commandline
@@ -175,6 +176,11 @@ godaddy:
                         Required
   --gd-domains GD_DOMAINS
                         Optional
+
+googlecloud:
+  Scan multiple domains by fetching them from Google Cloud
+  --project-id PROJECT_ID
+                        Required
 
 projectdiscovery:
   Scan multiple domains by fetching them from ProjectDiscovery
