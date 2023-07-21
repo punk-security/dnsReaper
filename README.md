@@ -106,7 +106,7 @@ options:
   -h, --help            Show this help message and exit
   --out OUT             Output file (default: results) - use 'stdout' to stream out
   --out-format {csv,json}
-  --resolver RESOLVER   Provide a custom DNS resolver (or multiple seperated by commas)
+  --resolver RESOLVER   Provide a custom DNS resolver
   --parallelism PARALLELISM
                         Number of domains to test in parallel - too high and you may see odd DNS results (default: 30)
   --disable-probable    Do not check for probable conditions
@@ -166,9 +166,17 @@ file:
 
   --filename FILENAME   Required
 
+projectdiscovery:
+  Scan multiple domains by fetching them from ProjectDiscovery
+
+  --pd-api-key PD_API_KEY
+                        Required
+  --pd-domains PD_DOMAINS
+                        Required
+
 godaddy:
   Scan multiple domains by fetching them from GoDaddy
-
+  
   --gd-api-key GD_API_KEY
                         Required
   --gd-api-secret GD_API_SECRET
@@ -191,6 +199,28 @@ securitytrails:
                         Required
   --st-domains ST_DOMAINS
                         Required
+
+googlecloud:
+  Scan multiple domains by fetching them from Google Cloud
+
+  --project-id PROJECT_ID
+                        Required
+
+projectdiscovery:
+  Scan multiple domains by fetching them from ProjectDiscovery
+
+  --pd-api-key PD_API_KEY
+                        Required
+  --pd-domains PD_DOMAINS
+                        Optional
+
+securitytrails:
+  Scan multiple domains by fetching them from Security Trails
+
+  --st-api-key ST_API_KEY
+                        Required
+  --st-domains ST_DOMAINS
+                        Optional
 
 single:
   Scan a single domain by providing a domain on the commandline
