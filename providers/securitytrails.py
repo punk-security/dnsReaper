@@ -11,14 +11,10 @@ class DomainNotFoundError(Exception):
         super().__init__(self.message)
 
 
-
 class STApi:
     def __init__(self, api_key):
         self.session = requests.session()
-        self.session.headers.update(
-            {"accept": "application/json", "APIKEY": api_key}
-        )
-
+        self.session.headers.update({"accept": "application/json", "APIKEY": api_key})
 
     @staticmethod
     def check_response(response: requests.Response):
@@ -29,19 +25,11 @@ class STApi:
             raise ValueError("Invalid response received from API: " + response.json())
 
         return response
-    
-    
+
     def make_request(self, endpoint):
         return self.session.prepare_request(
             requests.Request("GET", "https://api.securitytrails.com/v1/" + endpoint)
         )
-
-    
-    def list_domains(self):
-        req = self.make_request("domains/list?include_ips=false")
-
-        return self.check_response(self.session.send(req))
-    
 
     def get_subdomains(self, domain):
         req = self.make_request(f"domain/{domain}/subdomains")
