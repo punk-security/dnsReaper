@@ -18,8 +18,11 @@ class STApi:
 
     @staticmethod
     def check_response(response: requests.Response):
-        if response.status_code == 401:
+        if response.status_code == 401: ###
             raise ValueError("Invalid API key specified.")
+        
+        if response.status_code == 403:
+            raise ValueError("This feature is not available for your subscription package. Consider upgrading your package or contact support@securitytrails.com")
 
         if response.status_code < 200 or response.status_code >= 300:
             raise ValueError("Invalid response received from API: " + response.json())
@@ -56,6 +59,5 @@ def fetch_domains(st_api_key: str, st_domains: str, **args):
 
         logging.info("Testing", raw_domains["subdomain_count"], "subdomains")
         domains.extend([Domain(f"{sb}.{domain}") for sb in raw_domains["subdomains"]])
-        print(domains)
 
     return domains
