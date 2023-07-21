@@ -95,6 +95,7 @@ providers:
   > file - Read domains from a file (or folder of files), one per line
   > projectdiscovery - Scan multiple domains by fetching them from ProjectDiscovery
   > securitytrails - Scan multiple domains by fetching them from Security Trails
+  > godaddy - Scan multiple domains by fetching them from GoDaddy
   > single - Scan a single domain by providing a domain on the commandline
   > zonetransfer - Scan multiple domains by fetching records via DNS zone transfer
 
@@ -172,6 +173,16 @@ projectdiscovery:
                         Required
   --pd-domains PD_DOMAINS
                         Required
+
+godaddy:
+  Scan multiple domains by fetching them from GoDaddy
+
+  --gd-api-key GD_API_KEY
+                        Required
+  --gd-api-secret GD_API_SECRET
+                        Required
+  --gd-domains GD_DOMAINS
+                        Optional
 
 securitytrails:
   Scan multiple domains by fetching them from Security Trails
