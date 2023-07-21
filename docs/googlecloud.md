@@ -9,26 +9,26 @@ To enumerate a domain's subdomains, you need to provide a valid project ID and s
 To to get the Private key:
 
 1. Navigate to https://cloud.google.com/ and select **Go to console**, or [click here](https://console.cloud.google.com/)
-2. Make sure the correct project by checking the drop down at top left of the page. If the project needs to be changed, click the drop down and select the correct project from the popup
-3. Select on `API & Services` under Quick Access
-4. On the side bar, select `Enabled APIs & services`
-5. At the top of the page, select **+ Enable APIs and Services**
-6. In the search bar, search for `Cloud DNS API`, and select `Cloud DNS API`
-7. On the `Cloud DNS API`, select **Enable**. 
-8. Then, on the `Cloud DNS API` page, select the `Credentials` tab
-9. Below the `Credentials compatible with this API` section, go to `Service Accounts`, and click on the `Manage service accounts`
-10. At the top of the page, select **+ Create Service Account**
-11. Give the service a `Service account ID`
-12. Click **Create and Continue**
-13. Click the `Select a role` dropdown, scroll down to `DNS`, then select `DNS Reader`
-14. Then, click **Done**
-15. Back on the Service Account page, select the service account you just made
-16. Select the `Keys` tab at the top
-17. Click the `Add Key` dropdown and select `Create new key`
-18. Ensure the type `JSON` is selected and click `Create`
-19. This will download a JSON file to your computer, switch can be moved to a suitable location
-20. Copy down the full path of the files location, including the files name and extension
-21. Save the file path to the `GOOGLE_APPLICATION_CREDENTIALS` environment variable
+1. Make sure the correct project by checking the drop down at top left of the page. If the project needs to be changed, click the drop down and select the correct project from the popup
+1. Select on `API & Services` under Quick Access
+1. On the side bar, select `Enabled APIs & services`
+1. At the top of the page, select **+ Enable APIs and Services**
+1. In the search bar, search for `Cloud DNS API`, and select `Cloud DNS API`
+1. On the `Cloud DNS API`, select **Enable**. 
+1. Then, on the `Cloud DNS API` page, select the `Credentials` tab
+1. Below the `Credentials compatible with this API` section, go to `Service Accounts`, and click on the `Manage service accounts`
+1. At the top of the page, select **+ Create Service Account**
+1. Give the service a `Service account ID`
+1. Click **Create and Continue**
+1. Click the `Select a role` dropdown, scroll down to `DNS`, then select `DNS Reader`
+1. Then, click **Done**
+1. Back on the Service Account page, select the service account you just made
+1. Select the `Keys` tab at the top
+1. Click the `Add Key` dropdown and select `Create new key`
+1. Ensure the type `JSON` is selected and click `Create`
+1. This will download a JSON file to your computer, which can be moved to a suitable location
+1. Copy down the full path of the credential file's location, including the file's name and extension
+1. Save the file path to the `GOOGLE_APPLICATION_CREDENTIALS` environment variable
     a. On Linux or MacOS:
         ```
         export GOOGLE_APPLICATION_CREDENTIALS="/path/to/json/file.json"
@@ -56,4 +56,24 @@ The `--project-id` option is used to provide your Google Cloud project's ID.
 The `GOOGLE_APPLICATION_CREDENTIALS` is an environment variable used to tell DNSReaper the location of your JSON credential file.
 
 ## Docker Usage
+To set up Google Cloud with docker, you will need to mount the JSON credential file.
 
+To mount the file:
+On Windows:
+```
+docker run -v C:\file\path\containing\credentials.json:/app/credentials.json
+```
+On Linux and MacOS
+```
+docker run -v /local/path/to/credentials.json:/app/credentials.json
+```
+
+To pass the environment variable:
+```
+-e GOOGLE_APPLICATION_CREDENTIALS='/app/credentials.json'
+```
+
+The full command would look like this:
+```
+docker run punksecurity/dnsreaper -v /local/path/to/credentials.json:/app/credentials.json -e GOOGLE_APPLICATION_CREDENTIALS='/app/credentials.json'
+```
