@@ -18,11 +18,13 @@ class STApi:
 
     @staticmethod
     def check_response(response: requests.Response):
-        if response.status_code == 401: ###
+        if response.status_code == 401:  ###
             raise ValueError("Invalid API key specified.")
-        
-        if response.status_code == 403:
-            raise ValueError("This feature is not available for your subscription package. Consider upgrading your package or contact support@securitytrails.com")
+
+        if response.status_code == 403 and response.content:
+            raise ValueError(
+                "This feature is not available for your subscription package. Consider upgrading your package or contact support@securitytrails.com"
+            )
 
         if response.status_code < 200 or response.status_code >= 300:
             raise ValueError("Invalid response received from API: " + response.json())

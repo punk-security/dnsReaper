@@ -93,17 +93,19 @@ providers:
   > cloudflare - Scan multiple domains by fetching them from Cloudflare
   > digitalocean - Scan multiple domains by fetching them from Digital Ocean
   > file - Read domains from a file (or folder of files), one per line
+  > projectdiscovery - Scan multiple domains by fetching them from ProjectDiscovery
+  > securitytrails - Scan multiple domains by fetching them from Security Trails
   > single - Scan a single domain by providing a domain on the commandline
   > zonetransfer - Scan multiple domains by fetching records via DNS zone transfer
 
 positional arguments:
-  {aws,azure,bind,cloudflare,digitalocean,file,single,zonetransfer}
+  {aws,azure,bind,cloudflare,digitalocean,file,projectdiscovery,securitytrails,single,zonetransfer}
 
 options:
   -h, --help            Show this help message and exit
   --out OUT             Output file (default: results) - use 'stdout' to stream out
   --out-format {csv,json}
-  --resolver RESOLVER   Provide a custom DNS resolver (or multiple seperated by commas)
+  --resolver RESOLVER   Provide a custom DNS resolver
   --parallelism PARALLELISM
                         Number of domains to test in parallel - too high and you may see odd DNS results (default: 30)
   --disable-probable    Do not check for probable conditions
@@ -122,6 +124,8 @@ aws:
   --aws-access-key-id AWS_ACCESS_KEY_ID
                         Optional
   --aws-access-key-secret AWS_ACCESS_KEY_SECRET
+                        Optional
+  --aws-session-token AWS_SESSION_TOKEN
                         Optional
 
 azure:
@@ -156,19 +160,26 @@ digitalocean:
   --do-domains DO_DOMAINS
                         Optional
 
+file:
+  Read domains from a file (or folder of files), one per line
+
+  --filename FILENAME   Required
+
 projectdiscovery:
-  Scan multiple domains by fetching them from Project Discovery
+  Scan multiple domains by fetching them from ProjectDiscovery
 
   --pd-api-key PD_API_KEY
                         Required
   --pd-domains PD_DOMAINS
                         Required
 
+securitytrails:
+  Scan multiple domains by fetching them from Security Trails
 
-file:
-  Read domains from a file (or folder of files), one per line
-
-  --filename FILENAME   Required
+  --st-api-key ST_API_KEY
+                        Required
+  --st-domains ST_DOMAINS
+                        Required
 
 single:
   Scan a single domain by providing a domain on the commandline
