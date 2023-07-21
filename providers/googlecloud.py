@@ -5,15 +5,14 @@ from google.cloud import dns
 
 description = "Scan multiple domains by fetching them from Google Cloud. Requires GOOGLE_APPLICATION_CREDENTIALS environment variable."
 
+
 def get_records(zone):
-    records = []    
+    records = []
 
     try:
         records = zone.list_resource_record_sets(max_results=None, page_token=None)
     except Exception as e:
-        logging.critical(
-            f"Failed to fetch zone records. {e}"
-        )
+        logging.critical(f"Failed to fetch zone records. {e}")
         return []
 
     return list(records)
@@ -57,8 +56,9 @@ or that the JSON file is in the default location.
     logging.debug(f"Got {len(zones)} zones from Google Cloud")
     if len(zones) == 0:
         return []
-    
+
     return zones
+
 
 def fetch_domains(project_id, **args):
     domains = []
@@ -74,9 +74,13 @@ def fetch_domains(project_id, **args):
         try:
             records = get_records(zone)
         except:
-            logging.warning(f"Could not retrieve records for Google Cloud zone '{zone.dns_name}'")
+            logging.warning(
+                f"Could not retrieve records for Google Cloud zone '{zone.dns_name}'"
+            )
             records = []
-        logging.debug(f"Got {len(records)} records for Google Cloud zone '{zone.dns_name}'")
+        logging.debug(
+            f"Got {len(records)} records for Google Cloud zone '{zone.dns_name}'"
+        )
 
         for domain in convert_records_to_domains(records):
             domains.append(domain)
