@@ -93,14 +93,15 @@ providers:
   > cloudflare - Scan multiple domains by fetching them from Cloudflare
   > digitalocean - Scan multiple domains by fetching them from Digital Ocean
   > file - Read domains from a file (or folder of files), one per line
+  > godaddy - Scan multiple domains by fetching them from GoDaddy
+  > googlecloud - Scan multiple domains by fetching them from Google Cloud. Requires GOOGLE_APPLICATION_CREDENTIALS environment variable.
   > projectdiscovery - Scan multiple domains by fetching them from ProjectDiscovery
   > securitytrails - Scan multiple domains by fetching them from Security Trails
-  > godaddy - Scan multiple domains by fetching them from GoDaddy
   > single - Scan a single domain by providing a domain on the commandline
   > zonetransfer - Scan multiple domains by fetching records via DNS zone transfer
 
 positional arguments:
-  {aws,azure,bind,cloudflare,digitalocean,file,projectdiscovery,securitytrails,single,zonetransfer}
+  {aws,azure,bind,cloudflare,digitalocean,file,godaddy,googlecloud,projectdiscovery,securitytrails,single,zonetransfer}
 
 options:
   -h, --help            Show this help message and exit
@@ -174,15 +175,6 @@ projectdiscovery:
   --pd-domains PD_DOMAINS
                         Required
 
-googlecloud:
-  Scan multiple domains by fetching them from Google Cloud
-  Requires user to already be authenticated.
-
-  --gc-api-key PD_API_KEY
-                        Required
-  --gc-domains PD_DOMAINS
-                        Required
-
 godaddy:
   Scan multiple domains by fetching them from GoDaddy
   
@@ -192,6 +184,20 @@ godaddy:
                         Required
   --gd-domains GD_DOMAINS
                         Optional
+
+googlecloud:
+  Scan multiple domains by fetching them from Google Cloud. Requires GOOGLE_APPLICATION_CREDENTIALS environment variable.
+
+  --project-id PROJECT_ID
+                        Required
+
+projectdiscovery:
+  Scan multiple domains by fetching them from ProjectDiscovery
+
+  --pd-api-key PD_API_KEY
+                        Required
+  --pd-domains PD_DOMAINS
+                        Required
 
 securitytrails:
   Scan multiple domains by fetching them from Security Trails

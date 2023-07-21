@@ -11,6 +11,6 @@ control panel (click API in the sidebar, or [here for a direct link](https://clo
 
 The API key should be limited to read-only access.
 
-The `--do-domains` option is used to limit the domains that are being scanned. Multiple can be provided by separating
+The `--do-domains` option is used to limit the domains that are being scanned. Multiple domains can be provided by separating
 each domain with a comma, eg:
 `--do-domains first.domain.example,second.domain.example`
