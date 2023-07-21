@@ -18,11 +18,13 @@ class STApi:
 
     @staticmethod
     def check_response(response: requests.Response):
-        if response.status_code == 403 and ("Invalid authentication credentials" in (response.content).decode("utf-8")):
+        if response.status_code == 403 and (
+            "Invalid authentication credentials" in (response.content).decode("utf-8")
+        ):
             raise ValueError(
                 "Invalid authentication credentials. Please ensure the API key entered vis correct."
             )
-        
+
         if response.status_code == 403:
             raise ValueError(
                 "This feature is not available for your subscription package. Consider upgrading your package or contact support@securitytrails.com."
