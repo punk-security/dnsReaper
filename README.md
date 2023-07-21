@@ -93,14 +93,14 @@ providers:
   > cloudflare - Scan multiple domains by fetching them from Cloudflare
   > digitalocean - Scan multiple domains by fetching them from Digital Ocean
   > file - Read domains from a file (or folder of files), one per line
+  > godaddy - Scan multiple domains by fetching them from GoDaddy
   > projectdiscovery - Scan multiple domains by fetching them from ProjectDiscovery
   > securitytrails - Scan multiple domains by fetching them from Security Trails
-  > godaddy - Scan multiple domains by fetching them from GoDaddy
   > single - Scan a single domain by providing a domain on the commandline
   > zonetransfer - Scan multiple domains by fetching records via DNS zone transfer
 
 positional arguments:
-  {aws,azure,bind,cloudflare,digitalocean,file,projectdiscovery,securitytrails,single,zonetransfer}
+  {aws,azure,bind,cloudflare,digitalocean,file,godaddy,projectdiscovery,securitytrails,single,zonetransfer}
 
 options:
   -h, --help            Show this help message and exit
@@ -166,14 +166,6 @@ file:
 
   --filename FILENAME   Required
 
-projectdiscovery:
-  Scan multiple domains by fetching them from ProjectDiscovery
-
-  --pd-api-key PD_API_KEY
-                        Required
-  --pd-domains PD_DOMAINS
-                        Required
-
 godaddy:
   Scan multiple domains by fetching them from GoDaddy
 
@@ -183,6 +175,14 @@ godaddy:
                         Required
   --gd-domains GD_DOMAINS
                         Optional
+
+projectdiscovery:
+  Scan multiple domains by fetching them from ProjectDiscovery
+
+  --pd-api-key PD_API_KEY
+                        Required
+  --pd-domains PD_DOMAINS
+                        Required
 
 securitytrails:
   Scan multiple domains by fetching them from Security Trails
