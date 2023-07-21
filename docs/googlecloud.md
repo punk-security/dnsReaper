@@ -1,7 +1,9 @@
 # Google Cloud
 
 ## Description
-The Google Cloud provider connects to Google Cloud and retrieves records associated with a domain.
+The Google Cloud provider connects to Google Cloud and retrieves all records associated with a domain.
+
+To enumerate a domain's subdomains, you need to provide a valid project ID and set the `GOOGLE_APPLICATION_CREDENTIALS` to your JSON credential file's full path.
 
 ## Create Google Cloud Private Key
 To to get the Private key:
@@ -47,7 +49,6 @@ To get the project id:
 
 1. Navigate to https://cloud.google.com/ and select **Go to console**, or [click here](https://console.cloud.google.com/)
 2. The project idea will be shown on the `Welcome page`. If the correct project isn't selected, click on the dropdown at the top left of the page. From here, you can search for your project and copy the project id under the ID column.
-
 
 ## Usage
 The `--project-id` option is used to provide your Google Cloud project's ID.
