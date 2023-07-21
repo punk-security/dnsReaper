@@ -61,7 +61,7 @@ def fetch_domains(st_api_key: str, st_domains: str, **args):
 
         raw_domains = api.get_subdomains(domain).json()
 
-        logging.warn("Testing", raw_domains["subdomain_count"], "subdomains")
+        logging.warn(f"Testing {raw_domains['subdomain_count']} subdomains")
         domains.extend([Domain(f"{sb}.{domain}") for sb in raw_domains["subdomains"]])
 
     return domains
