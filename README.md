@@ -93,13 +93,14 @@ providers:
   > cloudflare - Scan multiple domains by fetching them from Cloudflare
   > digitalocean - Scan multiple domains by fetching them from Digital Ocean
   > file - Read domains from a file (or folder of files), one per line
+  > projectdiscovery - Scan multiple domains by fetching them from ProjectDiscovery
+  > securitytrails - Scan multiple domains by fetching them from Security Trails
   > godaddy - Scan multiple domains by fetching them from GoDaddy
-  > projectdiscovery - Scan multiple domains by fetching them from Project Discovery
   > single - Scan a single domain by providing a domain on the commandline
   > zonetransfer - Scan multiple domains by fetching records via DNS zone transfer
 
 positional arguments:
-  {aws,azure,bind,cloudflare,digitalocean,file,single,zonetransfer}
+  {aws,azure,bind,cloudflare,digitalocean,file,projectdiscovery,securitytrails,single,zonetransfer}
 
 options:
   -h, --help            Show this help message and exit
@@ -124,6 +125,8 @@ aws:
   --aws-access-key-id AWS_ACCESS_KEY_ID
                         Optional
   --aws-access-key-secret AWS_ACCESS_KEY_SECRET
+                        Optional
+  --aws-session-token AWS_SESSION_TOKEN
                         Optional
 
 azure:
@@ -158,8 +161,13 @@ digitalocean:
   --do-domains DO_DOMAINS
                         Optional
 
+file:
+  Read domains from a file (or folder of files), one per line
+
+  --filename FILENAME   Required
+
 projectdiscovery:
-  Scan multiple domains by fetching them from Project Discovery
+  Scan multiple domains by fetching them from ProjectDiscovery
 
   --pd-api-key PD_API_KEY
                         Required
@@ -176,10 +184,13 @@ godaddy:
   --gd-domains GD_DOMAINS
                         Optional
 
-file:
-  Read domains from a file (or folder of files), one per line
+securitytrails:
+  Scan multiple domains by fetching them from Security Trails
 
-  --filename FILENAME   Required
+  --st-api-key ST_API_KEY
+                        Required
+  --st-domains ST_DOMAINS
+                        Required
 
 single:
   Scan a single domain by providing a domain on the commandline
