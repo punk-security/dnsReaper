@@ -59,7 +59,7 @@ def get_zones(client):
     while True:
         page_number += 1
         try:
-            raw_results = client.zones.get()
+            raw_results = client.zones.get(params={"page": page_number})
         except CloudFlare.exceptions.CloudFlareAPIError as e:
             exit(f"/zones.get api call failed {e}")
         except Exception as e:
