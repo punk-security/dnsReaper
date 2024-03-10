@@ -10,7 +10,7 @@ cname = "shops.myshopify.com"
 test = cname_or_ip_found_but_string_in_body(
     cname=cname,
     ips=ipv4 + ipv6,
-    domain_not_configured_message="Only one step left!",
+    domain_not_configured_message="Create an Ecommerce Website and Sell Online! Ecommerce Software by Shopify",
     service="Shopify",
 )
 
