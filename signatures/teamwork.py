@@ -5,5 +5,5 @@ test = cname_found_but_string_in_body(
     domain_not_configured_message="""Unable to determine installationID from domain""",
     service="teamwork",
     custom_uri="launchpad/v1/info.json",
-    https=True
+    https=True,
 )

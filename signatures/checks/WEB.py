@@ -3,7 +3,9 @@ from math import floor
 import logging
 
 
-def string_in_body(domain: Domain, string: str, https: bool, custom_uri: str = "") -> bool:
+def string_in_body(
+    domain: Domain, string: str, https: bool, custom_uri: str = ""
+) -> bool:
     if string in domain.fetch_web(https=https, uri=custom_uri).body:
         logging.info(f"Message observed in response for '{domain}'")
         return True
