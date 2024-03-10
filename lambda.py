@@ -43,8 +43,7 @@ async def root():
 @app.get("/check")
 async def check(domain: str):
     try:
-        findings = process_domain(Domain(domain))
-        return build_response(findings)
+        return(process_domain(Domain(domain)))
     except Exception as e:
         return {"error": f" {e}"}
 
@@ -58,14 +57,6 @@ def process_domain(domain):
     with output.Output("json", stdout) as o:
         scan_domain(domain, signatures, lock, findings, o, name_servers=[])
         return findings
-
-
-def build_response(findings):
-    msg = f"We found {len(findings)} takeovers ☠️"
-    for finding in findings:
-        msg += f"-- DOMAIN '{finding.domain}' :: SIGNATURE '{finding.signature}' :: CONFIDENCE '{finding.confidence}'"
-        msg += f"{linesep}{finding.populated_records()}"
-    return msg
 
 
 def handler(event, context):
