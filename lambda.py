@@ -43,7 +43,7 @@ async def root():
 @app.get("/check")
 async def check(domain: str):
     try:
-        return(process_domain(Domain(domain)))
+        return process_domain(Domain(domain))
     except Exception as e:
         return {"error": f" {e}"}
 
