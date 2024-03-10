@@ -20,6 +20,7 @@ github_pages_cname = ".github.io"
 test = cname_or_ip_found_but_string_in_body(
     cname=github_pages_cname,
     ips=github_pages_ipv4 + github_pages_ipv6,
-    domain_not_configured_message="There isn't a GitHub Pages site here",
+    domain_not_configured_message="<title>Site not found ",
     service="Github Pages",
+    https=True,
 )

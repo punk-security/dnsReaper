@@ -1,8 +1,8 @@
-from .templates.cname_found_but_string_in_body import cname_found_but_string_in_body
+from .templates.ip_found_but_string_in_body import ip_found_but_string_in_body
 
-test = cname_found_but_string_in_body(
-    cname="cname.smartjobboard.com",
-    domain_not_configured_message="404 Not Found",
+test = ip_found_but_string_in_body(
+    ips=["52.16.160.97"],
+    domain_not_configured_message="job board website is either expired or its domain name is invalid.",
     service="smartjobboard.com",
     https=True,
 )
