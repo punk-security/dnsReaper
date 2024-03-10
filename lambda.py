@@ -16,6 +16,7 @@ from sys import stderr, exit, argv, stdout
 import time
 
 import sys, os
+
 sys.path.append(os.getcwd())
 
 
@@ -38,22 +39,26 @@ for signature in signatures:
 async def root():
     return {"message": "Hello Punk!"}
 
+
 @app.get("/check")
 async def check(domain: str):
     try:
         findings = process_domain(Domain(domain))
         return build_response(findings)
     except Exception as e:
-        return {"error":f" {e}" }
+        return {"error": f" {e}"}
 
-###### scanning 
+
+###### scanning
+
 
 def process_domain(domain):
     findings = []
     lock = threading.Lock()
     with output.Output("json", stdout) as o:
-        scan_domain(domain,signatures,lock,findings,o, name_servers=[])
+        scan_domain(domain, signatures, lock, findings, o, name_servers=[])
         return findings
+
 
 def build_response(findings):
     msg = f"We found {len(findings)} takeovers ☠️"
@@ -64,11 +69,12 @@ def build_response(findings):
 
 
 def handler(event, context):
-    #if event.get("some-key"):
-        # Do something or return, etc.
+    # if event.get("some-key"):
+    # Do something or return, etc.
 
     asgi_handler = Mangum(app)
-    response = asgi_handler(event, context) # Call the instance with the event arguments
+    response = asgi_handler(
+        event, context
+    )  # Call the instance with the event arguments
 
     return response
-
