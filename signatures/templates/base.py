@@ -5,7 +5,7 @@ class Base:
     def potential(self, *args, **kwargs):
         raise NotImplementedError()
 
-    def check(self, *args, **kwargs):
+    async def check(self, *args, **kwargs):
         raise NotImplementedError()
 
     def __init__(

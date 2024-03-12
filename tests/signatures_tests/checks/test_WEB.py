@@ -3,6 +3,8 @@ from signatures.checks import WEB
 
 from collections import namedtuple
 
+import pytest
+
 ## string_in_body
 
 string_in_body_response = "This is a response"
@@ -11,7 +13,8 @@ string_in_body_partial_match = "response"
 string_in_body_no_match = "goose"
 
 
-def test_string_in_body_success_on_full_match():
+@pytest.mark.asyncio
+async def test_string_in_body_success_on_full_match():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["body"])(string_in_body_response)
 
@@ -20,7 +23,8 @@ def test_string_in_body_success_on_full_match():
     assert WEB.string_in_body(domain, string_in_body_full_match, False) == True
 
 
-def test_string_in_body_success_on_partial_match():
+@pytest.mark.asyncio
+async def test_string_in_body_success_on_partial_match():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["body"])(string_in_body_response)
 
@@ -29,7 +33,8 @@ def test_string_in_body_success_on_partial_match():
     assert WEB.string_in_body(domain, string_in_body_partial_match, False) == True
 
 
-def test_string_in_body_failure_on_no_match():
+@pytest.mark.asyncio
+async def test_string_in_body_failure_on_no_match():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["body"])(string_in_body_response)
 
@@ -38,7 +43,8 @@ def test_string_in_body_failure_on_no_match():
     assert WEB.string_in_body(domain, string_in_body_no_match, False) == False
 
 
-def test_string_in_body_failure_on_no_body():
+@pytest.mark.asyncio
+async def test_string_in_body_failure_on_no_body():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["body"])("")
 
@@ -50,7 +56,8 @@ def test_string_in_body_failure_on_no_body():
 ## status_code_match
 
 
-def test_status_code_match_success_specific():
+@pytest.mark.asyncio
+async def test_status_code_match_success_specific():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(200)
 
@@ -59,7 +66,8 @@ def test_status_code_match_success_specific():
     assert WEB.status_code_match(domain, 200, False) == True
 
 
-def test_status_code_match_success_partial():
+@pytest.mark.asyncio
+async def test_status_code_match_success_partial():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(302)
 
@@ -68,7 +76,8 @@ def test_status_code_match_success_partial():
     assert WEB.status_code_match(domain, 3, False) == True
 
 
-def test_status_code_match_fail_specific():
+@pytest.mark.asyncio
+async def test_status_code_match_fail_specific():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(302)
 
@@ -77,7 +86,8 @@ def test_status_code_match_fail_specific():
     assert WEB.status_code_match(domain, 401, False) == False
 
 
-def test_status_code_match_fail_partial():
+@pytest.mark.asyncio
+async def test_status_code_match_fail_partial():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(404)
 
@@ -86,7 +96,8 @@ def test_status_code_match_fail_partial():
     assert WEB.status_code_match(domain, 3, False) == False
 
 
-def test_status_code_match_fail_partial():
+@pytest.mark.asyncio
+async def test_status_code_match_fail_partial():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(404)
 
@@ -95,7 +106,8 @@ def test_status_code_match_fail_partial():
     assert WEB.status_code_match(domain, 3, False) == False
 
 
-def test_status_code_404_success():
+@pytest.mark.asyncio
+async def test_status_code_404_success():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(404)
 
@@ -104,7 +116,8 @@ def test_status_code_404_success():
     assert WEB.status_code_404(domain, False) == True
 
 
-def test_status_code_404_failure():
+@pytest.mark.asyncio
+async def test_status_code_404_failure():
     def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(200)
 

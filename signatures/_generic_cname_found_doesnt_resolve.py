@@ -34,8 +34,8 @@ def potential(domain: Domain, **kwargs) -> bool:
     return False
 
 
-def check(domain: Domain, **kwargs) -> bool:
-    return checks.CNAME.NX_DOMAIN_on_resolve(domain)
+async def check(domain: Domain, **kwargs) -> bool:
+    return await checks.CNAME.NX_DOMAIN_on_resolve(domain)
 
 
 INFO = """
