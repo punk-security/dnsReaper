@@ -13,8 +13,8 @@ class ns_found_but_no_SOA(base.Base):
     def potential(self, domain, **kwargs) -> bool:
         return signatures.checks.NS.match(domain, self.ns)
 
-    def check(self, domain, **kwargs) -> bool:
-        return signatures.checks.NS.no_SOA_detected(domain)
+    async def check(self, domain, **kwargs) -> bool:
+        return await signatures.checks.NS.no_SOA_detected(domain)
 
     def __init__(self, ns, service, sample_ns=None, info=None, **kwargs):
         self.ns = ns

@@ -14,12 +14,12 @@ class cname_found_but_string_in_body(base.Base):
     def potential(self, domain, **kwargs) -> bool:
         return signatures.checks.CNAME.match(domain, self.cname)
 
-    def check(self, domain, **kwargs) -> bool:
+    async def check(self, domain, **kwargs) -> bool:
         if self.https:
-            return signatures.checks.WEB.string_in_body_https(
+            return await signatures.checks.WEB.string_in_body_https(
                 domain, self.domain_not_configured_message, custom_uri=self.custom_uri
             )
-        return signatures.checks.WEB.string_in_body_http(
+        return await signatures.checks.WEB.string_in_body_http(
             domain, self.domain_not_configured_message, custom_uri=self.custom_uri
         )
 

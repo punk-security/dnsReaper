@@ -43,7 +43,7 @@ async def root():
 @app.get("/check")
 async def check(domain: str):
     try:
-        return process_domain(Domain(domain))
+        return await process_domain(Domain(domain))
     except Exception as e:
         return {"error": f" {e}"}
 
@@ -51,11 +51,11 @@ async def check(domain: str):
 ###### scanning
 
 
-def process_domain(domain):
+async def process_domain(domain):
     findings = []
-    lock = threading.Lock()
+    # lock = threading.Lock()
     with output.Output("json", stdout) as o:
-        scan_domain(domain, signatures, lock, findings, o, name_servers=[])
+        await scan_domain(domain, signatures, lock, findings, o, name_servers=[])
         return findings
 
 

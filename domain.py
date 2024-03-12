@@ -1,10 +1,9 @@
 import ipaddress
 import socket
 from collections import namedtuple
-import dns.resolver
+import dns.asyncresolver
 from functools import lru_cache
 
-import requests
 import logging
 
 import urllib3
@@ -15,42 +14,45 @@ collections.Iterable = collections.abc.Iterable
 collections.Mapping = collections.abc.Mapping
 import whois
 
+import asyncio
+import aiohttp
+
 
 class Domain:
     @property
-    @lru_cache
-    def SOA(self):
-        return self.query("SOA")
+    # @lru_cache
+    async def SOA(self):
+        return await self.query("SOA")
 
     @property
-    @lru_cache
-    def NX_DOMAIN(self):
+    # @lru_cache
+    async def NX_DOMAIN(self):
         record_types = ["A", "AAAA", "CNAME", "TXT", "MX", "NS"]
         for record_type in record_types:
-            if self.query(record_type):
+            if await self.query(record_type):
                 return False
         return True
 
-    def query(self, type):
+    async def query(self, type):
         try:
-            resp = self.resolver.resolve(self.domain, type)
+            resp = await self.resolver.resolve(self.domain, type)
             return [record.to_text().rstrip(".") for record in resp]
         except:
             return []
 
-    def fetch_std_records(self):
+    async def fetch_std_records(self):
         # TODO: is this recursive?
-        self.CNAME = self.query("CNAME")
-        self.A = self.query("A")
-        self.AAAA = self.query("AAAA")
+        self.CNAME = await self.query("CNAME")
+        self.A = await self.query("A")
+        self.AAAA = await self.query("AAAA")
         if self.CNAME:
             # return early if we get a CNAME otherwise we get records for the cname aswell
             # this is actually desirable for A/AAAA but not NS as the next zone
             # will be queried based on the CNAME value, not the original domain
             return
-        self.NS = self.query("NS")
+        self.NS = await self.query("NS")
 
-    def fetch_external_records(self):
+    async def fetch_external_records(self):
         for cname in self.CNAME:
             split_cname = cname.split(".", 1)
             if len(split_cname) == 1:
@@ -58,14 +60,14 @@ class Domain:
             if self.base_domain == split_cname[1]:
                 continue  # Same zone, dont fetch
             d = Domain(cname)
-            d.fetch_std_records()
+            await d.fetch_std_records()
             self.A += d.A
             self.AAAA += d.AAAA
             self.CNAME += d.CNAME
         for ns in self.NS:
             try:
                 d = Domain(self.domain)
-                d.set_custom_NS(ns=ns)
+                await d.set_custom_NS(ns=ns)
                 self.A += d.A
                 self.AAAA += d.AAAA
             except:
@@ -73,10 +75,30 @@ class Domain:
                     f"We could not resolve the provided NS record '{ns}' to an ip"
                 )
 
-    def set_custom_NS(self, ns: str):
+    async def set_custom_NS(self, ns: str):
         if type(ns) != str:
             logging.error(f"Cannot set custom NS as {ns} not a string")
-        self.resolver = dns.resolver.Resolver()
+        self.resolver = dns.asyncresolver.Resolver()
+
+        try:
+            ipaddress.ip_address(ns)
+            self.resolver.nameservers = [ns]
+        except ValueError:
+            try:
+                nameservers = list(
+                    map(
+                        lambda rr: rr.address,
+                        (await self.resolver.resolve(ns.rstrip("."))).rrset,
+                    )
+                )
+                self.resolver.nameservers = nameservers
+            except:
+                self.resolver.nameservers = []
+
+    def set_custom_NS_sync(self, ns: str):
+        if type(ns) != str:
+            logging.error(f"Cannot set custom NS as {ns} not a string")
+        self.resolver = dns.asyncresolver.Resolver()
 
         try:
             ipaddress.ip_address(ns)
@@ -101,23 +123,23 @@ class Domain:
         self.AAAA = []
         self.CNAME = []
         self.set_base_domain()
-        self.requests = requests
         if ns == None:
-            self.resolver = dns.resolver
+            self.resolver = dns.asyncresolver
         else:
-            self.set_custom_NS(ns)
+            self.set_custom_NS_sync(ns)
         self.resolver.timeout = 1
         self.should_fetch_std_records = fetch_standard_records
 
-    @lru_cache
-    def fetch_web(self, uri="", https=True, params={}):
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    # @lru_cache
+    async def fetch_web(self, uri="", https=True, params={}):
         protocol = "https" if https else "http"
         url = f"{protocol}://{self.domain}/{uri}"
         try:
-            resp = self.requests.get(url, timeout=5, verify=False, params=params)
-            web_status = resp.status_code
-            web_body = resp.content.decode()
+            # resp = self.requests.get(url, timeout=5, verify=False, params=params)
+            async with aiohttp.ClientSession() as session:
+                resp = await session.get(url, ssl=False)
+                web_status = resp.status
+                web_body = await resp.text()
         except:
             web_status = 0
             web_body = ""

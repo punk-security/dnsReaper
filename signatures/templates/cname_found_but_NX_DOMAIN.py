@@ -14,8 +14,8 @@ class cname_found_but_NX_DOMAIN(base.Base):
     def potential(self, domain, **kwargs) -> bool:
         return signatures.checks.CNAME.match(domain, self.cname)
 
-    def check(self, domain, **kwargs) -> bool:
-        return signatures.checks.CNAME.NX_DOMAIN_on_resolve(domain)
+    async def check(self, domain, **kwargs) -> bool:
+        return await signatures.checks.CNAME.NX_DOMAIN_on_resolve(domain)
 
     def __init__(self, cname, service, info=None, **kwargs):
         self.cname = cname

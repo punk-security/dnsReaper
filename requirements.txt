@@ -8,3 +8,5 @@ azure-mgmt-dns==8.0.0
 azure-identity==1.10.0
 msrestazure==0.6.4
 google-cloud-dns==0.34.1
+asyncio
+aiohttp
