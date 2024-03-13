@@ -22,7 +22,7 @@ async def string_in_body_https(domain: Domain, string: str, custom_uri: str = ""
 
 
 async def status_code_match(domain: Domain, status_code: int, https: bool) -> bool:
-    response_code = await domain.fetch_web(https=https).status_code
+    response_code = (await domain.fetch_web(https=https)).status_code
     if status_code < 10:  # match the first int
         if floor(response_code / 100) == status_code:
             logging.info(f"Response code {response_code} observed for '{domain}'")
