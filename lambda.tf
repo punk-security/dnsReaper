@@ -51,7 +51,7 @@ resource "aws_lambda_function" "serverless-dnsreaper" {
   runtime = "python3.10"
 
   timeout = 30
-  memory_size = 2048
+  memory_size = 128
 
   environment {
     variables = {

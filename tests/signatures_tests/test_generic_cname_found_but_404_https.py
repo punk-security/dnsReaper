@@ -27,7 +27,7 @@ async def test_potential_failure_with_same_root_For_both_domain_and_cname():
 
 @pytest.mark.asyncio
 async def test_check_success():
-    def mock_fetch_web(**kwargs):
+    async def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(404)
 
     domain = Domain("mock.local", fetch_standard_records=False)
@@ -37,7 +37,7 @@ async def test_check_success():
 
 @pytest.mark.asyncio
 async def test_check_failure():
-    def mock_fetch_web(**kwargs):
+    async def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["status_code"])(200)
 
     domain = Domain("mock.local", fetch_standard_records=False)

@@ -17,6 +17,9 @@ import time
 
 import sys, os
 
+import asyncio
+
+
 sys.path.append(os.getcwd())
 
 
@@ -34,6 +37,12 @@ signatures = [getattr(signatures, signature) for signature in signatures.__all__
 for signature in signatures:
     signature.__name__ = signature.__name__.replace("signatures.", "")
 
+signatures = [
+    s
+    for s in signatures
+    if s.test.CONFIDENCE != detection_enums.CONFIDENCE.UNLIKELY
+]
+
 
 @app.get("/")
 async def root():
@@ -43,7 +52,9 @@ async def root():
 @app.get("/check")
 async def check(domain: str):
     try:
-        return await process_domain(Domain(domain))
+        domain = domain.replace(" ","")
+        domains = domain.split(",")
+        return await process_domains(domains)
     except Exception as e:
         return {"error": f" {e}"}
 
@@ -51,12 +62,21 @@ async def check(domain: str):
 ###### scanning
 
 
-async def process_domain(domain):
+async def process_domains(domains):
     findings = []
+    Domains = [Domain(domain) for domain in domains]
     # lock = threading.Lock()
     with output.Output("json", stdout) as o:
-        await scan_domain(domain, signatures, lock, findings, o, name_servers=[])
-        return findings
+        scan = partial(
+            scan_domain,
+            signatures=signatures,
+            output_handler=o,
+            findings=findings,
+            name_servers=[],
+        )
+
+        await asyncio.gather(*[asyncio.create_task(scan(domain)) for domain in Domains])
+    return findings
 
 
 def handler(event, context):

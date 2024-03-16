@@ -138,7 +138,7 @@ class Domain:
             # resp = self.requests.get(url, timeout=5, verify=False, params=params)
             async with aiohttp.ClientSession() as session:
                 resp = await session.get(url, ssl=False)
-                web_status = resp.status
+                web_status = await resp.status
                 web_body = await resp.text()
         except:
             web_status = 0

@@ -13,7 +13,7 @@ def random_string():
 def mock_web_response_with_static_value(
     domain: Domain, body: str = "", status_code: int = 0
 ) -> Domain:
-    def mock_fetch_web(**kwargs):
+    async def mock_fetch_web(**kwargs):
         return namedtuple("web_response", ["body", "status_code"])(body, status_code)
 
     domain.fetch_web = mock_fetch_web
