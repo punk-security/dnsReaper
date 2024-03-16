@@ -30,8 +30,8 @@ resource "null_resource" "build_venv" {
   }
 
   provisioner "local-exec" {
-    command = "docker build -t ${time_static.src.unix} ${path.root} -f ${path.root}/Lambda-Build-Dockerfile && docker create --name ${time_static.src.unix} ${time_static.src.unix} && docker cp ${time_static.src.unix}:/packaged_app.zip ${path.root}/${time_static.src.unix}.zip"
-  } #&& docker rm -v ${time_static.src.unix}
+    command = "docker build -t ${time_static.src.unix} ${path.root} -f ${path.root}/Lambda-Build-Dockerfile && docker create --name ${time_static.src.unix} ${time_static.src.unix} && docker cp ${time_static.src.unix}:/packaged_app.zip ${path.root}/${time_static.src.unix}.zip && docker rm -v ${time_static.src.unix}"
+  }
 }
 
 ### Logs
@@ -55,7 +55,7 @@ resource "aws_lambda_function" "serverless-dnsreaper" {
 
   environment {
     variables = {
-      GOOSE = "true"
+      PD_API_KEY = file("./pdkey")
       }
   }
 }

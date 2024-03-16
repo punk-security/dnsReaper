@@ -15,7 +15,9 @@ class cname_found_but_status_code(base.Base):
         return signatures.checks.CNAME.match(domain, self.cname)
 
     async def check(self, domain, **kwargs) -> bool:
-        return await signatures.checks.WEB.status_code_match(domain, self.code, self.https)
+        return await signatures.checks.WEB.status_code_match(
+            domain, self.code, self.https
+        )
 
     def __init__(self, cname, code, service, info=None, https=False, **kwargs):
         self.cname = cname

@@ -39,6 +39,7 @@ class PDApi:
         return self.check_response(self.session.send(req))
 
     def get_subdomains(self, domain):
+        domain = domain.lower()
         req = self.make_request(f"{domain}/subdomains")
         res = self.session.send(req)
 

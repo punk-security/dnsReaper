@@ -143,3 +143,9 @@ dmypy.json
 terraform.tfstate
 .terraform.tfstate.lock.info
 *.zip
+
+pdkey
+
+# exclude state
+terraform.tfstate
+terraform.tfstate.backup

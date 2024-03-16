@@ -45,7 +45,7 @@ class Domain:
         self.CNAME = await self.query("CNAME")
         self.A = await self.query("A")
         self.AAAA = await self.query("AAAA")
-        if self.CNAME:
+        if self.CNAME or self.A or self.AAAA:
             # return early if we get a CNAME otherwise we get records for the cname aswell
             # this is actually desirable for A/AAAA but not NS as the next zone
             # will be queried based on the CNAME value, not the original domain
@@ -138,7 +138,7 @@ class Domain:
             # resp = self.requests.get(url, timeout=5, verify=False, params=params)
             async with aiohttp.ClientSession() as session:
                 resp = await session.get(url, ssl=False)
-                web_status = await resp.status
+                web_status = resp.status
                 web_body = await resp.text()
         except:
             web_status = 0
