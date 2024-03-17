@@ -25,4 +25,5 @@ jobs:
             --push \
             --progress=plain \
             --tag docker.io/punksecurity/dnsreaper:nightly \
-            --platform linux/amd64
+            --platform linux/amd64 \
+            --platform linux/arm64

@@ -30,4 +30,5 @@ jobs:
             --progress=plain \
             --tag docker.io/punksecurity/dnsreaper:${{ steps.version.outputs.version }} \
             --tag docker.io/punksecurity/dnsreaper:latest \
-            --platform linux/amd64
+            --platform linux/amd64 \
+            --platform linux/arm64
