@@ -61,21 +61,23 @@ async def check(domain: str):
     except Exception as e:
         return {"error": f" {e}"}
 
+
 ###### scanning
 
 PD_API_KEY = os.environ.get("PD_API_KEY", None)
+
 
 async def process_domains(domains):
     findings = []
     Domains = [Domain(domain) for domain in domains]
     if len(domains) == 1:
-        #Project Discovery!
+        # Project Discovery!
         pd_domains = projectdiscovery.fetch_domains(PD_API_KEY, domains[0])
         logging.warning(f"Got {len(pd_domains)} domains from PD")
         Domains = Domains + pd_domains
     # lock = threading.Lock()
     random.shuffle(Domains)
-    Domains = Domains[:100] #upto 200 domains to test
+    Domains = Domains[:100]  # upto 200 domains to test
     logging.warning(Domains)
     with output.Output("json", stdout) as o:
         scan = partial(
@@ -85,8 +87,13 @@ async def process_domains(domains):
             findings=findings,
             name_servers=[],
         )
-        await asyncio.wait([asyncio.create_task(scan(domain)) for domain in Domains], timeout=20, return_when=asyncio.ALL_COMPLETED)
+        await asyncio.wait(
+            [asyncio.create_task(scan(domain)) for domain in Domains],
+            timeout=20,
+            return_when=asyncio.ALL_COMPLETED,
+        )
     return findings
+
 
 def handler(event, context):
     # if event.get("some-key"):

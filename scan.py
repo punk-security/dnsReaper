@@ -4,7 +4,8 @@ import logging
 
 import random
 
-import asyncio 
+import asyncio
+
 
 async def scan_domain(domain, signatures, findings, output_handler, name_servers: list):
     if name_servers and name_servers != [""]:
