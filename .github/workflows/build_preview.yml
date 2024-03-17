@@ -12,7 +12,7 @@ jobs:
   v3-9:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Python runtime test
         uses: ./.github/actions/pytest
         with:
@@ -20,7 +20,7 @@ jobs:
   v3-10:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Python runtime test
         uses: ./.github/actions/pytest
         with:
@@ -28,7 +28,7 @@ jobs:
   v3-11:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Python runtime test
         uses: ./.github/actions/pytest
         with:
