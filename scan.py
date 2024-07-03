@@ -9,7 +9,7 @@ import asyncio
 
 async def scan_domain(domain, signatures, findings, output_handler, name_servers: list):
     if name_servers and name_servers != [""]:
-        await domain.set_custom_NS(random.choice(name_servers))
+        domain.ns = random.choice(name_servers)
     if domain.should_fetch_std_records:
         await domain.fetch_std_records()
     else:

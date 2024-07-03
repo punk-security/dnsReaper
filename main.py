@@ -4,6 +4,7 @@ import output
 import detection_enums
 import providers
 from os import linesep
+from domain import Domain
 
 from multiprocessing.pool import ThreadPool
 import threading
@@ -90,6 +91,8 @@ if "--out" not in argv:
 
 async def main():
     ###### domain ingestion
+
+    Domain.semaphore = asyncio.Semaphore(args.parallelism)
 
     provider = getattr(providers, args.provider)
     domains = list(provider.fetch_domains(**args.__dict__))

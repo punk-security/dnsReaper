@@ -19,6 +19,7 @@ import aiohttp
 
 
 class Domain:
+    semaphore = asyncio.Semaphore(50)
     @property
     # @lru_cache
     async def SOA(self):
@@ -34,11 +35,14 @@ class Domain:
         return True
 
     async def query(self, type):
-        try:
-            resp = await self.resolver.resolve(self.domain, type)
-            return [record.to_text().rstrip(".") for record in resp]
-        except:
-            return []
+        async with self.semaphore:
+            try:
+                if self.resolver == None:
+                    await self.set_NS()
+                resp = await self.resolver.resolve(self.domain, type)
+                return [record.to_text().rstrip(".") for record in resp]
+            except:
+                return []
 
     async def fetch_std_records(self):
         # TODO: is this recursive?
@@ -67,7 +71,8 @@ class Domain:
         for ns in self.NS:
             try:
                 d = Domain(self.domain)
-                await d.set_custom_NS(ns=ns)
+                d.ns = ns
+                await d.set_NS()
                 self.A += d.A
                 self.AAAA += d.AAAA
             except:
@@ -75,25 +80,29 @@ class Domain:
                     f"We could not resolve the provided NS record '{ns}' to an ip"
                 )
 
-    async def set_custom_NS(self, ns: str):
-        if type(ns) != str:
-            logging.error(f"Cannot set custom NS as {ns} not a string")
-        self.resolver = dns.asyncresolver.Resolver()
+    async def set_NS(self):
+        if self.ns == None:
+            self.resolver = dns.asyncresolver
+        else:
+            if type(self.ns) != str:
+                logging.error(f"Cannot set custom NS as {ns} not a string")
+            self.resolver = dns.asyncresolver.Resolver()
 
-        try:
-            ipaddress.ip_address(ns)
-            self.resolver.nameservers = [ns]
-        except ValueError:
             try:
-                nameservers = list(
-                    map(
-                        lambda rr: rr.address,
-                        (await self.resolver.resolve(ns.rstrip("."))).rrset,
+                ipaddress.ip_address(self.ns)
+                self.resolver.nameservers = [self.ns]
+            except ValueError:
+                try:
+                    nameservers = list(
+                        map(
+                            lambda rr: rr.address,
+                            (await self.resolver.resolve(self.ns.rstrip("."))).rrset,
+                        )
                     )
-                )
-                self.resolver.nameservers = nameservers
-            except:
-                self.resolver.nameservers = []
+                    self.resolver.nameservers = nameservers
+                except:
+                    self.resolver.nameservers = []
+        self.resolver.timeout = 1
 
     def set_custom_NS_sync(self, ns: str):
         if type(ns) != str:
@@ -122,12 +131,9 @@ class Domain:
         self.A = []
         self.AAAA = []
         self.CNAME = []
+        self.resolver = None
+        self.ns = ns
         self.set_base_domain()
-        if ns == None:
-            self.resolver = dns.asyncresolver
-        else:
-            self.set_custom_NS_sync(ns)
-        self.resolver.timeout = 1
         self.should_fetch_std_records = fetch_standard_records
 
     # @lru_cache
