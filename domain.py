@@ -20,6 +20,7 @@ import aiohttp
 
 class Domain:
     semaphore = asyncio.Semaphore(50)
+
     @property
     # @lru_cache
     async def SOA(self):
