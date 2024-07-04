@@ -15,6 +15,7 @@ collections.Mapping = collections.abc.Mapping
 import whois
 
 import aiohttp
+import ssl
 
 from resolver2 import Resolver
 
@@ -133,14 +134,24 @@ class Domain:
         self.set_base_domain()
         self.should_fetch_std_records = fetch_standard_records
 
+    def get_session(self):
+        return aiohttp.ClientSession()
+
     # @lru_cache
     async def fetch_web(self, uri="", https=True, params={}):
         protocol = "https" if https else "http"
         url = f"{protocol}://{self.domain}/{uri}"
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        # async with self.get_session() as session:
+        #     resp = await session.get(url, ssl=False)
+        #     web_status = resp.status
+        #     web_body = await resp.text()
         try:
             # resp = self.requests.get(url, timeout=5, verify=False, params=params)
-            async with aiohttp.ClientSession() as session:
-                resp = await session.get(url, ssl=False)
+            async with self.get_session() as session:
+                resp = await session.get(url, ssl=ssl_context)
                 web_status = resp.status
                 web_body = await resp.text()
         except:

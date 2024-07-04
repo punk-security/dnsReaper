@@ -61,5 +61,5 @@ async def test_check_success_ACTIVE(signature):
         if ":" in ip:
             continue  # skip IPv6
         domain = Domain(f"{mocks.random_string()}.com", fetch_standard_records=False)
-        mocks.mock_web_request_by_providing_static_host_resolution(domain, ip)
+        domain.get_session = mocks.generate_mock_aiohttp_session_with_forced_ip_resolution(ip)
         assert await signature.test.check(domain) == True

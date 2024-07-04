@@ -10,6 +10,8 @@ async def string_in_body(
         logging.info(f"Message observed in response for '{domain}'")
         return True
     logging.debug(f"Message not found in response for '{domain}'")
+    # Uncomment to debug and identify a string match issue
+    # logging.debug((await domain.fetch_web(https=https, uri=custom_uri)).body)
     return False
 
 
