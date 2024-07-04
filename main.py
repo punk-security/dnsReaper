@@ -92,8 +92,10 @@ if "--out" not in argv:
 
 async def main():
     ###### domain ingestion
-    nameservers = [] if args.resolver == "" else args.resolver.replace(" ", "").split(",")
-    Domain.resolver = Resolver(nameservers = nameservers, parallelism = args.parallelism)
+    nameservers = (
+        [] if args.resolver == "" else args.resolver.replace(" ", "").split(",")
+    )
+    Domain.resolver = Resolver(nameservers=nameservers, parallelism=args.parallelism)
     provider = getattr(providers, args.provider)
     domains = list(provider.fetch_domains(**args.__dict__))
 

@@ -7,6 +7,7 @@ import os
 
 import dns.resolver
 
+
 class DynamicSemaphore:
     def __init__(self, value=1):
         self._lock = asyncio.Lock()
@@ -37,16 +38,19 @@ class DynamicSemaphore:
     def release(self):
         self.value += 1
 
+
 # We need a semaphore per resolver
 # We need a resolver health check
 # We need to set a minimum return time of like half a second or something
 
-class Resolver():
+
+class Resolver:
     resolutions = 0
     errors = 0
     no_records = 0
     nx_domains = 0
-    def __init__(self, parallelism = 200, nameservers = []):
+
+    def __init__(self, parallelism=200, nameservers=[]):
         self.semaphore = asyncio.Semaphore(parallelism)
         if nameservers:
             self.resolvers = []
@@ -61,10 +65,10 @@ class Resolver():
             resolver = dns.asyncresolver.Resolver()
             resolver.cache = dns.resolver.Cache(60 * 60)
             resolver.timeout = 1
-            #resolver.lifetime = 1
+            # resolver.lifetime = 1
             self.resolvers = [resolver]
 
-    async def resolve(self,fqdn, type = None):
+    async def resolve(self, fqdn, type=None):
         async with self.semaphore:
             start = time.time()
             resolver = random.choice(self.resolvers)
@@ -72,28 +76,28 @@ class Resolver():
             try:
                 resp = await resolver.resolve(fqdn, type)
                 if self.resolutions % 100 == 0:
-                    os.write(2,b".")
-                self.resolutions+=1
+                    os.write(2, b".")
+                self.resolutions += 1
             except dns.resolver.NoAnswer:
                 if self.no_records % 100 == 0:
-                    os.write(2,b"-")
-                self.no_records+=1
+                    os.write(2, b"-")
+                self.no_records += 1
             except dns.resolver.NXDOMAIN:
                 if self.nx_domains % 100 == 0:
-                    os.write(2,b"+")
-                self.nx_domains+=1
+                    os.write(2, b"+")
+                self.nx_domains += 1
             except:
                 if self.errors % 100 == 0:
-                    os.write(2,b"x")  
-                self.errors+=1
-                #await asyncio.sleep(5) # gash backoff
+                    os.write(2, b"x")
+                self.errors += 1
+                # await asyncio.sleep(5) # gash backoff
             time_delta = time.time() - start
             if time_delta < 1:
-                await asyncio.sleep(1 - time_delta)      
+                await asyncio.sleep(1 - time_delta)
             return resp
-            
+
     @staticmethod
-    async def resolve_with_ns(fqdn, ns, type = None):
+    async def resolve_with_ns(fqdn, ns, type=None):
         resolver = dns.asyncresolver.Resolver()
         resolver.nameservers = [ns]
         try:
@@ -101,7 +105,11 @@ class Resolver():
             return resp
         except:
             return []
-        
+
     @staticmethod
     async def check_health(resolver):
-        await resolver.resolve("punksecurity.co.uk", "T", tcp=True, )
+        await resolver.resolve(
+            "punksecurity.co.uk",
+            "T",
+            tcp=True,
+        )

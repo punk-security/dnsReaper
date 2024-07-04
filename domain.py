@@ -18,7 +18,6 @@ import aiohttp
 
 
 class Domain:
-
     resolver = None
 
     @property
