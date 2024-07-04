@@ -78,7 +78,7 @@ async def test_match_multiple_with_no_ns_records():
 async def test_no_SOA_detected_on_NS_with_matching_nameservers():
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.NS = ["ns"]
-    with patch("resolver2.Resolver.resolve_with_ns", return_value={"SOA":[]}):
+    with patch("resolver2.Resolver.resolve_with_ns", return_value={"SOA": []}):
         with patch("domain.Domain.query", return_value=["10.10.10.10"]):
             assert (await NS.no_SOA_detected(domain)) == True
 
@@ -88,7 +88,9 @@ async def test_no_SOA_detected_on_NS_with_no_matching_nameservers():
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.NS = ["ns"]
 
-    with patch("resolver2.Resolver.resolve_with_ns", return_value={"SOA":["SOA RECORD HERE"]}):
+    with patch(
+        "resolver2.Resolver.resolve_with_ns", return_value={"SOA": ["SOA RECORD HERE"]}
+    ):
         with patch("domain.Domain.query", return_value=["10.10.10.10"]):
             assert (await NS.no_SOA_detected(domain)) == False
 

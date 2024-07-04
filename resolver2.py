@@ -262,7 +262,7 @@ class Resolver:
             return await resolve_dns(fqdn, qtype, ns)
         except:
             return {"A": [], "NS": [], "CNAME": [], "SOA": [], "AAAA": [], "MX": []}
-        
+
     @staticmethod
     async def check_health(resolver):
         await resolver.resolve(

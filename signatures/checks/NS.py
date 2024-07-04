@@ -19,10 +19,12 @@ async def no_SOA_detected(domain: Domain) -> bool:
             logging.debug(f"Could not resolve NS '{ns}'")
             continue
         if (
-            (await resolver.Resolver.resolve_with_ns(domain.domain, ns_ip[0], "SOA"))["SOA"]
+            (await resolver.Resolver.resolve_with_ns(domain.domain, ns_ip[0], "SOA"))[
+                "SOA"
+            ]
         ) == []:
             logging.info(f"NAMESERVER at {ns} does not have this zone.")
             return True
         else:
             logging.debug(f"SOA record found on NAMESERVER '{ns}'")
-    return False # Never found the condition
+    return False  # Never found the condition
