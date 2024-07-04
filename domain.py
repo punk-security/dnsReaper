@@ -14,12 +14,12 @@ collections.Iterable = collections.abc.Iterable
 collections.Mapping = collections.abc.Mapping
 import whois
 
-import asyncio
 import aiohttp
 
 
 class Domain:
-    semaphore = asyncio.Semaphore(50)
+
+    resolver = None
 
     @property
     # @lru_cache
@@ -36,14 +36,11 @@ class Domain:
         return True
 
     async def query(self, type):
-        async with self.semaphore:
-            try:
-                if self.resolver == None:
-                    await self.set_NS()
-                resp = await self.resolver.resolve(self.domain, type)
-                return [record.to_text().rstrip(".") for record in resp]
-            except:
-                return []
+        try:
+            resp = await self.resolver.resolve(self.domain, type)
+            return [record.to_text().rstrip(".") for record in resp]
+        except:
+            return []
 
     async def fetch_std_records(self):
         # TODO: is this recursive?
@@ -126,14 +123,12 @@ class Domain:
         else:
             self.base_domain = "."
 
-    def __init__(self, domain, fetch_standard_records=True, ns=None):
+    def __init__(self, domain, fetch_standard_records=True):
         self.domain = domain.rstrip(".")
         self.NS = []
         self.A = []
         self.AAAA = []
         self.CNAME = []
-        self.resolver = None
-        self.ns = ns
         self.set_base_domain()
         self.should_fetch_std_records = fetch_standard_records
 

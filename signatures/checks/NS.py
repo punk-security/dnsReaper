@@ -1,6 +1,7 @@
 from domain import Domain
 from . import helpers
 import logging
+import resolver
 
 
 def match(domain: Domain, strings) -> str:
@@ -19,7 +20,7 @@ async def no_SOA_detected(domain: Domain) -> bool:
             logging.debug(f"Could not resolve NS '{ns}'")
             continue
         if (
-            await Domain(domain.domain, fetch_standard_records=False, ns=ns_ip[0]).SOA
+            await resolver.Resolver.resolve_with_ns(domain.domain, ns_ip[0], "SOA")
         ) == []:
             logging.info(f"NAMESERVER at {ns} does not have this zone.")
             takeover_possible = True

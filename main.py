@@ -5,6 +5,7 @@ import detection_enums
 import providers
 from os import linesep
 from domain import Domain
+from resolver import Resolver
 
 from multiprocessing.pool import ThreadPool
 import threading
@@ -91,9 +92,8 @@ if "--out" not in argv:
 
 async def main():
     ###### domain ingestion
-
-    Domain.semaphore = asyncio.Semaphore(args.parallelism)
-
+    nameservers = [] if args.resolver == "" else args.resolver.replace(" ", "").split(",")
+    Domain.resolver = Resolver(nameservers = nameservers, parallelism = args.parallelism)
     provider = getattr(providers, args.provider)
     domains = list(provider.fetch_domains(**args.__dict__))
 
@@ -107,7 +107,6 @@ async def main():
             signatures=signatures,
             output_handler=o,
             findings=findings,
-            name_servers=args.resolver.replace(" ", "").split(","),
         )
 
         await asyncio.gather(*[asyncio.create_task(scan(domain)) for domain in domains])
