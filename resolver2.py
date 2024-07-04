@@ -16,6 +16,7 @@ TYPE_NS = 2
 TYPE_CNAME = 5
 TYPE_SOA = 6
 TYPE_AAAA = 28
+TYPE_MX = 15
 
 QUERY_TYPES = {
     "A": TYPE_A,
@@ -23,6 +24,7 @@ QUERY_TYPES = {
     "CNAME": TYPE_CNAME,
     "SOA": TYPE_SOA,
     "AAAA": TYPE_AAAA,
+    "MX": TYPE_MX
 }
 
 
@@ -118,7 +120,7 @@ def parse_dns_response(response):
             offset += response[offset] + 1
         offset += 5  # null byte + QTYPE + QCLASS
 
-    records = {"A": [], "NS": [], "CNAME": [], "SOA": [], "AAAA": []}
+    records = {"A": [], "NS": [], "CNAME": [], "SOA": [], "AAAA": [], "MX": []}
 
     for _ in range(answer_count):
         name, offset = decode_name(offset)
@@ -156,6 +158,11 @@ def parse_dns_response(response):
                 socket.AF_INET6, response[offset : offset + data_length]
             )
             records["AAAA"].append(ip)
+        elif rtype == TYPE_MX:
+            preference = struct.unpack_from(">H", response, offset)[0]
+            offset += 2
+            exchange, _ = decode_name(offset)
+            records['MX'].append((preference, exchange))
 
         offset += data_length
 
