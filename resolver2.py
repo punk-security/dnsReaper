@@ -231,7 +231,7 @@ class Resolver:
         async with self.semaphore:
             qtype = QUERY_TYPES[type]
             start = time.time()
-            resp = []
+            resp = {"A": [], "NS": [], "CNAME": [], "SOA": [], "AAAA": [], "MX": []}
             try:
                 resp = await resolve_dns(fqdn, qtype, random.choice(self.nameservers))
                 if self.resolutions % 100 == 0:
@@ -257,14 +257,12 @@ class Resolver:
 
     @staticmethod
     async def resolve_with_ns(fqdn, ns, type=None):
-        resolver = dns.asyncresolver.Resolver()
-        resolver.nameservers = [ns]
+        qtype = QUERY_TYPES[type]
         try:
-            resp = await resolver.resolve(fqdn, type)
-            return resp
+            return await resolve_dns(fqdn, qtype, ns)
         except:
-            return []
-
+            return {"A": [], "NS": [], "CNAME": [], "SOA": [], "AAAA": [], "MX": []}
+        
     @staticmethod
     async def check_health(resolver):
         await resolver.resolve(

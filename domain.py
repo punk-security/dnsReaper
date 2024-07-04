@@ -16,9 +16,11 @@ import whois
 
 import aiohttp
 
+from resolver2 import Resolver
+
 
 class Domain:
-    resolver = None
+    resolver = Resolver()
 
     @property
     # @lru_cache
