@@ -75,7 +75,9 @@ async def test_check_success_ACTIVE(signature):
     for cname in cnames:
         test_cname = f"{mocks.random_string()}{cname}" if cname[0] == "." else cname
         domain = Domain(f"{mocks.random_string()}.com", fetch_standard_records=False)
-        domain.get_session = mocks.generate_mock_aiohttp_session_with_forced_cname_resolution(test_cname)
+        domain.get_session = (
+            mocks.generate_mock_aiohttp_session_with_forced_cname_resolution(test_cname)
+        )
         assert await signature.test.check(domain) == True
 
     ips = (
@@ -85,5 +87,7 @@ async def test_check_success_ACTIVE(signature):
         if ":" in ip:
             continue  # skip IPv6
         domain = Domain(f"{mocks.random_string()}.com", fetch_standard_records=False)
-        domain.get_session = mocks.generate_mock_aiohttp_session_with_forced_ip_resolution(ip)
+        domain.get_session = (
+            mocks.generate_mock_aiohttp_session_with_forced_ip_resolution(ip)
+        )
         assert await signature.test.check(domain) == True

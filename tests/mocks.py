@@ -99,32 +99,38 @@ class HostHeaderAdapter(requests.adapters.HTTPAdapter):
         return super(HostHeaderAdapter, self).send(request, **kwargs)
 
 
-
 class CustomResolver:
     def __init__(self, ip):
         self.ip = ip
 
     async def resolve(self, host, port=0, family=socket.AF_INET):
-        return [{
-            'hostname': host,
-            'host': self.ip,
-            'port': port,
-            'family': family,
-            'proto': socket.IPPROTO_TCP,
-            'flags': 0,
-        }]
+        return [
+            {
+                "hostname": host,
+                "host": self.ip,
+                "port": port,
+                "family": family,
+                "proto": socket.IPPROTO_TCP,
+                "flags": 0,
+            }
+        ]
+
 
 def generate_mock_aiohttp_session_with_forced_ip_resolution(ip):
     def mock_aiohttp_session_with_forced_resolution():
         resolver = CustomResolver(ip)
         conn = aiohttp.TCPConnector(resolver=resolver)
         return aiohttp.ClientSession(connector=conn)
+
     return mock_aiohttp_session_with_forced_resolution
+
 
 def generate_mock_aiohttp_session_with_forced_cname_resolution(cname):
     ip = [record.to_text() for record in dns.resolver.resolve(cname)][0]
+
     def mock_aiohttp_session_with_forced_resolution():
         resolver = CustomResolver(ip)
         conn = aiohttp.TCPConnector(resolver=resolver)
         return aiohttp.ClientSession(connector=conn)
+
     return mock_aiohttp_session_with_forced_resolution
