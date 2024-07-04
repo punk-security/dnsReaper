@@ -18,21 +18,25 @@ TYPE_SOA = 6
 TYPE_AAAA = 28
 
 QUERY_TYPES = {
-    'A': TYPE_A,
-    'NS': TYPE_NS,
-    'CNAME': TYPE_CNAME,
-    'SOA': TYPE_SOA,
-    'AAAA': TYPE_AAAA
+    "A": TYPE_A,
+    "NS": TYPE_NS,
+    "CNAME": TYPE_CNAME,
+    "SOA": TYPE_SOA,
+    "AAAA": TYPE_AAAA,
 }
+
 
 class DNSException(Exception):
     pass
 
+
 class NXDomainException(DNSException):
     pass
 
+
 class NoAnswerException(DNSException):
     pass
+
 
 def build_dns_query(domain, qtype):
     # Transaction ID
@@ -54,7 +58,15 @@ def build_dns_query(domain, qtype):
     additional_rrs = 0
 
     # Header
-    header = struct.pack(">HHHHHH", transaction_id, flags, questions, answer_rrs, authority_rrs, additional_rrs)
+    header = struct.pack(
+        ">HHHHHH",
+        transaction_id,
+        flags,
+        questions,
+        answer_rrs,
+        authority_rrs,
+        additional_rrs,
+    )
 
     # Question
     question = b""
@@ -67,6 +79,7 @@ def build_dns_query(domain, qtype):
     question += struct.pack(">HH", qtype, 1)  # QTYPE = qtype, QCLASS = IN
 
     return header + question
+
 
 def parse_dns_response(response):
     def decode_name(offset):
@@ -84,7 +97,7 @@ def parse_dns_response(response):
                 break
             else:
                 offset += 1
-                labels.append(response[offset:offset+length].decode())
+                labels.append(response[offset : offset + length].decode())
                 offset += length
         return ".".join(labels), offset
 
@@ -105,13 +118,7 @@ def parse_dns_response(response):
             offset += response[offset] + 1
         offset += 5  # null byte + QTYPE + QCLASS
 
-    records = {
-        'A': [],
-        'NS': [],
-        'CNAME': [],
-        'SOA': [],
-        'AAAA': []
-    }
+    records = {"A": [], "NS": [], "CNAME": [], "SOA": [], "AAAA": []}
 
     for _ in range(answer_count):
         name, offset = decode_name(offset)
@@ -119,36 +126,41 @@ def parse_dns_response(response):
         offset += 10
 
         if rtype == TYPE_A:
-            ip = socket.inet_ntoa(response[offset:offset + data_length])
-            records['A'].append(ip)
+            ip = socket.inet_ntoa(response[offset : offset + data_length])
+            records["A"].append(ip)
         elif rtype == TYPE_NS:
             ns, _ = decode_name(offset)
-            records['NS'].append(ns)
+            records["NS"].append(ns)
         elif rtype == TYPE_CNAME:
             cname, _ = decode_name(offset)
-            records['CNAME'].append(cname)
+            records["CNAME"].append(cname)
         elif rtype == TYPE_SOA:
             mname, offset = decode_name(offset)
             rname, offset = decode_name(offset)
-            serial, refresh, retry, expire, minimum = struct.unpack_from(">IIIII", response, offset)
+            serial, refresh, retry, expire, minimum = struct.unpack_from(
+                ">IIIII", response, offset
+            )
             soa = {
-                'mname': mname,
-                'rname': rname,
-                'serial': serial,
-                'refresh': refresh,
-                'retry': retry,
-                'expire': expire,
-                'minimum': minimum
+                "mname": mname,
+                "rname": rname,
+                "serial": serial,
+                "refresh": refresh,
+                "retry": retry,
+                "expire": expire,
+                "minimum": minimum,
             }
-            records['SOA'].append(soa)
+            records["SOA"].append(soa)
             offset += 20
         elif rtype == TYPE_AAAA:
-            ip = socket.inet_ntop(socket.AF_INET6, response[offset:offset + data_length])
-            records['AAAA'].append(ip)
+            ip = socket.inet_ntop(
+                socket.AF_INET6, response[offset : offset + data_length]
+            )
+            records["AAAA"].append(ip)
 
         offset += data_length
 
     return records
+
 
 class DnsClientProtocol(asyncio.DatagramProtocol):
     def __init__(self, query, future):
@@ -174,13 +186,13 @@ class DnsClientProtocol(asyncio.DatagramProtocol):
         if not self.future.done():
             self.future.set_exception(exc)
 
-async def resolve_dns(domain, qtype, server='8.8.8.8', port=53):
+
+async def resolve_dns(domain, qtype, server="8.8.8.8", port=53):
     query = build_dns_query(domain, qtype)
     loop = asyncio.get_running_loop()
     future = loop.create_future()
     transport, protocol = await loop.create_datagram_endpoint(
-        lambda: DnsClientProtocol(query, future),
-        remote_addr=(server, port)
+        lambda: DnsClientProtocol(query, future), remote_addr=(server, port)
     )
 
     try:
@@ -189,6 +201,7 @@ async def resolve_dns(domain, qtype, server='8.8.8.8', port=53):
         return records
     finally:
         transport.close()
+
 
 # We need a semaphore per resolver
 # We need a resolver health check
