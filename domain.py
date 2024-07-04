@@ -144,6 +144,9 @@ class Domain:
         ssl_context = ssl.create_default_context()
         ssl_context.check_hostname = False
         ssl_context.verify_mode = ssl.CERT_NONE
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+        }
         # async with self.get_session() as session:
         #     resp = await session.get(url, ssl=False)
         #     web_status = resp.status
@@ -151,7 +154,7 @@ class Domain:
         try:
             # resp = self.requests.get(url, timeout=5, verify=False, params=params)
             async with self.get_session() as session:
-                resp = await session.get(url, ssl=ssl_context)
+                resp = await session.get(url, ssl=ssl_context, headers=headers)
                 web_status = resp.status
                 web_body = await resp.text()
         except:
