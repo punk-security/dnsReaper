@@ -37,7 +37,7 @@ class Domain:
     async def query(self, type):
         try:
             resp = await self.resolver.resolve(self.domain, type)
-            return [record.to_text().rstrip(".") for record in resp]
+            return resp[type]
         except:
             return []
 

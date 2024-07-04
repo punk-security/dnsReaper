@@ -5,7 +5,7 @@ import detection_enums
 import providers
 from os import linesep
 from domain import Domain
-from resolver import Resolver
+from resolver2 import Resolver
 
 from multiprocessing.pool import ThreadPool
 import threading
