@@ -24,7 +24,7 @@ QUERY_TYPES = {
     "CNAME": TYPE_CNAME,
     "SOA": TYPE_SOA,
     "AAAA": TYPE_AAAA,
-    "MX": TYPE_MX
+    "MX": TYPE_MX,
 }
 
 
@@ -162,7 +162,7 @@ def parse_dns_response(response):
             preference = struct.unpack_from(">H", response, offset)[0]
             offset += 2
             exchange, _ = decode_name(offset)
-            records['MX'].append((preference, exchange))
+            records["MX"].append((preference, exchange))
 
         offset += data_length
 
