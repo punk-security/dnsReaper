@@ -48,10 +48,10 @@ resource "aws_lambda_function" "serverless-dnsreaper" {
   role          = aws_iam_role.iam_for_lambda.arn
   handler = "lambda.handler"
 
-  runtime = "python3.10"
+  runtime = "python3.11"
 
   timeout = 30
-  memory_size = 128
+  memory_size = 256
 
   environment {
     variables = {

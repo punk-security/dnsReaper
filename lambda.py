@@ -21,6 +21,7 @@ import asyncio
 
 import random
 
+from resolver2 import Resolver
 
 sys.path.append(os.getcwd())
 
@@ -68,6 +69,7 @@ PD_API_KEY = os.environ.get("PD_API_KEY", None)
 
 
 async def process_domains(domains):
+    Domain.resolver = Resolver(nameservers=["8.8.8.8","8.8.4.4","1.1.1.1","1.0.0.1","208.67.222.2","208.67.220.2"], parallelism=4000)
     findings = []
     Domains = [Domain(domain) for domain in domains]
     if len(domains) == 1:
@@ -77,7 +79,7 @@ async def process_domains(domains):
         Domains = Domains + pd_domains
     # lock = threading.Lock()
     random.shuffle(Domains)
-    Domains = Domains[:100]  # upto 200 domains to test
+    Domains = Domains[:2000]  # upto 200 domains to test
     logging.warning(Domains)
     with output.Output("json", stdout) as o:
         scan = partial(
@@ -85,7 +87,6 @@ async def process_domains(domains):
             signatures=signatures,
             output_handler=o,
             findings=findings,
-            name_servers=[],
         )
         await asyncio.wait(
             [asyncio.create_task(scan(domain)) for domain in Domains],

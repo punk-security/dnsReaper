@@ -149,3 +149,9 @@ pdkey
 # exclude state
 terraform.tfstate
 terraform.tfstate.backup
+
+#exclude other stuff
+.github
+.vscode
+__pycache__
+.git
