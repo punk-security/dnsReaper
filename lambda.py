@@ -69,7 +69,17 @@ PD_API_KEY = os.environ.get("PD_API_KEY", None)
 
 
 async def process_domains(domains):
-    Domain.resolver = Resolver(nameservers=["8.8.8.8","8.8.4.4","1.1.1.1","1.0.0.1","208.67.222.2","208.67.220.2"], parallelism=4000)
+    Domain.resolver = Resolver(
+        nameservers=[
+            "8.8.8.8",
+            "8.8.4.4",
+            "1.1.1.1",
+            "1.0.0.1",
+            "208.67.222.2",
+            "208.67.220.2",
+        ],
+        parallelism=4000,
+    )
     findings = []
     Domains = [Domain(domain) for domain in domains]
     if len(domains) == 1:
