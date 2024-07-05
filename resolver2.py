@@ -122,7 +122,15 @@ def parse_dns_response(response):
             offset += response[offset] + 1
         offset += 5  # null byte + QTYPE + QCLASS
 
-    records = {"A": [], "NS": [], "CNAME": [], "SOA": [], "AAAA": [], "MX": []}
+    records = {
+        "A": [],
+        "NS": [],
+        "CNAME": [],
+        "SOA": [],
+        "AAAA": [],
+        "MX": [],
+        "NX_DOMAIN": False,
+    }
 
     for _ in range(answer_count):
         name, offset = decode_name(offset)
@@ -235,7 +243,15 @@ class Resolver:
             self.attempted_resolutions += 1
             qtype = QUERY_TYPES[type]
             start = time.time()
-            resp = {"A": [], "NS": [], "CNAME": [], "SOA": [], "AAAA": [], "MX": []}
+            resp = {
+                "A": [],
+                "NS": [],
+                "CNAME": [],
+                "SOA": [],
+                "AAAA": [],
+                "MX": [],
+                "NX_DOMAIN": False,
+            }
             try:
                 resp = await resolve_dns(fqdn, qtype, random.choice(self.nameservers))
                 if self.resolutions % 100 == 99:
@@ -249,6 +265,7 @@ class Resolver:
                 if self.nx_domains % 100 == 99:
                     write_when_on_warn("+")
                 self.nx_domains += 1
+                resp["NX_DOMAIN"] = True
             except:
                 if self.errors % 100 == 99:
                     write_when_on_warn("x")

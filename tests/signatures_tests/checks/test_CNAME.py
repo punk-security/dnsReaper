@@ -85,50 +85,14 @@ domain_with_cname.CNAME = ["cname"]
 
 @pytest.mark.asyncio
 async def test_NX_DOMAIN_on_resolve_success():
-    with patch("domain.Domain.query", return_value=[]):
+    with patch("resolver2.Resolver.resolve", return_value={"NX_DOMAIN": True}):
         assert await CNAME.NX_DOMAIN_on_resolve(domain_with_cname) == True
-
-
-@pytest.mark.asyncio
-async def test_NX_DOMAIN_on_resolve_failure_A_record_found():
-    async def query(self, type):
-        return "something" if type == "A" else []
-
-    with patch("domain.Domain.query", new=query):
-        assert await CNAME.NX_DOMAIN_on_resolve(domain_with_cname) == False
-
-
-@pytest.mark.asyncio
-async def test_NX_DOMAIN_on_resolve_failure_AAAA_record_found():
-    async def query(self, type):
-        return "something" if type == "AAAA" else []
-
-    with patch("domain.Domain.query", new=query):
-        assert await CNAME.NX_DOMAIN_on_resolve(domain_with_cname) == False
-
-
-@pytest.mark.asyncio
-async def test_NX_DOMAIN_on_resolve_failure_CNAME_record_found():
-    async def query(self, type):
-        return "something" if type == "CNAME" else []
-
-    with patch("domain.Domain.query", new=query):
-        assert await CNAME.NX_DOMAIN_on_resolve(domain_with_cname) == False
-
-
-@pytest.mark.asyncio
-async def test_NX_DOMAIN_on_resolve_failure_NS_record_found():
-    async def query(self, type):
-        return "something" if type == "NS" else []
-
-    with patch("domain.Domain.query", new=query):
-        assert await CNAME.NX_DOMAIN_on_resolve(domain_with_cname) == False
 
 
 @pytest.mark.asyncio
 async def test_NX_DOMAIN_on_resolve_failure_no_cname():
     domain = Domain("mock.local", fetch_standard_records=False)
-    with patch("domain.Domain.query", return_value=["something"]):
+    with patch("resolver2.Resolver.resolve", return_value={"NX_DOMAIN": False}):
         assert await CNAME.NX_DOMAIN_on_resolve(domain_with_cname) == False
 
 

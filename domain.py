@@ -31,11 +31,7 @@ class Domain:
     @property
     # @lru_cache
     async def NX_DOMAIN(self):
-        record_types = ["A", "AAAA", "CNAME", "TXT", "MX", "NS"]
-        for record_type in record_types:
-            if await self.query(record_type):
-                return False
-        return True
+        return (await self.resolver.resolve(self.domain, "A"))["NX_DOMAIN"]
 
     async def query(self, type):
         try:

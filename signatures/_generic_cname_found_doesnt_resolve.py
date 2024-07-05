@@ -10,6 +10,7 @@ filtered_cname_substrings = [
     ".cloudfront.net",
     ".oracle.com",
     ".invalid",
+    "online.lync.com",
 ]
 
 
