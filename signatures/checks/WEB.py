@@ -1,6 +1,7 @@
 from domain import Domain
 from math import floor
 import logging
+import sys
 
 
 async def string_in_body(
@@ -11,7 +12,8 @@ async def string_in_body(
         return True
     logging.debug(f"Message not found in response for '{domain}'")
     # Uncomment to debug and identify a string match issue
-    # logging.debug((await domain.fetch_web(https=https, uri=custom_uri)).body)
+    if "pytest" in sys.modules:
+        logging.warn((await domain.fetch_web(https=https, uri=custom_uri)).body)
     return False
 
 

@@ -22,6 +22,8 @@ import time
 
 import asyncio
 
+import dns.resolver
+
 start_time = time.time()
 
 if "--nocolour" in argv:
@@ -93,7 +95,9 @@ if "--out" not in argv:
 async def main():
     ###### domain ingestion
     nameservers = (
-        [] if args.resolver == "" else args.resolver.replace(" ", "").split(",")
+        dns.resolver.Resolver().nameservers
+        if args.resolver == ""
+        else args.resolver.replace(" ", "").split(",")
     )
     Domain.resolver = Resolver(nameservers=nameservers, parallelism=args.parallelism)
     provider = getattr(providers, args.provider)
