@@ -17,6 +17,16 @@ data "aws_caller_identity" "current" {
 
 data "aws_region" "region" {}
 
+resource "aws_dynamodb_table" "results" {
+  name           = "dnsreaper-results"
+  billing_mode   = "PAY_PER_REQUEST"
+
+  attribute {
+    name = "guid"
+    type = "S"
+  }
+  hash_key = "guid"
+}
 
 resource "time_static" "src" {
   triggers = {
@@ -55,7 +65,8 @@ resource "aws_lambda_function" "serverless-dnsreaper" {
 
   environment {
     variables = {
-      PD_API_KEY = file("./pdkey")
+      PD_API_KEY = file("./pdkey"),
+      DYNAMO_TABLE = aws_dynamodb_table.results.name
       }
   }
 }
@@ -97,6 +108,20 @@ data "aws_iam_policy_document" "execution" {
     resources = ["${aws_cloudwatch_log_group.logs.arn}:*"]
   }
 
+  statement {
+    actions = [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem",
+      "dynamodb:DeleteItem",
+      "dynamodb:BatchGetItem",
+      "dynamodb:BatchWriteItem",
+      "dynamodb:Scan",
+      "dynamodb:Query"
+    ]
+    resources = [aws_dynamodb_table.results.arn]
+  }
+
 }
 
 resource "aws_iam_role" "iam_for_lambda" {
@@ -107,3 +132,5 @@ resource "aws_iam_role" "iam_for_lambda" {
     policy = data.aws_iam_policy_document.execution.json
   }
 }
+
+

@@ -21,6 +21,10 @@ import asyncio
 
 import random
 
+import uuid
+import boto3
+import datetime
+
 from resolver2 import Resolver
 
 sys.path.append(os.getcwd())
@@ -58,14 +62,44 @@ async def check(domain: str):
         logging.warning(f"Received: {domain}")
         domain = domain.replace(" ", "")
         domains = domain.split(",")
-        return await process_domains(domains)
+        return (await process_domains(domains))["findings"]
     except Exception as e:
-        return {"error": f" {e}"}
+        return {"error": True}  # f" {e}"}
+
+
+@app.get("/scan")
+async def scan(domain: str):
+    try:
+        dynamodb = boto3.resource("dynamodb")
+        table = dynamodb.Table(DYNAMO_TABLE)
+        logging.warning(f"Received: {domain}")
+        domain = domain.replace(" ", "")
+        domains = domain.split(",")
+        results = await process_domains(domains)
+        guid = str(uuid.uuid4())
+        table.put_item(Item={"guid": guid, "results": results})
+        return {"results": guid}
+    except Exception as e:
+        logging.error(e)
+        return {"error": True}  # f" {e}"}
+
+
+@app.get("/result")
+async def result(id: str):
+    try:
+        dynamodb = boto3.resource("dynamodb")
+        table = dynamodb.Table(DYNAMO_TABLE)
+        logging.warning(f"Received id: {id}")
+        return table.get_item(Key={"guid": id})["Item"]["results"]
+    except Exception as e:
+        logging.error(e)
+        return {"error": True}  # f" {e}"}
 
 
 ###### scanning
 
 PD_API_KEY = os.environ.get("PD_API_KEY", None)
+DYNAMO_TABLE = os.environ.get("DYNAMO_TABLE", None)
 
 
 async def process_domains(domains):
@@ -91,6 +125,7 @@ async def process_domains(domains):
     random.shuffle(Domains)
     Domains = Domains[:2000]  # upto 200 domains to test
     logging.warning(Domains)
+    start_time = time.time()
     with output.Output("json", stdout) as o:
         scan = partial(
             scan_domain,
@@ -103,7 +138,14 @@ async def process_domains(domains):
             timeout=20,
             return_when=asyncio.ALL_COMPLETED,
         )
-    return findings
+    return {
+        "domains": domains,
+        "findings": [f.__dict__ for f in findings],
+        "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "count_scanned_domains": len(Domains),
+        "count_signatures": len(signatures),
+        "execution_time": str(round(time.time() - start_time, 2)),
+    }
 
 
 def handler(event, context):
