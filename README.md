@@ -47,6 +47,10 @@ To run DNS Reaper, you can use the docker image or run it with python 3.11.
 
 ``` docker run punksecurity/dnsreaper --help  ```
 
+If you have a device running Apple silicon you need to add the platform parameter, for example:
+
+``` docker run --platform linux/amd64 punksecurity/dnsreaper --help ```
+
 ### Run it with python
 ``` 
 pip install -r requirements.txt
