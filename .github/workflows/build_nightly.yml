@@ -4,7 +4,6 @@ on:
     - cron: '0 3 * * *'
 
 jobs:
-  
   buildx:
     runs-on: ubuntu-latest
     steps:
@@ -19,10 +18,9 @@ jobs:
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
-      - name: Run Buildx
-        run: |
-          docker buildx build . \
-            --push \
-            --progress=plain \
-            --tag docker.io/punksecurity/dnsreaper:nightly \
-            --platform linux/amd64
+      - name: Build and push
+        uses: docker/bake-action@v5
+        with:
+          push: true
+          targets: "nightly"
+

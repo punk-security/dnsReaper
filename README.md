@@ -1,5 +1,5 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/punk-security/secret-magpie-cli/graphs/commit-activity)
-[![Maintaner](https://img.shields.io/badge/maintainer-PunkSecurity-blue)](https://www.punksecurity.co.uk)
+[![Maintainer](https://img.shields.io/badge/maintainer-PunkSecurity-blue)](https://www.punksecurity.co.uk)
 [![Docker Pulls](https://img.shields.io/docker/pulls/punksecurity/dnsreaper)](https://hub.docker.com/r/punksecurity/dnsreaper)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=punk-security_dnsReaper&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=punk-security_dnsReaper)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=punk-security_dnsReaper&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=punk-security_dnsReaper)
@@ -11,6 +11,13 @@ DNS Reaper is yet another sub-domain takeover tool, but with an emphasis on accu
 
 We can scan around 50 subdomains per second, testing each one with over 50 takeover signatures.
 This means most organisations can scan their entire DNS estate in less than 10 seconds.
+
+To make it easier to get started, we've built a cheeky little web version that will scan a dns zone file, a comma-separated list, or up to 100 subdomains we find from ProjectDiscovery.  
+
+Check it out: [dnsreaper web](https://punksecurity.co.uk/dnsreaper)
+
+
+Of course the CLI tool is much more EPIC, and its faster.
 
 ![DNS Reaper detects a if domain has a broken cname record and can be taken over by registering the domain's cname](docs/reaper_detection.png "DNS Reaper detects a if domain has a broken cname record and can be taken over by registering the domain's cname")
 

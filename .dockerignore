@@ -155,3 +155,6 @@ terraform.tfstate.backup
 .vscode
 __pycache__
 .git
+dev
+docs
+tests

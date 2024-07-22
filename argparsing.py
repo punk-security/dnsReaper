@@ -86,9 +86,11 @@ for provider in providers.__all__:
         group.add_argument(
             f"--{parameter.name.replace('_','-')}",
             type=str,
-            help="Required"
-            if isinstance(parameter.default, type(parameter.empty))
-            else "Optional",
+            help=(
+                "Required"
+                if isinstance(parameter.default, type(parameter.empty))
+                else "Optional"
+            ),
         )
 
 parser.add_argument(
