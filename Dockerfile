@@ -1,4 +1,5 @@
 FROM python:3.11-alpine AS builder
+RUN apk add gcc libffi musl-dev libffi-dev
 
 # Create app directory
 RUN python -m venv /opt/venv
