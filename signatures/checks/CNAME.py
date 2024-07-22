@@ -11,16 +11,16 @@ def match(domain: Domain, strings) -> str:
     return False
 
 
-def NX_DOMAIN_on_resolve(domain: Domain) -> bool:
+async def NX_DOMAIN_on_resolve(domain: Domain) -> bool:
     for cname in domain.CNAME:
         cname = Domain(cname, fetch_standard_records=False)
-        if cname.NX_DOMAIN:
+        if await cname.NX_DOMAIN:
             logging.info(f"NX_Domain for cname {cname}")
             return True
     return False
 
 
-def is_unregistered(domain: Domain) -> bool:
+async def is_unregistered(domain: Domain) -> bool:
     for cname in domain.CNAME:
         cname = Domain(cname, fetch_standard_records=False)
         if not cname.is_registered:

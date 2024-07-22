@@ -14,8 +14,8 @@ def potential(domain: Domain, **kwargs) -> bool:
     return False
 
 
-def check(domain: Domain, **kwargs) -> bool:
-    return checks.NS.no_SOA_detected(domain)
+async def check(domain: Domain, **kwargs) -> bool:
+    return await checks.NS.no_SOA_detected(domain)
 
 
 INFO = """
