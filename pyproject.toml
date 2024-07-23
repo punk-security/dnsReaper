@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dnsReaper"
+dynamic = ["version"]
+requires-python = ">= 3.9"
+readme = "README.md"
+license = { text = "License :: OSI Approved :: GNU Affero General Public License v3" }
+authors = [
+    { name = "Punk Security Limited" }
+]
+
+dependencies = [
+    "dnspython==2.2.1",
+    "requests==2.31.0",
+    "python-whois==0.8.0",
+    "boto3==1.24.40",
+    "cloudflare==2.9.11",
+    "colorama==0.4.5",
+    "azure-mgmt-dns==8.0.0",
+    "azure-identity==1.10.0",
+    "msrestazure==0.6.4",
+    "google-cloud-dns==0.34.1",
+    "aiohttp"
+]
+description = ""
+
+[project.optional-dependencies]
+lambda = [
+    "fastapi==0.87.0",
+    "mangum==0.172"
+]
+
+[project.scripts]
+dnsreaper = "main:run"
+
+[project.urls]
+Homepage = "https://punksecurity.co.uk/dnsreaper"
+Repository = "https://github.com/punk-security/dnsReaper"
+Issues = "https://github.com/punk-security/dnsReaper/issues"
+
+[tool]
+
+[tool.hatch.build.targets.wheel]
+include = [
+    "**/*.py",
+]
+exclude = [
+  "/.github",
+  "/docs",
+    "/dev",
+    "/tests"
+]
+[tool.hatch.build.targets.wheel.sources]
+"" = "dnsreaper"
+
+[tool.hatch.version]
+path = "VERSION"

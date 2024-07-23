@@ -146,4 +146,8 @@ async def main():
         exit(len(findings))
 
 
-asyncio.run(main())
+def run():
+    return asyncio.run(main())
+
+if __name__ == '__main__':
+    run()
