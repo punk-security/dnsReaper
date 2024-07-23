@@ -24,6 +24,10 @@ jobs:
   package:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.12"
       - name: Install Hatch
         uses: pypa/hatch@install
       - name: Write version
