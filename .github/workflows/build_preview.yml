@@ -2,7 +2,7 @@ name: pytest
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ main, lambda ]
     types:
       - synchronize
       - opened
@@ -21,6 +21,22 @@ jobs:
         uses: ./.github/actions/pytest
         with:
           python-version: ${{ matrix.python-version }}
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Hatch
+        uses: pypa/hatch@install
+      - name: Write version
+        run: |
+          echo '__version__ = "0.0+dev0"' > VERSION
+      - name: Build Python Module
+        run: hatch build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
   buildx:
     runs-on: ubuntu-latest
     steps:

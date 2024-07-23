@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 from scan import scan_domain
 import signatures
 import output
@@ -7,7 +8,6 @@ import providers
 from os import linesep
 from domain import Domain
 from resolver import Resolver
-
 from functools import partial
 
 import logging
@@ -81,7 +81,6 @@ if args.disable_probable:
 logging.warning(f"Testing with {len(signatures)} signatures")
 
 
-###### scanning
 
 findings = []
 
@@ -132,4 +131,8 @@ async def main():
         exit(len(findings))
 
 
-asyncio.run(main())
+def run():
+    return asyncio.run(main())
+
+if __name__ == '__main__':
+    run()
