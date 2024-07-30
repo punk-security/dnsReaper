@@ -4,14 +4,10 @@ import output
 import detection_enums
 from providers import projectdiscovery
 from domain import Domain
-from os import linesep
-
-from multiprocessing.pool import ThreadPool
-import threading
 from functools import partial
 
 import logging
-from sys import stderr, exit, argv, stdout
+from sys import stdout
 
 import time
 
@@ -25,15 +21,14 @@ import uuid
 import boto3
 import datetime
 
-from resolver2 import Resolver
+from resolver import Resolver
 
 sys.path.append(os.getcwd())
 
 logger = logging.getLogger()
 logger.setLevel("INFO")
 
-from fastapi import FastAPI, Request
-from fastapi.responses import Response
+from fastapi import FastAPI
 from mangum import Mangum
 
 app = FastAPI()
@@ -121,7 +116,7 @@ async def process_domains(domains):
         pd_domains = projectdiscovery.fetch_domains(PD_API_KEY, domains[0])
         logging.warning(f"Got {len(pd_domains)} domains from PD")
         Domains = Domains + pd_domains
-    # lock = threading.Lock()
+
     random.shuffle(Domains)
     Domains = Domains[:2000]  # upto 200 domains to test
     logging.warning(Domains)
@@ -149,7 +144,6 @@ async def process_domains(domains):
 
 
 def handler(event, context):
-    # if event.get("some-key"):
     # Do something or return, etc.
 
     asgi_handler = Mangum(app)

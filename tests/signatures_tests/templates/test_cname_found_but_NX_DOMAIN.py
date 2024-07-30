@@ -4,7 +4,7 @@ from signatures.templates.cname_found_but_NX_DOMAIN import (
     cname_found_but_NX_DOMAIN,
 )
 
-from tests import mocks
+import mocks
 from unittest.mock import patch
 import pytest
 
@@ -28,7 +28,7 @@ async def test_potential_failure_no_matching_CNAME():
 async def test_check_success():
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.CNAME = ["cname"]
-    with patch("resolver2.Resolver.resolve", return_value={"NX_DOMAIN": True}):
+    with patch("resolver.Resolver.resolve", return_value={"NX_DOMAIN": True}):
         assert await test.check(domain) == True
 
 
@@ -36,7 +36,7 @@ async def test_check_success():
 async def test_check_failure():
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.CNAME = ["cname"]
-    with patch("resolver2.Resolver.resolve", return_value={"NX_DOMAIN": False}):
+    with patch("resolver.Resolver.resolve", return_value={"NX_DOMAIN": False}):
         assert await test.check(domain) == False
 
 

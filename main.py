@@ -5,10 +5,8 @@ import detection_enums
 import providers
 from os import linesep
 from domain import Domain
-from resolver2 import Resolver
+from resolver import Resolver
 
-from multiprocessing.pool import ThreadPool
-import threading
 from functools import partial
 
 import logging
@@ -85,7 +83,6 @@ logging.warning(f"Testing with {len(signatures)} signatures")
 ###### scanning
 
 findings = []
-# lock = threading.Lock()
 
 if "--out" not in argv:
     # using default out location, need to append our format
@@ -116,18 +113,6 @@ async def main():
         )
 
         await asyncio.gather(*[asyncio.create_task(scan(domain)) for domain in domains])
-
-        # pool = ThreadPool(processes=args.parallelism)
-        # res = pool.map_async(scan, domains)
-        # try:
-        #    while not res.ready():
-        #        time.sleep(2)
-        # except KeyboardInterrupt:
-        #    logging.warning("Caught KeyboardInterrupt, terminating early...")
-        #    lock.acquire()
-        # else:
-        #    pool.close()
-        #    pool.join()
 
     ###### exit
     logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")

@@ -4,7 +4,7 @@ from signatures.templates.cname_found_but_string_in_body import (
     cname_found_but_string_in_body,
 )
 
-from tests import mocks
+import mocks
 import pytest
 
 test = cname_found_but_string_in_body("cname", "No domain found here", "INFO")

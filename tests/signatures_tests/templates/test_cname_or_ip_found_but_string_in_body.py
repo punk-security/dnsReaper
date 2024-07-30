@@ -4,7 +4,7 @@ from signatures.templates.cname_or_ip_found_but_string_in_body import (
     cname_or_ip_found_but_string_in_body,
 )
 
-from tests import mocks
+import mocks
 import pytest
 
 test = cname_or_ip_found_but_string_in_body(

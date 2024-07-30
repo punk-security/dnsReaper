@@ -1,10 +1,9 @@
 from domain import Domain
 from signatures.checks import CNAME
-from unittest.mock import patch, PropertyMock
-from whois.parser import PywhoisError
+from unittest.mock import patch, AsyncMock
+from asyncwhois.errors import NotFoundError
 import mocks
 import pytest
-import asyncio
 
 
 @pytest.mark.asyncio
@@ -85,14 +84,20 @@ domain_with_cname.CNAME = ["cname"]
 
 @pytest.mark.asyncio
 async def test_NX_DOMAIN_on_resolve_success():
-    with patch("resolver2.Resolver.resolve", return_value={"NX_DOMAIN": True}):
+    with patch(
+        "resolver.Resolver.resolve",
+        side_effect=AsyncMock(return_value={"NX_DOMAIN": True}),
+    ):
         assert await CNAME.NX_DOMAIN_on_resolve(domain_with_cname) == True
 
 
 @pytest.mark.asyncio
 async def test_NX_DOMAIN_on_resolve_failure_no_cname():
     domain = Domain("mock.local", fetch_standard_records=False)
-    with patch("resolver2.Resolver.resolve", return_value={"NX_DOMAIN": False}):
+    with patch(
+        "resolver.Resolver.resolve",
+        side_effect=AsyncMock(return_value={"NX_DOMAIN": False}),
+    ):
         assert await CNAME.NX_DOMAIN_on_resolve(domain_with_cname) == False
 
 
@@ -106,29 +111,32 @@ async def test_is_unregistered_failure_no_cname():
 async def test_is_unregistered_failure_cname_registered():
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.CNAME = ["something"]
-    with patch("domain.whois.whois", return_value={"registrar": "something"}):
+    with patch(
+        "domain.asyncwhois.aio_whois",
+        side_effect=AsyncMock(return_value={"registrar": "something"}),
+    ):
         assert await CNAME.is_unregistered(domain) == False
 
 
 @pytest.mark.asyncio
 async def test_is_unregistered_failure_whois_failure():
-    def whois(domain):
+    async def whois(domain):
         raise ValueError("BOOK")
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.CNAME = ["something"]
-    with patch("domain.whois.whois", new=whois):
+    with patch("domain.asyncwhois.aio_whois", new=whois):
         assert await CNAME.is_unregistered(domain) == False
 
 
 @pytest.mark.asyncio
 async def test_is_unregistered_success_cname_unregistered():
-    def whois(domain):
-        raise PywhoisError("Not found")
+    async def whois(domain):
+        raise NotFoundError("Domain not found!")
 
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.CNAME = ["something"]
-    with patch("domain.whois.whois", new=whois):
+    with patch("domain.asyncwhois.aio_whois", new=whois):
         assert await CNAME.is_unregistered(domain) == True
 
 
