@@ -2,7 +2,7 @@ from domain import Domain
 from signatures.checks import CNAME
 from unittest.mock import patch, AsyncMock
 from asyncwhois.errors import NotFoundError
-import mocks
+from ... import mocks
 import pytest
 
 

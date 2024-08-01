@@ -4,7 +4,7 @@ from signatures.templates.cname_found_but_NX_DOMAIN import (
     cname_found_but_NX_DOMAIN,
 )
 
-import mocks
+from ... import mocks
 from unittest.mock import patch
 import pytest
 

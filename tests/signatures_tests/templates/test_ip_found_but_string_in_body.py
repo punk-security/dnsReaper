@@ -3,7 +3,7 @@ import signatures
 from signatures.templates.ip_found_but_string_in_body import (
     ip_found_but_string_in_body,
 )
-import mocks
+from ... import mocks
 import pytest
 
 test = ip_found_but_string_in_body(["::1", "1.1.1.1"], "No domain found here", "INFO")

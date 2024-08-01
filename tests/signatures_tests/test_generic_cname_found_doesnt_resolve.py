@@ -1,7 +1,7 @@
 from domain import Domain
 from signatures import _generic_cname_found_doesnt_resolve
 from unittest.mock import patch
-import mocks
+from .. import mocks
 import pytest
 
 

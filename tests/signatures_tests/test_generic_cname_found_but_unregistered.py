@@ -1,7 +1,7 @@
 from domain import Domain
 from signatures import _generic_cname_found_but_unregistered
 from unittest.mock import patch, PropertyMock, AsyncMock
-import mocks
+from .. import mocks
 import pytest
 
 
@@ -31,9 +31,10 @@ async def test_check_success():
     domain.CNAME = ["cname.tld"]
     with patch(
         "domain.Domain.is_registered",
-        new=PropertyMock(AsyncMock()(), return_value=False),
-    ):
+        new=PropertyMock(spec=AsyncMock()(), return_value=False),
+    ) as mock:
         assert await _generic_cname_found_but_unregistered.test.check(domain) == True
+        assert mock.await_count == 1
 
 
 @pytest.mark.asyncio
@@ -42,9 +43,10 @@ async def test_check_failure():
     domain.CNAME = ["cname.tld"]
     with patch(
         "domain.Domain.is_registered",
-        new=PropertyMock(AsyncMock()(), return_value=True),
-    ):
+        new=PropertyMock(spec=AsyncMock()(), return_value=True),
+    ) as mock:
         assert await _generic_cname_found_but_unregistered.test.check(domain) == False
+        assert mock.await_count == 1
 
 
 @pytest.mark.asyncio

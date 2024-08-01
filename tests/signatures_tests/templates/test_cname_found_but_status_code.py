@@ -5,7 +5,7 @@ from signatures.templates.cname_found_but_status_code import (
 )
 
 import pytest
-import mocks
+from ... import mocks
 
 test = cname_found_but_status_code("cname", 404, "mock")
 
