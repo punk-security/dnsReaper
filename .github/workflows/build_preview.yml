@@ -11,6 +11,7 @@ on:
 jobs:
   pytest:
     strategy:
+      max-parallel: 2
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
     runs-on: ubuntu-latest
@@ -34,4 +35,3 @@ jobs:
           VERSION: ${{ github.run_id }}
         with:
           targets: "preview"
-
