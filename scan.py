@@ -2,10 +2,6 @@ from finding import Finding
 
 import logging
 
-import random
-
-import asyncio
-
 
 async def scan_domain(domain, signatures, findings, output_handler):
     if domain.should_fetch_std_records:
@@ -32,7 +28,6 @@ async def scan_domain(domain, signatures, findings, output_handler):
                     confidence=signature.test.CONFIDENCE,
                     more_info_url=signature.test.more_info_url,
                 )
-                #                with lock:
                 findings.append(finding)
                 output_handler.write(finding)
             else:

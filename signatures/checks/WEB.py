@@ -13,7 +13,7 @@ async def string_in_body(
     logging.debug(f"Message not found in response for '{domain}'")
     # Uncomment to debug and identify a string match issue
     if "pytest" in sys.modules:
-        logging.warn((await domain.fetch_web(https=https, uri=custom_uri)).body)
+        logging.warning((await domain.fetch_web(https=https, uri=custom_uri)).body)
     return False
 
 

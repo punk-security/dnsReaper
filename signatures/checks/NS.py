@@ -1,7 +1,7 @@
 from domain import Domain
 from . import helpers
 import logging
-import resolver2 as resolver
+import resolver as resolver
 
 
 def match(domain: Domain, strings) -> str:

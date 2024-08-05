@@ -1,7 +1,7 @@
 from domain import Domain
 from signatures import _generic_cname_found_doesnt_resolve
 from unittest.mock import patch
-from tests import mocks
+from .. import mocks
 import pytest
 
 
@@ -44,7 +44,7 @@ async def test_potential_failure_with_domain_in_cname():
 async def test_check_success():
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.CNAME = ["cname"]
-    with patch("resolver2.Resolver.resolve", return_value={"NX_DOMAIN": True}):
+    with patch("resolver.Resolver.resolve", return_value={"NX_DOMAIN": True}):
         assert (await _generic_cname_found_doesnt_resolve.test.check(domain)) == True
 
 
@@ -52,7 +52,7 @@ async def test_check_success():
 async def test_check_failure():
     domain = Domain("mock.local", fetch_standard_records=False)
     domain.CNAME = ["cname"]
-    with patch("resolver2.Resolver.resolve", return_value={"NX_DOMAIN": False}):
+    with patch("resolver.Resolver.resolve", return_value={"NX_DOMAIN": False}):
         assert (await _generic_cname_found_doesnt_resolve.test.check(domain)) == False
 
 

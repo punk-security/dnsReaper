@@ -1,6 +1,5 @@
 from domain import Domain
 from . import checks
-import detection_enums
 
 from .templates.base import Base
 

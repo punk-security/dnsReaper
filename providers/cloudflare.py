@@ -91,5 +91,5 @@ def fetch_domains(cloudflare_token, **args):
         )
         for record in convert_records_to_domains(records):
             domains.append(record)
-    logging.warn(f"Got {len(domains)} records from cloudflare")
+    logging.warning(f"Got {len(domains)} records from cloudflare")
     return domains

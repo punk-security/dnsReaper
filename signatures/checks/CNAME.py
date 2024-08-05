@@ -23,7 +23,7 @@ async def NX_DOMAIN_on_resolve(domain: Domain) -> bool:
 async def is_unregistered(domain: Domain) -> bool:
     for cname in domain.CNAME:
         cname = Domain(cname, fetch_standard_records=False)
-        if not cname.is_registered:
+        if not await cname.is_registered:
             logging.info(f"The domain '{cname}' is NOT registered")
             return True
     return False

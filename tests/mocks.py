@@ -6,9 +6,7 @@ import dns.resolver
 import ipaddress
 from uuid import uuid4
 
-import asyncio
 import aiohttp
-import ssl
 
 
 def random_string():
