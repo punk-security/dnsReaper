@@ -11,7 +11,9 @@ def fetch_domains(filename, **args):
         with open(filename) as file:
             try:
                 domains = file.readlines()
-                logging.warn(f"Ingested {len(domains)} domains from file '{filename}'")
+                logging.warning(
+                    f"Ingested {len(domains)} domains from file '{filename}'"
+                )
             except Exception as e:
                 logging.error(f"Could not read any domains from file {filename} -- {e}")
                 exit(-1)
@@ -25,7 +27,7 @@ def fetch_domains(filename, **args):
                 logging.debug(f"Ingested domains from file '{file}'")
             except:
                 logging.debug(f"Could not read file '{file}'")
-        logging.warn(f"Ingested {len(domains)} domains from folder '{filename}'")
+        logging.warning(f"Ingested {len(domains)} domains from folder '{filename}'")
     return [Domain(domain.rstrip()) for domain in domains]
 
 

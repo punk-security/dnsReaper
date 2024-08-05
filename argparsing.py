@@ -117,8 +117,8 @@ parser.add_argument(
 parser.add_argument(
     "--resolver",
     type=str,
-    default="",
-    help="Provide a custom DNS resolver (or multiple seperated by commas)",
+    default="8.8.8.8,8.8.4.4,1.1.1.1,1.0.0.1,208.67.222.2,208.67.220.2",
+    help="Provide a custom DNS resolver (or multiple seperated by commas), or '' to use system resolver. We loadbalance a public resolver list by default",
 )
 
 

@@ -14,8 +14,8 @@ def potential(domain: Domain, **kwargs) -> bool:
     return False
 
 
-def check(domain: Domain, **kwargs) -> bool:
-    return checks.WEB.status_code_404(domain, True)
+async def check(domain: Domain, **kwargs) -> bool:
+    return await checks.WEB.status_code_404(domain, True)
 
 
 INFO = """

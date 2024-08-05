@@ -1,6 +1,3 @@
-from os import linesep
-
-
 class Finding(object):
     def __init__(self, domain, signature, info, confidence, more_info_url):
         self.domain = domain.domain

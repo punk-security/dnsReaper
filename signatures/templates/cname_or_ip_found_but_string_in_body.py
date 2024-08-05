@@ -16,12 +16,12 @@ class cname_or_ip_found_but_string_in_body(base.Base):
             domain, self.cname, self.ips
         )
 
-    def check(self, domain, **kwargs) -> bool:
+    async def check(self, domain, **kwargs) -> bool:
         if self.https:
-            return signatures.checks.WEB.string_in_body_https(
+            return await signatures.checks.WEB.string_in_body_https(
                 domain, self.domain_not_configured_message, custom_uri=self.custom_uri
             )
-        return signatures.checks.WEB.string_in_body_http(
+        return await signatures.checks.WEB.string_in_body_http(
             domain, self.domain_not_configured_message, custom_uri=self.custom_uri
         )
 
