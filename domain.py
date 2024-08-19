@@ -2,34 +2,28 @@ import ipaddress
 import socket
 from collections import namedtuple
 import dns.asyncresolver
-from functools import lru_cache
 
 import logging
-
-import urllib3
-
 import collections
 
 collections.Iterable = collections.abc.Iterable
 collections.Mapping = collections.abc.Mapping
-import whois
 
+import asyncwhois
 import aiohttp
 import ssl
 
-from resolver2 import Resolver
+from resolver import Resolver
 
 
 class Domain:
     resolver = Resolver()
 
     @property
-    # @lru_cache
     async def SOA(self):
         return await self.query("SOA")
 
     @property
-    # @lru_cache
     async def NX_DOMAIN(self):
         return (await self.resolver.resolve(self.domain, "A"))["NX_DOMAIN"]
 
@@ -133,7 +127,6 @@ class Domain:
     def get_session(self):
         return aiohttp.ClientSession()
 
-    # @lru_cache
     async def fetch_web(self, uri="", https=True, params={}):
         protocol = "https" if https else "http"
         url = f"{protocol}://{self.domain}/{uri}"
@@ -143,12 +136,7 @@ class Domain:
         headers = {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
         }
-        # async with self.get_session() as session:
-        #     resp = await session.get(url, ssl=False)
-        #     web_status = resp.status
-        #     web_body = await resp.text()
         try:
-            # resp = self.requests.get(url, timeout=5, verify=False, params=params)
             async with self.get_session() as session:
                 resp = await session.get(url, ssl=ssl_context, headers=headers)
                 web_status = resp.status
@@ -159,17 +147,11 @@ class Domain:
         return namedtuple("web_response", ["status_code", "body"])(web_status, web_body)
 
     @property
-    @lru_cache
-    def is_registered(self):
+    async def is_registered(self):
         try:
-            whois.whois(self.domain)
+            await asyncwhois.aio_whois(self.domain)
             return True
-        except whois.parser.PywhoisError as e:
-            if e.args[0] == "No whois server is known for this kind of object.":
-                # This is the only case of a potentially registered domain
-                # triggering a PywhoisError
-                # https://github.com/richardpenman/whois/blob/56dc7e41d134e6d4343ad80a48533681bd887ff2/whois/parser.py#L201
-                return True
+        except asyncwhois.NotFoundError:
             return False
         except Exception:
             return True
