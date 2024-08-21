@@ -27,7 +27,7 @@ class GDApi:
             raise ValueError("Invalid API key specified.")
 
         if response.status_code < 200 or response.status_code >= 300:
-            raise ValueError("Invalid response received from API: " + response.json())
+            raise ValueError("Invalid response received from API: " + str(response.json()))
 
         return response
 
