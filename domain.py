@@ -130,6 +130,9 @@ class Domain:
     async def fetch_web(self, uri="", https=True, params={}):
         protocol = "https" if https else "http"
         url = f"{protocol}://{self.domain}/{uri}"
+
+        # We must disable SSL validation because vulnerable domains probably won't have a valid cert on the other end
+        # e.g. github
         ssl_context = ssl.create_default_context()
         ssl_context.check_hostname = False
         ssl_context.verify_mode = ssl.CERT_NONE
