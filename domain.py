@@ -1,6 +1,7 @@
 import ipaddress
-import socket
 from collections import namedtuple
+from typing import Optional
+
 import dns.asyncresolver
 
 import logging
@@ -61,8 +62,7 @@ class Domain:
         for ns in self.NS:
             try:
                 d = Domain(self.domain)
-                d.ns = ns
-                await d.set_NS()
+                await d.set_resolver_nameserver(ns)
                 self.A += d.A
                 self.AAAA += d.AAAA
             except:
@@ -70,42 +70,37 @@ class Domain:
                     f"We could not resolve the provided NS record '{ns}' to an ip"
                 )
 
-    async def set_NS(self):
-        if self.ns == None:
+    async def set_resolver_nameserver(self, ns: Optional[str] = None):
+        if ns is None:
             self.resolver = dns.asyncresolver
-        else:
-            if type(self.ns) != str:
-                logging.error(f"Cannot set custom NS as {ns} not a string")
-            self.resolver = dns.asyncresolver.Resolver()
+            self.resolver.timeout = 1
 
-            try:
-                ipaddress.ip_address(self.ns)
-                self.resolver.nameservers = [self.ns]
-            except ValueError:
-                try:
-                    nameservers = list(
-                        map(
-                            lambda rr: rr.address,
-                            (await self.resolver.resolve(self.ns.rstrip("."))).rrset,
-                        )
-                    )
-                    self.resolver.nameservers = nameservers
-                except:
-                    self.resolver.nameservers = []
-        self.resolver.timeout = 1
+            return
 
-    def set_custom_NS_sync(self, ns: str):
         if type(ns) != str:
             logging.error(f"Cannot set custom NS as {ns} not a string")
+
+            raise RuntimeError(f"Invalid NS type - expected str got {type(ns)}")
+
         self.resolver = dns.asyncresolver.Resolver()
+        self.resolver.timeout = 1
 
         try:
             ipaddress.ip_address(ns)
             self.resolver.nameservers = [ns]
+            return
         except ValueError:
+            # if ns isn't a valid IP address, attempt to resolve it
             try:
-                self.resolver.nameservers = [socket.gethostbyname(ns.rstrip("."))]
+                nameservers = list(
+                    map(
+                        lambda rr: rr.address,
+                        (await self.resolver.resolve(ns.rstrip("."))).rrset,
+                    )
+                )
+                self.resolver.nameservers = nameservers
             except:
+                # TODO: document why this gets set to an empty list
                 self.resolver.nameservers = []
 
     def set_base_domain(self):
@@ -123,11 +118,12 @@ class Domain:
         self.CNAME = []
         self.set_base_domain()
         self.should_fetch_std_records = fetch_standard_records
+        self.base_domain = None
 
     def get_session(self):
         return aiohttp.ClientSession()
 
-    async def fetch_web(self, uri="", https=True, params={}):
+    async def fetch_web(self, uri="", https=True):
         protocol = "https" if https else "http"
         url = f"{protocol}://{self.domain}/{uri}"
 

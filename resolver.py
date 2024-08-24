@@ -226,11 +226,9 @@ class Resolver:
     no_records = 0
     nx_domains = 0
 
-    def __init__(self, parallelism=200, nameservers=[]):
+    def __init__(self, parallelism=200, nameservers=None):
+        self.nameservers = nameservers if nameservers is not None else ["8.8.8.8"]
         self.semaphore = asyncio.Semaphore(parallelism)
-        if not nameservers:
-            nameservers = ["8.8.8.8"]
-        self.nameservers = nameservers
 
     async def resolve(self, fqdn, type=None, retry=3):
         async with self.semaphore:
