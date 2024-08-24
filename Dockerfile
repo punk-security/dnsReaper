@@ -20,7 +20,7 @@ COPY . .
 ENV SM_COMMAND "docker run punksecurity/dnsreaper --" 
 ENTRYPOINT [ "python3", "/app/main.py" ]
 
-FROM amazon/aws-lambda-python:3.11 as lambda
+FROM amazon/aws-lambda-python:3.11 AS lambda
 
 COPY requirements.txt /app/
 COPY lambda-requirements.txt /app/
