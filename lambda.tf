@@ -40,7 +40,7 @@ resource "null_resource" "build_venv" {
   }
 
   provisioner "local-exec" {
-    command = "docker build -t ${time_static.src.unix} ${path.root} -f ${path.root}/Lambda-Build-Dockerfile --target lambda && docker create --name ${time_static.src.unix} ${time_static.src.unix} && docker cp ${time_static.src.unix}:/packaged_app.zip ${path.root}/${time_static.src.unix}.zip && docker rm -v ${time_static.src.unix}"
+    command = "docker build -t ${time_static.src.unix} ${path.root} -f ${path.root}/Dockerfile --target lambda && docker create --name ${time_static.src.unix} ${time_static.src.unix} && docker cp ${time_static.src.unix}:/packaged_app.zip ${path.root}/${time_static.src.unix}.zip && docker rm -v ${time_static.src.unix}"
   }
 }
 
