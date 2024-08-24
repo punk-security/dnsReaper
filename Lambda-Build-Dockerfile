@@ -1,9 +1,0 @@
-FROM amazon/aws-lambda-python:3.11
-
-COPY requirements.txt /app/
-COPY lambda-requirements.txt /app/
-WORKDIR /app
-RUN pip install -r requirements.txt -r lambda-requirements.txt --target . 
-COPY . /app
-
-RUN yum install zip -y && zip -r9 /packaged_app.zip .
