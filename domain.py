@@ -118,7 +118,8 @@ class Domain:
             resp = self.requests.get(url, timeout=5, verify=False, params=params)
             web_status = resp.status_code
             web_body = resp.content.decode()
-        except:
+        except Exception as e:
+            logging.error(e)
             web_status = 0
             web_body = ""
         return namedtuple("web_response", ["status_code", "body"])(web_status, web_body)

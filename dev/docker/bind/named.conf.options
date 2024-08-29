@@ -10,9 +10,13 @@ options {
 	// Uncomment the following block, and insert the addresses replacing
 	// the all-0's placeholder.
 
-	// forwarders {
-	// 	0.0.0.0;
-	// };
+   recursion yes;
+   allow-query { any; };
+   allow-recursion { any; };
+   allow-query-cache { any; };
+	 forwarders {
+	 	1.1.1.1;
+	 };
 
 	//========================================================================
 	// If BIND logs error messages about the root key being expired,
@@ -20,5 +24,5 @@ options {
 	//========================================================================
 	dnssec-validation auto;
 
-	listen-on-v6 { any; };
+  listen-on { any; };
 };
