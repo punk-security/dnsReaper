@@ -39,6 +39,7 @@ class PDApi:
         return self.check_response(self.session.send(req))
 
     def get_subdomains(self, domain):
+        domain = domain.lower()
         req = self.make_request(f"{domain}/subdomains")
         res = self.session.send(req)
 
@@ -60,7 +61,7 @@ def fetch_domains(pd_api_key: str, pd_domains: str, **args):
             continue
 
         raw_domains = api.get_subdomains(domain).json()
-        logging.warn(f"Testing {len(raw_domains['subdomains'])} subdomains")
+        logging.warning(f"Testing {len(raw_domains['subdomains'])} subdomains")
         domains.extend(
             [
                 Domain(f"{sb}.{domain}")

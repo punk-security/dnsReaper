@@ -1,56 +1,53 @@
 import ipaddress
-import socket
 from collections import namedtuple
-import dns.resolver
-from functools import lru_cache
+from typing import Optional
 
-import requests
+import dns.asyncresolver
+
 import logging
-
-import urllib3
-
 import collections
 
 collections.Iterable = collections.abc.Iterable
 collections.Mapping = collections.abc.Mapping
-import whois
+
+import asyncwhois
+import aiohttp
+import ssl
+
+from resolver import Resolver
 
 
 class Domain:
-    @property
-    @lru_cache
-    def SOA(self):
-        return self.query("SOA")
+    resolver = Resolver()
 
     @property
-    @lru_cache
-    def NX_DOMAIN(self):
-        record_types = ["A", "AAAA", "CNAME", "TXT", "MX", "NS"]
-        for record_type in record_types:
-            if self.query(record_type):
-                return False
-        return True
+    async def SOA(self):
+        return await self.query("SOA")
 
-    def query(self, type):
+    @property
+    async def NX_DOMAIN(self):
+        return (await self.resolver.resolve(self.domain, "A"))["NX_DOMAIN"]
+
+    async def query(self, type):
         try:
-            resp = self.resolver.resolve(self.domain, type)
-            return [record.to_text().rstrip(".") for record in resp]
+            resp = await self.resolver.resolve(self.domain, type)
+            return resp[type]
         except:
             return []
 
-    def fetch_std_records(self):
+    async def fetch_std_records(self):
         # TODO: is this recursive?
-        self.CNAME = self.query("CNAME")
-        self.A = self.query("A")
-        self.AAAA = self.query("AAAA")
-        if self.CNAME:
+        self.CNAME = await self.query("CNAME")
+        self.A = await self.query("A")
+        self.AAAA = await self.query("AAAA")
+        if self.CNAME or self.A or self.AAAA:
             # return early if we get a CNAME otherwise we get records for the cname aswell
             # this is actually desirable for A/AAAA but not NS as the next zone
             # will be queried based on the CNAME value, not the original domain
             return
-        self.NS = self.query("NS")
+        self.NS = await self.query("NS")
 
-    def fetch_external_records(self):
+    async def fetch_external_records(self):
         for cname in self.CNAME:
             split_cname = cname.split(".", 1)
             if len(split_cname) == 1:
@@ -58,14 +55,14 @@ class Domain:
             if self.base_domain == split_cname[1]:
                 continue  # Same zone, dont fetch
             d = Domain(cname)
-            d.fetch_std_records()
+            await d.fetch_std_records()
             self.A += d.A
             self.AAAA += d.AAAA
             self.CNAME += d.CNAME
         for ns in self.NS:
             try:
                 d = Domain(self.domain)
-                d.set_custom_NS(ns=ns)
+                await d.set_resolver_nameserver(ns)
                 self.A += d.A
                 self.AAAA += d.AAAA
             except:
@@ -73,18 +70,37 @@ class Domain:
                     f"We could not resolve the provided NS record '{ns}' to an ip"
                 )
 
-    def set_custom_NS(self, ns: str):
+    async def set_resolver_nameserver(self, ns: Optional[str] = None):
+        if ns is None:
+            self.resolver = dns.asyncresolver
+            self.resolver.timeout = 1
+
+            return
+
         if type(ns) != str:
             logging.error(f"Cannot set custom NS as {ns} not a string")
-        self.resolver = dns.resolver.Resolver()
+
+            raise RuntimeError(f"Invalid NS type - expected str got {type(ns)}")
+
+        self.resolver = dns.asyncresolver.Resolver()
+        self.resolver.timeout = 1
 
         try:
             ipaddress.ip_address(ns)
             self.resolver.nameservers = [ns]
+            return
         except ValueError:
+            # if ns isn't a valid IP address, attempt to resolve it
             try:
-                self.resolver.nameservers = [socket.gethostbyname(ns.rstrip("."))]
+                nameservers = list(
+                    map(
+                        lambda rr: rr.address,
+                        (await self.resolver.resolve(ns.rstrip("."))).rrset,
+                    )
+                )
+                self.resolver.nameservers = nameservers
             except:
+                # TODO: document why this gets set to an empty list
                 self.resolver.nameservers = []
 
     def set_base_domain(self):
@@ -94,47 +110,47 @@ class Domain:
         else:
             self.base_domain = "."
 
-    def __init__(self, domain, fetch_standard_records=True, ns=None):
+    def __init__(self, domain, fetch_standard_records=True):
         self.domain = domain.rstrip(".")
         self.NS = []
         self.A = []
         self.AAAA = []
         self.CNAME = []
         self.set_base_domain()
-        self.requests = requests
-        if ns == None:
-            self.resolver = dns.resolver
-        else:
-            self.set_custom_NS(ns)
-        self.resolver.timeout = 1
         self.should_fetch_std_records = fetch_standard_records
+        self.base_domain = None
 
-    @lru_cache
-    def fetch_web(self, uri="", https=True, params={}):
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    def get_session(self):
+        return aiohttp.ClientSession()
+
+    async def fetch_web(self, uri="", https=True):
         protocol = "https" if https else "http"
         url = f"{protocol}://{self.domain}/{uri}"
+
+        # We must disable SSL validation because vulnerable domains probably won't have a valid cert on the other end
+        # e.g. github
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+        }
         try:
-            resp = self.requests.get(url, timeout=5, verify=False, params=params)
-            web_status = resp.status_code
-            web_body = resp.content.decode()
+            async with self.get_session() as session:
+                resp = await session.get(url, ssl=ssl_context, headers=headers)
+                web_status = resp.status
+                web_body = await resp.text()
         except:
             web_status = 0
             web_body = ""
         return namedtuple("web_response", ["status_code", "body"])(web_status, web_body)
 
     @property
-    @lru_cache
-    def is_registered(self):
+    async def is_registered(self):
         try:
-            whois.whois(self.domain)
+            await asyncwhois.aio_whois(self.domain)
             return True
-        except whois.parser.PywhoisError as e:
-            if e.args[0] == "No whois server is known for this kind of object.":
-                # This is the only case of a potentially registered domain
-                # triggering a PywhoisError
-                # https://github.com/richardpenman/whois/blob/56dc7e41d134e6d4343ad80a48533681bd887ff2/whois/parser.py#L201
-                return True
+        except asyncwhois.NotFoundError:
             return False
         except Exception:
             return True

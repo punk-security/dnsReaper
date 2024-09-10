@@ -6,6 +6,13 @@ __pycache__/
 # Exclude Output
 results.csv
 
+# exclude pdkey
+pdkey
+
+# exclude state
+terraform.tfstate
+terraform.tfstate.backup
+
 # C extensions
 *.so
 
