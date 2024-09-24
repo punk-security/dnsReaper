@@ -81,10 +81,11 @@ def convert_records_to_domains(records, root_domain):
         if "AAAA" in buf[subdomain].keys():
             domain.AAAA = extract_records("AAAA")
         if "CNAME" in buf[subdomain].keys():
-            domain.CNAME = extract_records("CNAME")
+            domain.CNAME = [
+                x.replace("@", root_domain) for x in extract_records("CNAME")
+            ]
         if "NS" in buf[subdomain].keys():
             domain.NS = extract_records("NS")
-
         yield domain
 
 
