@@ -25,7 +25,8 @@ class GDApi:
     def check_response(response: requests.Response):
         if response.status_code == 401:
             raise ValueError("Invalid API key specified.")
-
+        if response.status_code == 403:
+            raise ValueError("API key valid but access denied. GoDaddy now block API access unless you have at least 10 domains")
         if response.status_code < 200 or response.status_code >= 300:
             raise ValueError(
                 "Invalid response received from API: " + str(response.json())

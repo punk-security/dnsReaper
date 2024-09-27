@@ -1,5 +1,7 @@
 # GoDaddy
 
+## WARNING: GoDaddy now block API access unless you have 10 domains and email their support. Craaaazy!
+
 ## Description
 The GoDaddy provider connects to the GoDaddy API and retrieves domains and records.
 
