@@ -3,7 +3,7 @@ from .templates.ip_found_but_string_in_body import ip_found_but_string_in_body
 
 
 test = ip_found_but_string_in_body(
-    ips=["23.236.62.147"],
+    ips=["34.149.87.45"],
     domain_not_configured_message="ConnectYourDomain",
     service="Wix",
 )
