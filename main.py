@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from scan import scan_domain
 import signatures
 import output
