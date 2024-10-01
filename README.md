@@ -38,17 +38,25 @@ We currently support AWS Route53, Cloudflare, and Azure. Documentation on adding
 You can run DNS Reaper in a pipeline, feeding it a list of domains that you intend to provision, and it will exit Non-Zero if it detects a takeover is possible.  You can prevent takeovers before they are even possible!
 
 ## Usage 
-
-To run DNS Reaper, you can use the docker image or run it with python 3.11.
+To run DNS Reaper, you can use the docker image or run it with Python 3.11.
 
 **Findings are returned in the output and more detail is provided in a local "results.csv" file.  We also support json output as an option.**
 
 ### Run it with docker
 
-``` docker run punksecurity/dnsreaper --help  ```
+```shell
+ docker run punksecurity/dnsreaper --help 
+```
 
-### Run it with python
-``` 
+### Run it locally
+> [!IMPORTANT]
+> The minimum version of Python that dnsReaper supports is 3.9, but 3.11 is recommended. We attempt to maintain support for stable versions of Python that are not end-of-life.
+We will not provide support or accept pull requests for issues that affect end-of-life versions of Python. See [Status of Python versions](https://devguide.python.org/versions/) for more information.
+
+When running locally, we recommend using a virtual environment (venv) to avoid dependency conflicts.
+Instructions available [Here](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#create-and-use-virtual-environments).
+
+```shell
 pip install -r requirements.txt
 python main.py --help
 ```
