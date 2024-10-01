@@ -31,7 +31,15 @@ def convert_records_to_domains(root_domain, records):
             continue
 
         if record_type == record_types.CNAME:
-            buf[fqdn]["CNAME"] = [str(x) for x in record_items]
+            cna = []
+            for x in record_items:
+                cn = str(x)
+                if cn.endswith("."):
+                    cna.append(cn)
+                else:
+                    cna.append(f"{cn}.{root_domain}")
+
+            buf[fqdn]["CNAME"] = cna
             continue
 
         if record_type == record_types.NS:
