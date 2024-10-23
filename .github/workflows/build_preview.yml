@@ -2,7 +2,7 @@ name: pytest
 
 on:
   pull_request:
-    branches: [ main, lambda ]
+    branches: [ main ]
     types:
       - synchronize
       - opened
