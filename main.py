@@ -106,14 +106,18 @@ async def main():
         exit(-1)
 
     with output.Output(args.out_format, args.out) as o:
-        scan = partial(
-            scan_domain,
-            signatures=signatures,
-            output_handler=o,
-            findings=findings,
-        )
+        tasks = []
+        for domain in domains:
+            task = asyncio.create_task(scan_domain(
+                domain,
+                signatures=signatures,
+                findings=findings,
+                output_handler=o,
+                args=args  
+            ))
+            tasks.append(task)
 
-        await asyncio.gather(*[asyncio.create_task(scan(domain)) for domain in domains])
+        await asyncio.gather(*tasks)
 
     ###### exit
     logging.warning(f"\n\nWe found {len(findings)} takeovers ☠️")

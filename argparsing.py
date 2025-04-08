@@ -167,6 +167,12 @@ parser.add_argument(
     help="-v for verbose, -vv for extra verbose",
 )
 
+parser.add_argument(
+    '--exclude-cnames',
+    type=str,
+    help='comma-separated list of CNAMES to exclude from detection',
+)
+
 parser.add_argument("--nocolour", help="Turns off coloured text", action="store_true")
 
 
@@ -180,11 +186,21 @@ def parse_args():
         for x in parameters
         if x[1].kind != x[1].VAR_KEYWORD and x[1].kind != x[1].VAR_POSITIONAL
     ]:
-        # If provider function signature has a default value, the command line option is optional!
         if args.__dict__[parameter.name] is None and isinstance(
             parameter.default, type(parameter.empty)
         ):
             parser.error(
                 f" {args.provider} provider requires --{parameter.name.replace('_', '-')}"
             )
+
+    # Process excluded CNAMEs
+    if args.exclude_cnames:
+        args.excluded_cnames = [
+            cname.strip().lower() 
+            for cname in args.exclude_cnames.split(',') 
+            if cname.strip()
+        ]
+    else:
+        args.excluded_cnames = []
+        
     return args
