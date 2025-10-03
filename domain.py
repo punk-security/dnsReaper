@@ -140,7 +140,8 @@ class Domain:
                 resp = await session.get(url, ssl=ssl_context, headers=headers)
                 web_status = resp.status
                 web_body = await resp.text()
-        except:
+        except Exception as exc:
+            logging.debug(f"Web request to '{url}' failed: {exc}")
             web_status = 0
             web_body = ""
         return namedtuple("web_response", ["status_code", "body"])(web_status, web_body)
