@@ -1,8 +1,7 @@
-from .templates.cname_found_but_string_in_body import cname_found_but_string_in_body
+from .templates.cname_found_but_status_code import cname_found_but_status_code
 
-test = cname_found_but_string_in_body(
+test = cname_found_but_status_code(
     cname="cname.helpscoutdocs.com",
-    domain_not_configured_message="Not Found",
+    code=0,
     service="helpscoutdocs.com",
-    https=True,
 )
