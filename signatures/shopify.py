@@ -10,7 +10,7 @@ cname = "shops.myshopify.com"
 test = cname_or_ip_found_but_string_in_body(
     cname=cname,
     ips=ipv4 + ipv6,
-    domain_not_configured_message="This domain points to Shopify but isn't configured properly",
+    domain_not_configured_message="Cloudflare is currently unable to resolve your requested domain",
     service="Shopify",
 )
 

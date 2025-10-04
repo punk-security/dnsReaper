@@ -7,13 +7,13 @@ import sys
 async def string_in_body(
     domain: Domain, string: str, https: bool, custom_uri: str = ""
 ) -> bool:
-    if string in (await domain.fetch_web(https=https, uri=custom_uri)).body:
+    body = (await domain.fetch_web(https=https, uri=custom_uri)).body
+    if string in body:
         logging.info(f"Message observed in response for '{domain}'")
         return True
     logging.debug(f"Message not found in response for '{domain}'")
-    # Uncomment to debug and identify a string match issue
     if "pytest" in sys.modules:
-        logging.warning((await domain.fetch_web(https=https, uri=custom_uri)).body)
+        logging.warning(f"{body=}")
     return False
 
 
