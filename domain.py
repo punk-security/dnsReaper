@@ -58,7 +58,7 @@ class Domain:
             await d.fetch_std_records()
             self.A += d.A
             self.AAAA += d.AAAA
-            self.CNAME += d.CNAME
+            self.CNAME = list(set(self.CNAME + d.CNAME))
         for ns in self.NS:
             try:
                 d = Domain(self.domain)
